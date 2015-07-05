@@ -73,11 +73,11 @@ Isis Script comes with an [Xtext](http://xtext.org)-generated [Eclipse](http://w
 
 ![DSL Editor](/../images/screenshots/simpleobject-dsl-editor.png?raw=true "DSL Editor")
 	
-The source code in the editor is evaluated while typing. So the outline and the problems markers are updated automatically. When a modified Isis Script is saved in the editor then the corresponding Java source file is generated in within the folder `target/generated-sources/isis/`.
+The source code in the editor is evaluated while typing. So the outline and the problems markers are updated automatically. When a modified Isis Script is saved in the editor then the corresponding Java source file is generated within the folder `target/generated-sources/isis/`.
 
 ![Generated Java Source Code](/../images/screenshots/simpleobject-java-editor.png?raw=true "Generated Java Source Code")
 
-To switch between the generated Java source code and the Isis Script file the option "Open Generated File" / "Open Source File" from the editors context menu can be used.
+To switch between the generated Java source file and the Isis Script file the option "Open Generated File" / "Open Source File" from the editors context menu can be used.
 
 
 ## System Requirements
