@@ -88,6 +88,12 @@ To use Isis Script you need local installations of the following tools:
 * [Eclipse](http://eclipse.org/downloads/) (4.2 or newer) with [Xtext](http://www.eclipse.org/Xtext/download.html) (2.7.0 or newer)
 
 
+## Installation
+
+The Isis Script Editor can be installed with the Eclipse Update Manager `Help > Install New Software...` from the
+update site [https://raw.githubusercontent.com/vaulttec/isis-script/updatesite/](https://raw.githubusercontent.com/vaulttec/isis-script/updatesite/).
+
+
 ## License
 
 Isis Script is released under the [Ecilpse Public License, Version 1.0](http://www.eclipse.org/org/documents/epl-v10.php).

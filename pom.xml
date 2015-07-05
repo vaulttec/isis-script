@@ -11,9 +11,9 @@
 		Java code for the Apache Isis framework from a textual representation.</description>
 
 	<scm>
-		<url>https://github.com/vaulttec/apache-isis-script.git</url>
-		<connection>scm:git:https://github.com/vaulttec/apache-isis-script.git</connection>
-		<developerConnection>scm:git:https://github.com/vaulttec/apache-isis-script.git</developerConnection>
+		<url>https://github.com/vaulttec/isis-script.git</url>
+		<connection>scm:git:https://github.com/vaulttec/isis-script.git</connection>
+		<developerConnection>scm:git:https://github.com/vaulttec/isis-script.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -502,7 +502,7 @@
 				<plugin>
 					<groupId>com.github.github</groupId>
 					<artifactId>site-maven-plugin</artifactId>
-					<version>0.11</version>
+					<version>0.12</version>
 					<!-- Deploying the p2 repository to a GitHub repository branch as described in
 						http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github/ -->
 					<configuration>

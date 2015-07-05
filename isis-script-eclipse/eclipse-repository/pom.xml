@@ -22,9 +22,10 @@
 				<configuration>
 					<message>Isis Script Eclipse bundles ${project.version}</message>
 					<outputDirectory>${project.build.directory}/repository</outputDirectory>
-					<repositoryName>apache-isis-script.vaulttec.github.io</repositoryName>
-					<branch>refs/heads/master</branch>
-					<path>updates</path>
+					<repositoryName>isis-script</repositoryName>
+					<repositoryOwner>vaulttec</repositoryOwner>
+					<branch>refs/heads/updatesite</branch>
+					<path></path>
 					<merge>true</merge>
 					<noJekyll>false</noJekyll>
 					<message>creates Isis Script Eclipse update site ${project.version}</message>
