@@ -58,7 +58,7 @@ title {
 }
 ```
 
-Isis Script files (which are using the file name extension `.isis`) are representing a single Java type. Depending declaration type keyword (`entity` or `service`) used in the DSL the corresponding source code is generated in the package defined via the `package` keyword within the folder `target/generated-sources/isis/`. This source code is plain Java which is compiled by the Java compiler.
+Isis Script files (which are using the file name extension `.isis`) are representing a single Java type. Depending on the declaration type keyword (`entity` or `service`) the corresponding source code is generated in the package defined via the `package` keyword within the folder `target/generated-sources/isis/`. This source code is plain Java which is compiled by the Java compiler.
 
 
 ## The Tools
@@ -96,4 +96,4 @@ update site [https://raw.githubusercontent.com/vaulttec/isis-script/updatesite/]
 
 ## License
 
-Isis Script is released under the [Ecilpse Public License, Version 1.0](http://www.eclipse.org/org/documents/epl-v10.php).
+Isis Script is released under the [Eclipse Public License, Version 1.0](http://www.eclipse.org/org/documents/epl-v10.php).
