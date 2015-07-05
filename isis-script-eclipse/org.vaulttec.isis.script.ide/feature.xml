@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.vaulttec.isis.script.ide"
+      label="Isis Script IDE"
+      version="1.0.0.qualifier"
+      provider-name="Torsten Juergeleit">
+
+   <description>
+      Isis Script is an Xtext-based DSL (with Eclipse-based editor) for generating Java code for the Apache Isis framework from a textual representation.
+   </description>
+
+   <copyright>
+      Copyright 2015 Torsten Juergeleit.
+   </copyright>
+
+   <license url="http://www.apache.org/licenses/LICENSE-2.0">
+      All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License v1.0
+and Eclipse Distribution License v1.0 which accompany this distribution.
+
+The Eclipse Public License is available at
+http://www.eclipse.org/legal/epl-v10.html
+and the Eclipse Distribution License is available at
+http://www.eclipse.org/org/documents/edl-v10.html.
+   </license>
+
+   <url>
+      <update label="isis" url=""/>
+   </url>
+
+   <plugin
+         id="org.vaulttec.isis.script"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.vaulttec.isis.script.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

@@ -1,0 +1,78 @@
+/*******************************************************************************
+ * Copyright (c) 2015 Torsten Juergeleit.
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ * 
+ * The Eclipse Public License is available at
+ *    http://www.eclipse.org/legal/epl-v10.html
+ * and the Eclipse Distribution License is available at
+ *    http://www.eclipse.org/org/documents/edl-v10.html.
+ * 
+ * Contributors:
+ *     Torsten Juergeleit - initial API and implementation
+ *******************************************************************************/
+grammar org.vaulttec.isis.script.Isis with org.eclipse.xtext.xbase.annotations.XbaseWithAnnotations
+
+generate dsl "http://vaulttec.org/dsl/Isis"
+
+IsisFile:
+	package=IsisPackageDeclaration
+	importSection=XImportSection?
+	declaration=IsisTypeDeclaration;
+
+IsisPackageDeclaration:
+	'package' name=QualifiedName;
+
+IsisTypeDeclaration:
+	IsisEntity | IsisService;
+
+IsisEntity:
+	=> (annotations+=XAnnotation*
+	'entity') name=ID ('extends' superType=JvmTypeReference)? '{'
+	(injections+=IsisInjection | properties+=IsisProperty | actions+=IsisAction | events+=IsisEvent |
+	uiHints+=IsisUiHint)*
+	'}';
+
+IsisService:
+	annotations+=XAnnotation*
+	'service' name=ID ('extends' superType=JvmTypeReference)? '{'
+	(injections+=IsisInjection | actions+=IsisAction)*
+	'}';
+
+IsisInjection:
+	'inject' type=JvmTypeReference name=ID;
+
+IsisProperty:
+	=> (annotations+=XAnnotation*
+	'property') type=JvmTypeReference name=ID ('{'
+	features+=IsisPropertyFeature*
+	'}')?;
+
+IsisPropertyFeature:
+	type=IsisPropertyFeatureType expression=XBlockExpression;
+
+enum IsisPropertyFeatureType:
+	Derived='derived' | Modify='modify' | Clear='clear' | Default='default' | Choices='choices' | Hide='hide' |
+	Disable='disable' | Validate='validate';
+
+IsisAction:
+	annotations+=XAnnotation*
+	'action' (returnType=JvmTypeReference)? name=ID '('
+	(parameters+=IsisActionParameter (',' parameters+=IsisActionParameter)*)?
+	')'
+	expression=XBlockExpression;
+
+IsisActionParameter:
+	annotations+=XAnnotation*
+	type=FullJvmFormalParameter;
+
+IsisEvent:
+	'event' name=ID;
+
+IsisUiHint:
+	type=IsisUiHintType expression=XBlockExpression;
+
+enum IsisUiHintType:
+	Title='title' | IconName='iconName' | CssClass='cssClass';
