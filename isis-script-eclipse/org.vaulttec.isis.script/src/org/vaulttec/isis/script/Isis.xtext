@@ -31,8 +31,8 @@ IsisTypeDeclaration:
 IsisEntity:
 	=> (annotations+=XAnnotation*
 	'entity') name=ID ('extends' superType=JvmTypeReference)? '{'
-	(injections+=IsisInjection | properties+=IsisProperty | actions+=IsisAction | events+=IsisEvent |
-	uiHints+=IsisUiHint)*
+	(injections+=IsisInjection | events+=IsisEvent | properties+=IsisProperty | actions+=IsisAction |
+	repositories+=IsisRepository | uiHints+=IsisUiHint)*
 	'}';
 
 IsisService:
@@ -43,6 +43,9 @@ IsisService:
 
 IsisInjection:
 	'inject' type=JvmTypeReference name=ID;
+
+IsisEvent:
+	'event' name=ID;
 
 IsisProperty:
 	=> (annotations+=XAnnotation*
@@ -58,8 +61,8 @@ enum IsisPropertyFeatureType:
 	Disable='disable' | Validate='validate';
 
 IsisAction:
-	annotations+=XAnnotation*
-	'action' (returnType=JvmTypeReference)? name=ID '('
+	=> (annotations+=XAnnotation*
+	'action') (returnType=JvmTypeReference)? name=ID '('
 	(parameters+=IsisActionParameter (',' parameters+=IsisActionParameter)*)?
 	')'
 	expression=XBlockExpression;
@@ -68,8 +71,12 @@ IsisActionParameter:
 	annotations+=XAnnotation*
 	type=FullJvmFormalParameter;
 
-IsisEvent:
-	'event' name=ID;
+IsisRepository:
+	{IsisRepository}
+	annotations+=XAnnotation*
+	'repository' name=ID? ('extends' superType=JvmTypeReference)? '{'
+	(injections+=IsisInjection | actions+=IsisAction)*
+	'}';
 
 IsisUiHint:
 	type=IsisUiHintType expression=XBlockExpression;

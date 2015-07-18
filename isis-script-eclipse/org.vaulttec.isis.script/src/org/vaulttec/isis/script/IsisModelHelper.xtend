@@ -15,9 +15,11 @@
  *******************************************************************************/
 package org.vaulttec.isis.script
 
+import org.atteo.evo.inflector.English
 import org.vaulttec.isis.script.dsl.IsisEntity
 import org.vaulttec.isis.script.dsl.IsisProperty
 import org.vaulttec.isis.script.dsl.IsisPropertyFeatureType
+import org.vaulttec.isis.script.dsl.IsisRepository
 import org.vaulttec.isis.script.dsl.IsisUiHintType
 
 class IsisModelHelper {
@@ -46,6 +48,17 @@ class IsisModelHelper {
 		} else {
 			null
 		}
+	}
+
+	def getRepository(IsisEntity it) {
+		if(repositories.nullOrEmpty) null else repositories.get(0)
+	}
+
+	def getNormalizedName(IsisRepository repository) {
+		if (repository.name.nullOrEmpty)
+			English.plural((repository.eContainer as IsisEntity).name)
+		else
+			repository.name
 	}
 
 }

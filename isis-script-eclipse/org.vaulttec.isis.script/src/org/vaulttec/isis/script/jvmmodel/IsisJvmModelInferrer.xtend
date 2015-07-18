@@ -18,6 +18,7 @@ package org.vaulttec.isis.script.jvmmodel
 import java.util.List
 import javax.inject.Inject
 import org.eclipse.emf.common.util.EList
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.common.types.JvmGenericType
 import org.eclipse.xtext.naming.QualifiedName
 import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
@@ -30,6 +31,7 @@ import org.vaulttec.isis.script.dsl.IsisEvent
 import org.vaulttec.isis.script.dsl.IsisFile
 import org.vaulttec.isis.script.dsl.IsisInjection
 import org.vaulttec.isis.script.dsl.IsisProperty
+import org.vaulttec.isis.script.dsl.IsisRepository
 import org.vaulttec.isis.script.dsl.IsisService
 import org.vaulttec.isis.script.dsl.IsisUiHint
 
@@ -42,17 +44,33 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 
 	@Inject extension IsisModelHelper
 	@Inject extension JvmTypesBuilder
+	@Inject extension JvmAnnotationHelper
 
 	def dispatch void infer(IsisFile file, IJvmDeclaredTypeAcceptor acceptor, boolean isPreIndexingPhase) {
 		val declaration = file.declaration
-		if (declaration != null) {
-			acceptor.accept(file.toClass(QualifiedName.create(file.package.name, declaration.name))) [
+		if (file.package != null && !file.package.name.nullOrEmpty &&
+				declaration != null && !declaration.name.nullOrEmpty) {
+			val type = file.toClass(QualifiedName.create(file.package.name, declaration.name))
+
+			// Create declaration
+			acceptor.accept(type) [
 				initializeDeclaration(declaration)
 			]
+
+			// Create entity repository
+			if (declaration instanceof IsisEntity) {
+				val repository = declaration.repository
+				if (repository != null) {
+					acceptor.accept(
+						repository.toClass(QualifiedName.create(file.package.name, repository.normalizedName))) [
+						initializeRepository(repository, type)
+					]
+				}
+			}
 		}
 	}
 
-	def dispatch void initializeDeclaration(JvmGenericType it, IsisEntity entity) {
+	protected def dispatch void initializeDeclaration(JvmGenericType it, IsisEntity entity) {
 		superTypes += entity.superType.cloneWithProxies
 		addAnnotations(entity.annotations)
 		addContainerInjection(entity)
@@ -64,11 +82,21 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 		addComparable(entity)
 	}
 
-	def dispatch void initializeDeclaration(JvmGenericType it, IsisService service) {
-		addAnnotations(service.annotations)
+	protected def dispatch void initializeDeclaration(JvmGenericType it, IsisService service) {
 		superTypes += service.superType.cloneWithProxies
+		addAnnotations(service.annotations)
 		addInjections(service.injections)
 		addActions(service.actions)
+	}
+
+	protected def initializeRepository(JvmGenericType it, IsisRepository repository, JvmGenericType entityType) {
+		annotations +=
+			annotationRef("org.apache.isis.applib.annotation.DomainService").addTypeValue("repositoryFor",
+				typeRef(entityType))
+		addAnnotations(repository.annotations)
+		addContainerInjection(repository)
+		addInjections(repository.injections)
+		addActions(repository.actions)
 	}
 
 	protected def void addComparable(JvmGenericType it, IsisEntity entity) {
@@ -76,15 +104,15 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 		val entityNonDerivedPropertyNames = entity.properties.filter[!hasFeature(DERIVED)].map[name].join(',')
 		superTypes += typeRef(Comparable, entityType)
 		members += entity.toMethod("compareTo", typeRef("int")) [
-//			annotations += annotationRef(Override)
+			annotations += annotationRef(Override)
 			parameters +=
 				entity.toParameter("other", entityType)
 			body = '''return org.apache.isis.applib.util.ObjectContracts.compare(this, other, "«entityNonDerivedPropertyNames»");'''
 		]
 	}
 
-	protected def void addContainerInjection(JvmGenericType it, IsisEntity entity) {
-		members += entity.toField("container", typeRef("org.apache.isis.applib.DomainObjectContainer")) [
+	protected def void addContainerInjection(JvmGenericType it, EObject object) {
+		members += object.toField("container", typeRef("org.apache.isis.applib.DomainObjectContainer")) [
 			annotations += annotationRef(Inject)
 			annotations += annotationRef(SuppressWarnings, "unused")
 		]
@@ -186,9 +214,13 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 
 	protected def void addActions(JvmGenericType it, EList<IsisAction> actions) {
 		for (a : actions) {
+			if (a.returnType == null && a.expression != null) {
+				a.returnType = a.expression.inferredType
+			}
 			members += a.toMethod(a.name, a.returnType) [
 				addAnnotations(a.annotations)
-				parameters += a.parameters.map[val param = type.cloneWithProxies
+				parameters += a.parameters.map [
+					val param = type.cloneWithProxies
 					param.addAnnotations(annotations)
 					param
 				]

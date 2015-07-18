@@ -15,6 +15,7 @@ import org.vaulttec.isis.script.dsl.IsisFile;
 import org.vaulttec.isis.script.dsl.IsisInjection;
 import org.vaulttec.isis.script.dsl.IsisProperty;
 import org.vaulttec.isis.script.dsl.IsisPropertyFeature;
+import org.vaulttec.isis.script.dsl.IsisRepository;
 import org.vaulttec.isis.script.dsl.IsisService;
 import org.vaulttec.isis.script.dsl.IsisUiHint;
 import org.vaulttec.isis.script.services.IsisGrammarAccess;
@@ -39,14 +40,17 @@ class IsisFormatter extends XbaseWithAnnotationsFormatter {
 		for (IsisInjection injections : isisentity.getInjections()) {
 			format(injections, document);
 		}
+		for (IsisEvent events : isisentity.getEvents()) {
+			format(events, document);
+		}
 		for (IsisProperty properties : isisentity.getProperties()) {
 			format(properties, document);
 		}
 		for (IsisAction actions : isisentity.getActions()) {
 			format(actions, document);
 		}
-		for (IsisEvent events : isisentity.getEvents()) {
-			format(events, document);
+		for (IsisRepository repositories : isisentity.getRepositories()) {
+			format(repositories, document);
 		}
 		for (IsisUiHint uiHints : isisentity.getUiHints()) {
 			format(uiHints, document);
@@ -106,6 +110,20 @@ class IsisFormatter extends XbaseWithAnnotationsFormatter {
 			format(annotations, document);
 		}
 		format(isisactionparameter.getType(), document);
+	}
+
+	def dispatch void format(IsisRepository isisrepository, extension IFormattableDocument document) {
+		// TODO: format HiddenRegions around keywords, attributes, cross references, etc. 
+		for (XAnnotation annotations : isisrepository.getAnnotations()) {
+			format(annotations, document);
+		}
+		format(isisrepository.getSuperType(), document);
+		for (IsisInjection injections : isisrepository.getInjections()) {
+			format(injections, document);
+		}
+		for (IsisAction actions : isisrepository.getActions()) {
+			format(actions, document);
+		}
 	}
 
 	def dispatch void format(IsisUiHint isisuihint, extension IFormattableDocument document) {
