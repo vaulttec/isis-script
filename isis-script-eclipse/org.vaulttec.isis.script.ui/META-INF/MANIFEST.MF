@@ -19,7 +19,7 @@ Require-Bundle: org.vaulttec.isis.script;visibility:=reexport,
  org.eclipse.xtext.ui.codetemplates.ui,
  org.eclipse.compare
 Import-Package: org.apache.log4j
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.vaulttec.isis.script.ui.internal,
  org.vaulttec.isis.script.ui.contentassist,
  org.vaulttec.isis.script.ui.quickfix,
