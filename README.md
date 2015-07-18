@@ -5,19 +5,76 @@ Isis Script is an [Xtext](http://xtext.org)-based [DSL](http://en.wikipedia.org/
 
 ## The DSL
 
-The Isis Script DSL is inspired by concepts from [Domain-Driven Design](http://domaindrivendesign.org/books/). It provides keywords for creating entities, service, repositories or events.
+The Isis Script DSL is inspired by concepts from [Domain-Driven Design](http://domaindrivendesign.org/books/). It provides keywords for creating entities (with their annotations, injections, properties, events, actions, repository and UI hints) and services (with their annotations, injections and actions).
+
+The following example shows an entity with a property and an action using an event:
 
 ```java
+@DomainObject(objectType = "SIMPLE")
 entity SimpleObject {
     property String name
 
 	event UpdateNameDomainEvent
 
-	title {
-		name
+	@Action(domainEvent = UpdateNameDomainEvent)
+	action updateName(String newName) {
+		setName(newName)
 	}
 }
 ```
+
+The following example shows an entity with a repository:
+
+```java
+@Queries(#[
+	@Query(name = "findByName", language = "JDOQL",
+		value = "SELECT FROM domainapp.dom.modules.simple.SimpleObject WHERE name.indexOf(:name) >= 0")
+])
+entity SimpleObject {
+    property String name
+
+	repository {
+
+		action listAll() {
+			container.allInstances(SimpleObject)
+		}
+
+		action findByName(String name) {
+			container.allMatches(new QueryDefault(SimpleObject,
+				"findByName", "name", name))
+		}
+	}
+}
+```
+
+The following example shows a service with an action using an injected repository:
+
+```java
+service SimpleObjectProvider {
+
+	inject SimpleObjects repo
+
+	action allObjects() {
+		repo.listAll
+	}
+}
+```
+
+The following example shows an entity with a property and the corresponding title UI hint:
+
+```java
+@DomainObject(objectType = "SIMPLE")
+entity SimpleObject {
+    property String name
+
+	title {
+		TranslatableString.tr("Object: {name}", "name", name)
+	}
+}
+```
+
+
+## The Implementation
 
 Isis Script uses [Xtexts support for accessing JVM types](https://www.eclipse.org/Xtext/documentation/305_xbase.html#jvmtypes), e.g. for Java annotations, super types, return types or parameters.
 
@@ -68,12 +125,18 @@ Isis Script comes with an [Xtext](http://xtext.org)-generated [Eclipse](http://w
 * Syntax Coloring
 * Outline View
 * Content Assist
+* Validator
 * Quick Fixes
 * Hyper Linking
 
 ![DSL Editor](/../images/screenshots/simpleobject-dsl-editor.png?raw=true "DSL Editor")
 	
-The source code in the editor is evaluated while typing. So the outline and the problems markers are updated automatically. When a modified Isis Script is saved in the editor then the corresponding Java source file is generated within the folder `target/generated-sources/isis/`.
+The source code in the editor is evaluated while typing. So the outline and the problems markers are updated automatically. 
+If enabled then selecting a node in the outline selects the corresponding code block in the editor view.
+
+![DSL Editor with selected repository](/../images/screenshots/simpleobject-dsl-editor-repository.png?raw=true "DSL Editor with selected repository")
+
+When a modified Isis Script is saved in the editor then the corresponding Java source file is generated within the folder `target/generated-sources/isis/`.
 
 ![Generated Java Source Code](/../images/screenshots/simpleobject-java-editor.png?raw=true "Generated Java Source Code")
 
