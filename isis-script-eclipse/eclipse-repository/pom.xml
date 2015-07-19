@@ -26,7 +26,7 @@
 					<repositoryOwner>vaulttec</repositoryOwner>
 					<branch>refs/heads/updatesite</branch>
 					<path></path>
-					<merge>true</merge>
+					<merge>false</merge>
 					<noJekyll>false</noJekyll>
 					<message>creates Isis Script Eclipse update site ${project.version}</message>
 				</configuration>
