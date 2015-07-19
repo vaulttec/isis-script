@@ -6,10 +6,16 @@ Isis Script is an [Xtext](http://xtext.org)-based [DSL](http://en.wikipedia.org/
 ## The DSL
 
 The Isis Script DSL is inspired by concepts from [Domain-Driven Design](http://domaindrivendesign.org/books/). It provides keywords for creating entities (with their annotations, injections, properties, events, actions, repository and UI hints) and services (with their annotations, injections and actions).
+To map the Isis Script DSL to the corresponding Java code the notion of packages and imports are supported as well.
 
 The following example shows an entity with a property and an action using an event:
 
 ```java
+package domainapp.dom.modules.simple
+
+import org.apache.isis.applib.annotation.Action
+import org.apache.isis.applib.annotation.DomainObject
+
 @DomainObject(objectType = "SIMPLE")
 entity SimpleObject {
     property String name
@@ -23,7 +29,7 @@ entity SimpleObject {
 }
 ```
 
-The following example shows an entity with a repository:
+The following example (package and imports are omitted for brevity) shows an entity with a repository:
 
 ```java
 @Queries(#[
@@ -47,7 +53,7 @@ entity SimpleObject {
 }
 ```
 
-The following example shows a service with an action using an injected repository:
+The following example (package and imports are omitted for brevity) shows a service with an action using an injected repository:
 
 ```java
 service SimpleObjectProvider {
@@ -60,7 +66,7 @@ service SimpleObjectProvider {
 }
 ```
 
-The following example shows an entity with a property and the corresponding title UI hint:
+The following example (package and imports are omitted for brevity) shows an entity with a property and the corresponding title UI hint:
 
 ```java
 @DomainObject(objectType = "SIMPLE")
@@ -70,6 +76,109 @@ entity SimpleObject {
 	title {
 		TranslatableString.tr("Object: {name}", "name", name)
 	}
+}
+```
+
+The following example shows show the complete Isis Script for the entity and repository of the domain object `SimpleObject` from the sample created with [Isis Maven archetype SimpleApp](http://isis.apache.org/guides/ug.html#_ug_getting-started_simpleapp-archetype):
+
+```java
+package domainapp.dom.modules.simple
+
+import javax.jdo.annotations.Column
+import javax.jdo.annotations.DatastoreIdentity
+import javax.jdo.annotations.IdGeneratorStrategy
+import javax.jdo.annotations.IdentityType
+import javax.jdo.annotations.PersistenceCapable
+import javax.jdo.annotations.Queries
+import javax.jdo.annotations.Query
+import javax.jdo.annotations.Unique
+import javax.jdo.annotations.Version
+import javax.jdo.annotations.VersionStrategy
+import org.apache.isis.applib.annotation.Action
+import org.apache.isis.applib.annotation.ActionLayout
+import org.apache.isis.applib.annotation.BookmarkPolicy
+import org.apache.isis.applib.annotation.DomainObject
+import org.apache.isis.applib.annotation.DomainObjectLayout
+import org.apache.isis.applib.annotation.DomainServiceLayout
+import org.apache.isis.applib.annotation.Editing
+import org.apache.isis.applib.annotation.MemberOrder
+import org.apache.isis.applib.annotation.Parameter
+import org.apache.isis.applib.annotation.ParameterLayout
+import org.apache.isis.applib.annotation.Property
+import org.apache.isis.applib.annotation.SemanticsOf
+import org.apache.isis.applib.annotation.Title
+import org.apache.isis.applib.query.QueryDefault
+import org.apache.isis.applib.services.i18n.TranslatableString
+
+@PersistenceCapable(identityType=IdentityType.DATASTORE)
+@DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY, column="id")
+@Version(strategy=VersionStrategy.VERSION_NUMBER, column="version")
+@Queries(#[
+	@Query(name = "find", language = "JDOQL",
+		value = "SELECT FROM domainapp.dom.modules.simple.SimpleObject"),
+	@Query(name = "findByName", language = "JDOQL",
+		value = "SELECT FROM domainapp.dom.modules.simple.SimpleObject WHERE name.indexOf(:name) >= 0")
+])
+@Unique(name="SimpleObject_name_UNQ", members = #["name"])
+@DomainObject(objectType = "SIMPLE")
+@DomainObjectLayout(bookmarking = BookmarkPolicy.AS_ROOT)
+entity SimpleObject {
+
+	@Column(allowsNull="false", length = 40)
+	@Title(sequence="1")
+	@Property(editing = Editing.DISABLED)
+	property String name
+
+	event UpdateNameDomainEvent
+
+	@Action(domainEvent = UpdateNameDomainEvent)
+	action updateName(@Parameter(maxLength = 40)
+            @ParameterLayout(named = "New name") String newName) {
+		setName(newName)
+		this
+	}
+
+	action default0UpdateName() {
+		getName()
+	}
+
+    action validateUpdateName(String name) {
+        if (name.contains("!"))
+        	TranslatableString.tr("Exclamation mark is not allowed")
+        else null
+    }
+
+	@DomainServiceLayout(menuOrder = "10")
+	repository {
+
+    	@Action(semantics = SemanticsOf.SAFE)
+    	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
+		@MemberOrder(sequence = "1")
+		action listAll() {
+			container.allInstances(SimpleObject)
+		}
+
+		@Action(semantics = SemanticsOf.SAFE)
+		@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
+		@MemberOrder(sequence = "2")
+		action findByName(@ParameterLayout(named="Name") String name) {
+			container.allMatches(new QueryDefault(SimpleObject,
+				"findByName", "name", name))
+		}
+
+		@MemberOrder(sequence = "3")
+		action create(@ParameterLayout(named="Name") String name) {
+			val obj = container.newTransientInstance(SimpleObject)
+			obj.name = name
+			container.persistIfNotAlready(obj)
+			obj
+		}
+	}
+
+	title {
+		TranslatableString.tr("Object: {name}", "name", name)
+	}
+
 }
 ```
 
@@ -84,20 +193,6 @@ action SimpleObject updateName(
         @Parameter(maxLength = 40)
         @ParameterLayout(named = "New name")
         String newName) {
-```
-
-To map the Isis Script DSL to the corresponding Java code the notion of packages and imports are supported as well.
-
-```java
-package domainapp.dom.modules.simple
-
-import org.apache.isis.applib.annotation.DomainObject
-import org.apache.isis.applib.annotation.DomainObjectLayout
-
-@DomainObject(objectType = "SIMPLE")
-@DomainObjectLayout(bookmarking = BookmarkPolicy.AS_ROOT)
-entity SimpleObject {
-}
 ```
 
 [Xbase expressions](https://www.eclipse.org/Xtext/documentation/305_xbase.html#xbase-expressions) are used to implement the dynamic parts of the DSL, e.g. property features, action or UI hints.
