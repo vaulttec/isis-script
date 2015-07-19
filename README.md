@@ -178,7 +178,6 @@ entity SimpleObject {
 	title {
 		TranslatableString.tr("Object: {name}", "name", name)
 	}
-
 }
 ```
 
@@ -220,6 +219,7 @@ Isis Script comes with an [Xtext](http://xtext.org)-generated [Eclipse](http://w
 * Syntax Coloring
 * Outline View
 * Content Assist
+* Organize Imports
 * Validator
 * Quick Fixes
 * Hyper Linking
