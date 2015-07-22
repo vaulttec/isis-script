@@ -242,7 +242,9 @@ To switch between the generated Java source file and the Isis Script file the op
 
 ### The Maven Support
 
-Isis Script files are compiled to Java source code via the [Xtext Maven Plugin](https://eclipse.org/Xtext/documentation/350_continuous_integration.html). To add the Isis Script output folder to Mavens list of Java source folder the [Build Helper Maven Plugin](http://www.mojohaus.org/build-helper-maven-plugin/) is used. Finally the generated Java source code is compiled by the Maven Compiler Plugin.  
+Isis Script files are compiled to Java source code via the [Xtext Maven Plugin](https://eclipse.org/Xtext/documentation/350_continuous_integration.html). To add the Isis Script output folder to Mavens list of Java source folder the [Build Helper Maven Plugin](http://www.mojohaus.org/build-helper-maven-plugin/) is used. Finally the generated Java source code is compiled by the Maven Compiler Plugin.
+
+A corresponding Maven POM is available in the [`simpleapp` example project](https://github.com/vaulttec/isis-script/tree/develop/isis-script-examples/simpleapp).    
 
 
 ## System Requirements
