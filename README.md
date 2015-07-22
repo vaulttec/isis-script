@@ -79,7 +79,7 @@ entity SimpleObject {
 }
 ```
 
-The following example shows show the complete Isis Script for the entity and repository of the domain object `SimpleObject` from the sample created with [Isis Maven archetype SimpleApp](http://isis.apache.org/guides/ug.html#_ug_getting-started_simpleapp-archetype):
+The following example shows show the complete Isis Script for the entity and repository of the domain object `SimpleObject` from the [Isis Script `simpleapp` example project](https://github.com/vaulttec/isis-script/tree/develop/isis-script-examples/simpleapp) created from the [Apache Isis Maven archetype SimpleApp](http://isis.apache.org/guides/ug.html#_ug_getting-started_simpleapp-archetype):
 
 ```java
 package domainapp.dom.modules.simple
@@ -214,6 +214,8 @@ Isis Script files (which are using the file name extension `.isis`) are represen
 
 ## The Tools
 
+### The Eclipse DSL Editor
+
 Isis Script comes with an [Xtext](http://xtext.org)-generated [Eclipse](http://www.eclipse.org) editor which supports the [IDE features](https://www.eclipse.org/Xtext/documentation/304_ide_concepts.html) known from the Java editor, e.g
 
 * Syntax Coloring
@@ -236,6 +238,11 @@ When a modified Isis Script is saved in the editor then the corresponding Java s
 ![Generated Java Source Code](/../images/screenshots/simpleobject-java-editor.png?raw=true "Generated Java Source Code")
 
 To switch between the generated Java source file and the Isis Script file the option "Open Generated File" / "Open Source File" from the editors context menu can be used.
+
+
+### The Maven Support
+
+Isis Script files are compiled to Java source code via the [Xtext Maven Plugin](https://eclipse.org/Xtext/documentation/350_continuous_integration.html). To add the Isis Script output folder to Mavens list of Java source folder the [Build Helper Maven Plugin](http://www.mojohaus.org/build-helper-maven-plugin/) is used. Finally the generated Java source code is compiled by the Maven Compiler Plugin.  
 
 
 ## System Requirements
