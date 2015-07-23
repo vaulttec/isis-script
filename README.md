@@ -18,7 +18,7 @@ import org.apache.isis.applib.annotation.DomainObject
 
 @DomainObject(objectType = "SIMPLE")
 entity SimpleObject {
-    property String name
+	property String name
 
 	event UpdateNameDomainEvent
 
@@ -37,10 +37,9 @@ The following example (package and imports are omitted for brevity) shows an ent
 		value = "SELECT FROM domainapp.dom.modules.simple.SimpleObject WHERE name.indexOf(:name) >= 0")
 ])
 entity SimpleObject {
-    property String name
+	property String name
 
 	repository {
-
 		action listAll() {
 			container.allInstances(SimpleObject)
 		}
@@ -53,11 +52,22 @@ entity SimpleObject {
 }
 ```
 
+The following example (package and imports are omitted for brevity) shows an entity with a property and the corresponding title UI hint:
+
+```java
+entity SimpleObject {
+	property String name
+
+	title {
+		TranslatableString.tr("Object: {name}", "name", name)
+	}
+}
+```
+
 The following example (package and imports are omitted for brevity) shows a service with an action using an injected repository:
 
 ```java
 service SimpleObjectProvider {
-
 	inject SimpleObjects repo
 
 	action allObjects() {
@@ -66,20 +76,7 @@ service SimpleObjectProvider {
 }
 ```
 
-The following example (package and imports are omitted for brevity) shows an entity with a property and the corresponding title UI hint:
-
-```java
-@DomainObject(objectType = "SIMPLE")
-entity SimpleObject {
-    property String name
-
-	title {
-		TranslatableString.tr("Object: {name}", "name", name)
-	}
-}
-```
-
-The following example shows show the complete Isis Script for the entity and repository of the domain object `SimpleObject` from the [Isis Script `simpleapp` example project](https://github.com/vaulttec/isis-script/tree/develop/isis-script-examples/simpleapp) created from the [Apache Isis Maven archetype SimpleApp](http://isis.apache.org/guides/ug.html#_ug_getting-started_simpleapp-archetype):
+The following example shows the complete Isis Script for the entity and repository of the domain object `SimpleObject` from the [Isis Script `simpleapp` example project](https://github.com/vaulttec/isis-script/tree/develop/isis-script-examples/simpleapp) created from the [Apache Isis Maven archetype SimpleApp](http://isis.apache.org/guides/ug.html#_ug_getting-started_simpleapp-archetype):
 
 ```java
 package domainapp.dom.modules.simple
@@ -194,7 +191,7 @@ action SimpleObject updateName(
         String newName) {
 ```
 
-[Xbase expressions](https://www.eclipse.org/Xtext/documentation/305_xbase.html#xbase-expressions) are used to implement the dynamic parts of the DSL, e.g. property features, action or UI hints.
+[Xbase expressions](https://www.eclipse.org/Xtext/documentation/305_xbase.html#xbase-expressions) are used to implement the dynamic parts of the DSL, e.g. property features, actions or UI hints.
 
 ```java
 action TranslatableString validateUpdateName(String name) {
