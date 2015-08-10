@@ -2,9 +2,6 @@
 
 The different aspects of the Isis Script DSL are explained in the following sections.  
 
-* toc
-{:toc}
-
 
 ## Entities
 
@@ -116,7 +113,6 @@ The keyword `derived` defines an expression which is used for the getter of a no
 	}
 
 For these properties only the business rule `hide` is allowed.
-{: .alert}
 
 
 #### Modify
@@ -133,7 +129,6 @@ The keyword `modify` defines an expression to update a property with a given val
 
 
 Using this method allows business logic to be placed apart from the setter.
-{: .alert}
 
 
 #### Clear
@@ -150,7 +145,6 @@ The keyword `clear` defines an expression to set a property to `null`:
 
 
 Using this method allows business logic to be placed apart from the setter.
-{: .alert}
 
 
 #### Drop-Downs
