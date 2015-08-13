@@ -38,7 +38,7 @@ The keyword `property` is used to define a Java bean property (a field with corr
 		property int someProperty
 	}
 
-A property can have additional attributes (supporting methods):
+A property can have additional features (supporting methods), e.g. default values or validation rules:
 
 	entity SomeType {
 		property int someProperty {
@@ -46,7 +46,7 @@ A property can have additional attributes (supporting methods):
 				1
 			}
 			validate {
-				if (proposed < 0 && proposed > 10)
+				if (value < 0 && value > 10)
 					"Proposed value out of bounds"
 				else
 					null
@@ -55,7 +55,7 @@ A property can have additional attributes (supporting methods):
 		}
 	}
 
-These features are described in the ollowing chapters.
+These features are described in the following chapters.
 
 
 #### Property Rules
@@ -76,7 +76,7 @@ The keyword `hide` defines a boolean expression for hiding the property:
 
 ##### Disable
 
-The keyword `disable` defines an expression for disabling (making read-only) the property. It returns a string with e reason for disabling or `null` if not disabled:
+The keyword `disable` defines an expression for disabling (making read-only) the property. It returns a string with the reason for disabling or `null` if not disabled:
 
 	property int someProperty {
 		disable {
@@ -90,11 +90,11 @@ The keyword `disable` defines an expression for disabling (making read-only) the
 
 ##### Validate
 
-The keyword `validate` defines an expression which validates a proposed value. It returns a string which is the reason the modification is vetoed or `null` if not vetoed:
+The keyword `validate` defines an expression which validates a proposed value (parameter named `value`). It returns a string which is the reason the modification is vetoed or `null` if not vetoed:
 
 	property int someProperty {
 		validate {
-			if (proposed < 0 && proposed > 10)
+			if (value < 0 && value > 10)
 				"Proposed value out of bounds"
 			else
 				null
@@ -104,7 +104,7 @@ The keyword `validate` defines an expression which validates a proposed value. I
 
 #### Derived Property
 
-The keyword `derived` defines an expression which is used for the getter of a non-persistent (derived) property. Derived properties have no instance variable and setter.
+The keyword `derived` defines an expression which is used as getter of a non-persistent (derived) property. Derived properties have no instance variable and setter.
 
 	property int someProperty {
 		derived {
@@ -117,12 +117,12 @@ For these properties only the business rule `hide` is allowed.
 
 #### Modify
 
-The keyword `modify` defines an expression to update a property with a given value (parameter name is the same as the property name):
+The keyword `modify` defines an expression to update a property with a given value (parameter name `value`):
 
 	property int someProperty {
 		modify {
 			doSomeStuff()
-			setSomeProperty(someProperty)	// 'someProperty' is the method parameter
+			setSomeProperty(value)
 			doSomeOtherStuff()
 		}
 	}
@@ -158,6 +158,21 @@ The keyword `choices` defines an expression which returns a collection of values
 	}
 
 
+#### Auto-Complete
+
+The keyword `complete` defines an expression which returns a collection of values from a properties drop-down list box for a given search string (parameter name is `search`):
+
+	property int someProperty {
+		complete {
+			switch search {
+				case 'min' : #[1, 2]
+				case 'max' : #[2, 3]
+				default : #[]
+			}
+		}
+	}
+
+
 #### Default
 
 The keyword `default` defines an expression which returns the initial argument value for this property:
@@ -169,9 +184,71 @@ The keyword `default` defines an expression which returns the initial argument v
 	}
 
 
-### Actions
+### Collections
 
 TODO
+
+
+### Actions
+
+The keyword `action` is used to define a method for an entity. The method expression (which evaluates the return value of the action) is defined with the keyword `body`:
+
+	entity SomeType {
+		@... // Isis and JDO annotations
+		action boolean someAction {
+			body {
+				true
+			}
+		}
+	}
+
+An action can have additional attributes (supporting methods), e.g. disable:
+
+	entity SomeType {
+		action boolean someAction {
+			body {
+				true
+			}
+			disable {
+				if (isBlacklisted())
+					"Cannot executed for blacklisted entities")
+				else
+					null
+			}
+		}
+	}
+
+These features are described in the following chapters.
+
+
+#### Action Parameters
+
+The action parameters (if any) are defined with the keyword `parameter`:
+
+	action int someAction {
+		@... // Isis and JDO annotations
+		parameter int someParameter {
+		}
+		body {
+			someParameter + 1
+		}
+	}
+
+An action parameter can have additional attributes (supporting methods):
+
+	action int someAction {
+		@... // Isis and JDO annotations
+		parameter int someParameter {
+			default {
+				5
+			}
+		}
+		body {
+			someParameter + 1
+		}
+	}
+
+These features are described in the following chapters.
 
 
 ### Events
