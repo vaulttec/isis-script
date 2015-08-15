@@ -2,6 +2,31 @@
 
 The different aspects of the Isis Script DSL are explained in the following sections.  
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Entities](#entities)
+  - [Inheritance](#inheritance)
+  - [Injections](#injections)
+  - [Properties](#properties)
+    - [Property Rules](#property-rules)
+      - [Hide](#hide)
+      - [Disable](#disable)
+      - [Validate](#validate)
+    - [Derived Property](#derived-property)
+    - [Modify](#modify)
+    - [Clear](#clear)
+    - [Drop-Downs](#drop-downs)
+    - [Auto-Complete](#auto-complete)
+    - [Default](#default)
+  - [Collections](#collections)
+  - [Actions](#actions)
+    - [Action Parameters](#action-parameters)
+  - [Events](#events)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 ## Entities
 

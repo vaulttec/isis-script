@@ -2,6 +2,21 @@
 
 Isis Script is an [Xtext](http://xtext.org)-based [DSL](http://en.wikipedia.org/wiki/Domain-specific_language) for generating Java code for the [Apache Isis framework](http://isis.apache.org) from a textual representation.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [The DSL](#the-dsl)
+- [The Implementation](#the-implementation)
+- [The Tools](#the-tools)
+  - [The Eclipse DSL Editor](#the-eclipse-dsl-editor)
+  - [The Maven Support](#the-maven-support)
+- [System Requirements](#system-requirements)
+- [Installation](#installation)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 ## The DSL
 
