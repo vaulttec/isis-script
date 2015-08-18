@@ -20,10 +20,19 @@ The different aspects of the Isis Script DSL are explained in the following sect
     - [Drop-Downs](#drop-downs)
     - [Auto-Complete](#auto-complete)
     - [Default](#default)
+    - [Property Events](#property-events)
   - [Collections](#collections)
   - [Actions](#actions)
+    - [Action Rules](#action-rules)
+      - [Hide](#hide-1)
+      - [Disable](#disable-1)
+      - [Validate](#validate-1)
     - [Action Parameters](#action-parameters)
-  - [Events](#events)
+      - [Default](#default-1)
+      - [Drop-Downs](#drop-downs-1)
+      - [Auto-Complete](#auto-complete-1)
+      - [Validate](#validate-2)
+    - [Action Events](#action-events)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -188,6 +197,7 @@ The keyword `choices` defines an expression which returns a collection of values
 The keyword `complete` defines an expression which returns a collection of values from a properties drop-down list box for a given search string (parameter name is `search`):
 
 	property int someProperty {
+		@MinLength(3)
 		complete {
 			switch search {
 				case 'min' : #[1, 2]
@@ -196,6 +206,8 @@ The keyword `complete` defines an expression which returns a collection of value
 			}
 		}
 	}
+
+The optional annotation `@MinLength` specifies the minimum number of characters that must be entered before the auto-complete method is called.
 
 
 #### Default
@@ -206,6 +218,16 @@ The keyword `default` defines an expression which returns the initial argument v
 		default {
 			2
 		}
+	}
+
+
+#### Property Events
+
+With the keyword `event` a domain event (subtype of `PropertyDomainEvent`) can be defined: 
+
+	@Property(domainEvent = SomeEvent)
+	property int someProperty {
+		event SomeEvent;
 	}
 
 
@@ -245,6 +267,51 @@ An action can have additional attributes (supporting methods), e.g. disable:
 
 These features are described in the following chapters.
 
+#### Action Rules
+
+For actions imperative rules for visibility, usability and validity can be defined. These business rules provide additional checking and behaviour to be performed when the user interacts with those object actions.
+
+
+##### Hide
+
+The keyword `hide` defines a boolean expression for hiding the action:
+
+		action boolean someAction {
+			hide {
+				isBlacklisted()
+			}
+		}
+	}
+
+
+##### Disable
+
+The keyword `disable` defines an expression for disabling the action.
+It returns a string with the reason for disabling or `null` if not disabled:
+
+		action boolean someAction {
+			disable {
+				if (isBlacklisted())
+					"Not allowed for blacklisted entities")
+				else
+					null
+			}
+	}
+
+
+##### Validate
+
+The keyword `validate` defines an expression which validates a complete set of proposed action arguments (parameters are the same as for the action). It returns a string which is the reason the modification is vetoed or `null` if not vetoed:
+
+		action Order placeOrder {
+			validate {
+				if (quantity > product.orderLimit)
+					"May not order more than " + product.orderLimit + " items for this product"
+				else
+					null
+			}
+	}
+
 
 #### Action Parameters
 
@@ -276,14 +343,65 @@ An action parameter can have additional attributes (supporting methods):
 These features are described in the following chapters.
 
 
-### Events
+##### Default
+
+The keyword `default` defines an expression which returns the initial argument value for this property:
+
+	parameter int someParameter {
+		default {
+			5
+		}
+	}
+
+
+##### Drop-Downs
+
+The keyword `choices` defines an expression which returns a collection of values for this property. These values are used for populating drop-down list boxes:
+
+	parameter int someParameter {
+		choices {
+			#[1, 2, 3]
+		}
+	}
+
+
+##### Auto-Complete
+
+The keyword `complete` defines an expression which returns a collection of values from a properties drop-down list box for a given search string (parameter name is `search`):
+
+	parameter int someParameter {
+		@MinLength(3)
+		complete {
+			switch search {
+				case 'min' : #[1, 2]
+				case 'max' : #[2, 3]
+				default : #[]
+			}
+		}
+	}
+
+The optional annotation `@MinLength` specifies the minimum number of characters that must be entered before the auto-complete method is called
+
+
+##### Validate
+
+The keyword `validate` defines an expression which validates a proposed value (parameter named `value`). It returns a string which is the reason the modification is vetoed or `null` if not vetoed:
+
+	parameter int someParameter {
+		validate {
+			if (value < 0 && value > 10)
+				"Proposed value out of bounds"
+			else
+				null
+		}
+	}
+
+
+#### Action Events
 
 With the keyword `event` a domain event (subtype of `ActionDomainEvent`) can be defined: 
 
-	entity SomeType {
+	@Action(domainEvent = SomeEvent)
+	action someAction {
 		event SomeEvent;
-
-		@Action(domainEvent = SomeEvent)
-		action someAction {
-		}
 	}
