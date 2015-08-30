@@ -22,16 +22,24 @@ The different aspects of the Isis Script DSL are explained in the following sect
     - [Default](#default)
     - [Property Events](#property-events)
   - [Collections](#collections)
-  - [Actions](#actions)
-    - [Action Rules](#action-rules)
+    - [Collection Rules](#collection-rules)
       - [Hide](#hide-1)
       - [Disable](#disable-1)
       - [Validate](#validate-1)
+    - [Derived Collection](#derived-collection)
+    - [Add](#add)
+    - [Remove](#remove)
+    - [Property Events](#property-events-1)
+  - [Actions](#actions)
+    - [Action Rules](#action-rules)
+      - [Hide](#hide-2)
+      - [Disable](#disable-2)
+      - [Validate](#validate-2)
     - [Action Parameters](#action-parameters)
       - [Default](#default-1)
       - [Drop-Downs](#drop-downs-1)
       - [Auto-Complete](#auto-complete-1)
-      - [Validate](#validate-2)
+      - [Validate](#validate-3)
     - [Action Events](#action-events)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -161,7 +169,6 @@ The keyword `modify` defines an expression to update a property with a given val
 		}
 	}
 
-
 Using this method allows business logic to be placed apart from the setter.
 
 
@@ -176,7 +183,6 @@ The keyword `clear` defines an expression to set a property to `null`:
 			doSomeOtherStuff()
 		}
 	}
-
 
 Using this method allows business logic to be placed apart from the setter.
 
@@ -227,13 +233,143 @@ With the keyword `event` a domain event (subtype of `PropertyDomainEvent`) can b
 
 	@Property(domainEvent = SomeEvent)
 	property int someProperty {
-		event SomeEvent;
+		event SomeEvent
 	}
 
 
 ### Collections
 
-TODO
+The keyword `collection` is used to define a collection property for an entity. The method expression (which evaluates the initial value of the collection property) is defined with the keyword `init`:
+
+	entity SomeType {
+		@... // Isis and JDO annotations
+		collection Set<OtherType> someCollection {
+			init {
+				new TreeSet<>()
+			}
+		}
+	}
+
+A collection can have additional attributes (supporting methods), e.g. disable:
+
+	entity SomeType {
+		collection Set<OtherType> someCollection {
+			init {
+				new TreeSet<>()
+			}
+			disable {
+				if (isBlacklisted())
+					"Cannot changed for blacklisted entities")
+				else
+					null
+			}
+		}
+	}
+
+These features are described in the following chapters.
+
+#### Collection Rules
+
+For collection imperative rules for visibility, usability and validity can be defined. These business rules provide additional checking and behaviour to be performed when the user interacts with those object collections.
+
+
+##### Hide
+
+The keyword `hide` defines a boolean expression for hiding the collection:
+
+	collection Set<OtherType> someCollection {
+		hide {
+			isBlacklisted()
+		}
+	}
+
+
+##### Disable
+
+The keyword `disable` defines an expression for disabling the collection.
+It returns a string with the reason for disabling or `null` if not disabled:
+
+	collection Set<OtherType> someCollection {
+		disable {
+			if (isBlacklisted())
+				"Not allowed for blacklisted entities")
+			else
+				null
+		}
+	}
+
+
+##### Validate
+
+The keyword `validate [add|remove]` defines an expression which validates a proposed argument (parameter name `element`). It returns a string which is the reason the modification is vetoed or `null` if not vetoed:
+
+	collection Set<OtherType> someCollection {
+		validate add {
+			if (someCollection.contains(element))
+				"Element is already added"
+			else
+				null
+		}
+		validate remove {
+			if (element.isInUse())
+				"Element is still in use"
+			else
+				null
+		}
+	}
+
+
+#### Derived Collection
+
+The keyword `derived` defines an expression which is used as getter of a non-persistent (derived) collection. Derived collections have no instance variable and setter.
+
+	collection Set<OtherType> someCollection {
+		derived {
+			someCalculation()
+		}
+	}
+
+For these collections only the business rule `hide` is allowed.
+
+
+#### Add
+
+The keyword `add` defines an expression to add a given element (parameter name `element`) to the collection:
+
+	collection Set<OtherType> someCollection {
+		add {
+			doSomeStuff()
+			getSomeCollection().add(element)
+			doSomeOtherStuff()
+		}
+	}
+
+Using this method allows business logic to be placed apart from the update of the collection.
+
+
+#### Remove
+
+The keyword `remove` defines an expression to remove a given element (parameter name `element`) from the collection:
+
+	collection Set<OtherType> someCollection {
+		remove {
+			doSomeStuff()
+			getSomeCollection().remove(element)
+			doSomeOtherStuff()
+		}
+	}
+
+Using this method allows business logic to be placed apart from the update of the collection.
+
+
+#### Property Events
+
+With the keyword `event` a domain event (subtype of `CollectionDomainEvent`) can be defined: 
+
+	@Collection(domainEvent = SomeEvent)
+	collection Set<OtherType> someCollection {
+		event SomeEvent
+	}
 
 
 ### Actions
@@ -276,10 +412,9 @@ For actions imperative rules for visibility, usability and validity can be defin
 
 The keyword `hide` defines a boolean expression for hiding the action:
 
-		action boolean someAction {
-			hide {
-				isBlacklisted()
-			}
+	action boolean someAction {
+		hide {
+			isBlacklisted()
 		}
 	}
 
@@ -289,13 +424,13 @@ The keyword `hide` defines a boolean expression for hiding the action:
 The keyword `disable` defines an expression for disabling the action.
 It returns a string with the reason for disabling or `null` if not disabled:
 
-		action boolean someAction {
-			disable {
-				if (isBlacklisted())
-					"Not allowed for blacklisted entities")
-				else
-					null
-			}
+	action boolean someAction {
+		disable {
+			if (isBlacklisted())
+				"Not allowed for blacklisted entities")
+			else
+				null
+		}
 	}
 
 
@@ -303,13 +438,13 @@ It returns a string with the reason for disabling or `null` if not disabled:
 
 The keyword `validate` defines an expression which validates a complete set of proposed action arguments (parameters are the same as for the action). It returns a string which is the reason the modification is vetoed or `null` if not vetoed:
 
-		action Order placeOrder {
-			validate {
-				if (quantity > product.orderLimit)
-					"May not order more than " + product.orderLimit + " items for this product"
-				else
-					null
-			}
+	action Order placeOrder {
+		validate {
+			if (quantity > product.orderLimit)
+				"May not order more than " + product.orderLimit + " items for this product"
+			else
+				null
+		}
 	}
 
 
@@ -403,5 +538,5 @@ With the keyword `event` a domain event (subtype of `ActionDomainEvent`) can be 
 
 	@Action(domainEvent = SomeEvent)
 	action someAction {
-		event SomeEvent;
+		event SomeEvent
 	}
