@@ -29,7 +29,7 @@ The different aspects of the Isis Script DSL are explained in the following sect
     - [Derived Collection](#derived-collection)
     - [Add](#add)
     - [Remove](#remove)
-    - [Property Events](#property-events-1)
+    - [Collection Events](#collection-events)
   - [Actions](#actions)
     - [Action Rules](#action-rules)
       - [Hide](#hide-2)
@@ -41,6 +41,10 @@ The different aspects of the Isis Script DSL are explained in the following sect
       - [Auto-Complete](#auto-complete-1)
       - [Validate](#validate-3)
     - [Action Events](#action-events)
+- [Services](#services)
+  - [Inheritance](#inheritance-1)
+  - [Injections](#injections-1)
+  - [Actions](#actions-1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -362,7 +366,7 @@ The keyword `remove` defines an expression to remove a given element (parameter 
 Using this method allows business logic to be placed apart from the update of the collection.
 
 
-#### Property Events
+#### Collection Events
 
 With the keyword `event` a domain event (subtype of `CollectionDomainEvent`) can be defined: 
 
@@ -540,3 +544,55 @@ With the keyword `event` a domain event (subtype of `ActionDomainEvent`) can be 
 	action someAction {
 		event SomeEvent
 	}
+
+
+## Services
+
+Domain services, factories or repositories are defined with the keyword `service`. They have a unique name and are preceeded by Isis or selected JDO annotations.
+
+	@... // Isis and JDO annotations 
+	service SomeService {
+	}
+
+
+### Inheritance
+
+By using the keyword `extends` a service can inherit from another service:
+
+	service SomeService extends SomeSuperType {
+	}
+
+
+### Injections
+
+With the keyword `inject` an Isis service can be autowired (field injection) into a service:
+
+	service SomeService {
+		inject OtherTypeRepository others;
+	}
+
+
+### Actions
+
+Services support the same kind of actions like [entities](#entities), e.g.
+
+	service SomeService {
+		@... // Isis and JDO annotations
+		action boolean someAction {
+			body {
+				true
+			}
+			disable {
+				if (isBlacklisted())
+					"Cannot executed for blacklisted service")
+				else
+					null
+			}
+		}
+	}
+
+Service actions have the same features as [entity actions](#actions):
+
+ * [Rules](#action-rules)
+ * [Parameters](#action-parameters)
+ * [Events](#action-events)
