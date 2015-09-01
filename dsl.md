@@ -6,6 +6,7 @@ The different aspects of the Isis Script DSL are explained in the following sect
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
+- [Namespaces](#namespaces)
 - [Entities](#entities)
   - [Inheritance](#inheritance)
   - [Injections](#injections)
@@ -47,6 +48,18 @@ The different aspects of the Isis Script DSL are explained in the following sect
   - [Actions](#actions-1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+
+## Namespaces
+
+To define a namespace for an Isis Script object the corresponding Java notion of packages and imports are supported. So the keywords `package` and `import` are used in the same way as in Java classes:
+
+	package org.vaulttec.types
+	
+	import org.vaulttec.types.other.SomeSuperType
+	
+	entity SomeType extends SomeSuperType {
+	}
 
 
 ## Entities

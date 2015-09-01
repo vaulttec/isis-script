@@ -20,7 +20,7 @@ Isis Script is an [Xtext](http://xtext.org)-based [DSL](http://en.wikipedia.org/
 
 ## The DSL
 
-The Isis Script DSL is inspired by concepts from [Domain-Driven Design](http://domaindrivendesign.org/books/). It provides keywords for creating entities (with their annotations, injections, properties, events, actions, repository and UI hints) and services (with their annotations, injections and actions).
+The [Isis Script DSL](https://github.com/vaulttec/isis-script/blob/develop/dsl.md) is inspired by concepts from [Domain-Driven Design](http://domaindrivendesign.org/books/). It provides keywords for creating entities (with their annotations, injections, properties, events, actions and UI hints) and services (with their annotations, injections and actions).
 To map the Isis Script DSL to the corresponding Java code the notion of packages and imports are supported as well.
 
 The following example shows an entity with a property and an action using an event:
@@ -192,6 +192,8 @@ entity SimpleObject {
 	}
 }
 ```
+
+A formal description of the Isis Script DSL can be found [here]](https://github.com/vaulttec/isis-script/blob/develop/dsl.md) 
 
 
 ## The Implementation
