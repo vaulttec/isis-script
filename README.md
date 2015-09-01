@@ -193,7 +193,7 @@ entity SimpleObject {
 }
 ```
 
-A formal description of the Isis Script DSL can be found [here]](https://github.com/vaulttec/isis-script/blob/develop/dsl.md) 
+A formal description of the Isis Script DSL can be found [here](https://github.com/vaulttec/isis-script/blob/develop/dsl.md).
 
 
 ## The Implementation
