@@ -256,24 +256,18 @@ With the keyword `event` a domain event (subtype of `PropertyDomainEvent`) can b
 
 ### Collections
 
-The keyword `collection` is used to define a collection property for an entity. The method expression (which evaluates the initial value of the collection property) is defined with the keyword `init`:
+The keyword `collection` is used to define a collection property (with its type and initial value) for an entity:
 
 	entity SomeType {
 		@... // Isis and JDO annotations
-		collection Set<OtherType> someCollection {
-			init {
-				new TreeSet<>()
-			}
+		collection Set<OtherType> someCollection = new TreeSet<>() {
 		}
 	}
 
 A collection can have additional attributes (supporting methods), e.g. disable:
 
 	entity SomeType {
-		collection Set<OtherType> someCollection {
-			init {
-				new TreeSet<>()
-			}
+		collection Set<OtherType> someCollection = new TreeSet<>() {
 			disable {
 				if (isBlacklisted())
 					"Cannot changed for blacklisted entities")
@@ -294,7 +288,7 @@ For collection imperative rules for visibility, usability and validity can be de
 
 The keyword `hide` defines a boolean expression for hiding the collection:
 
-	collection Set<OtherType> someCollection {
+	collection Set<OtherType> someCollection = new TreeSet<>() {
 		hide {
 			isBlacklisted()
 		}
@@ -306,7 +300,7 @@ The keyword `hide` defines a boolean expression for hiding the collection:
 The keyword `disable` defines an expression for disabling the collection.
 It returns a string with the reason for disabling or `null` if not disabled:
 
-	collection Set<OtherType> someCollection {
+	collection Set<OtherType> someCollection = new TreeSet<>() {
 		disable {
 			if (isBlacklisted())
 				"Not allowed for blacklisted entities")
@@ -320,7 +314,7 @@ It returns a string with the reason for disabling or `null` if not disabled:
 
 The keyword `validate [add|remove]` defines an expression which validates a proposed argument (parameter name `element`). It returns a string which is the reason the modification is vetoed or `null` if not vetoed:
 
-	collection Set<OtherType> someCollection {
+	collection Set<OtherType> someCollection = new TreeSet<>() {
 		validate add {
 			if (someCollection.contains(element))
 				"Element is already added"
@@ -340,7 +334,7 @@ The keyword `validate [add|remove]` defines an expression which validates a prop
 
 The keyword `derived` defines an expression which is used as getter of a non-persistent (derived) collection. Derived collections have no instance variable and setter.
 
-	collection Set<OtherType> someCollection {
+	collection Set<OtherType> someCollection = new TreeSet<>() {
 		derived {
 			someCalculation()
 		}
@@ -353,7 +347,7 @@ For these collections only the business rule `hide` is allowed.
 
 The keyword `add` defines an expression to add a given element (parameter name `element`) to the collection:
 
-	collection Set<OtherType> someCollection {
+	collection Set<OtherType> someCollection = new TreeSet<>() {
 		add {
 			doSomeStuff()
 			getSomeCollection().add(element)
@@ -368,7 +362,7 @@ Using this method allows business logic to be placed apart from the update of th
 
 The keyword `remove` defines an expression to remove a given element (parameter name `element`) from the collection:
 
-	collection Set<OtherType> someCollection {
+	collection Set<OtherType> someCollection = new TreeSet<>() {
 		remove {
 			doSomeStuff()
 			getSomeCollection().remove(element)
@@ -384,7 +378,7 @@ Using this method allows business logic to be placed apart from the update of th
 With the keyword `event` a domain event (subtype of `CollectionDomainEvent`) can be defined: 
 
 	@Collection(domainEvent = SomeEvent)
-	collection Set<OtherType> someCollection {
+	collection Set<OtherType> someCollection = new TreeSet<>() {
 		event SomeEvent
 	}
 
