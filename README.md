@@ -148,9 +148,9 @@ entity SimpleObject {
 			this
 		}
 		validate {
-	        if (newName.contains("!"))
-	        	TranslatableString.tr("Exclamation mark is not allowed")
-	        else null
+			if (newName.contains("!"))
+				TranslatableString.tr("Exclamation mark is not allowed")
+			else null
 		}
 		event UpdateNameDomainEvent
 	}
