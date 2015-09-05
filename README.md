@@ -226,7 +226,6 @@ action SimpleObject updateName {
 	@Parameter(maxLength = 40)
 	@ParameterLayout(named = "New name")
 	parameter String newName {
-}
 ```
 
 [Xbase expressions](https://www.eclipse.org/Xtext/documentation/305_xbase.html#xbase-expressions) are used to implement the dynamic parts of the DSL, e.g. property features, actions or UI hints.
