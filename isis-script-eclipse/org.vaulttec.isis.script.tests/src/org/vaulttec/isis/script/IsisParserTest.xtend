@@ -41,9 +41,17 @@ class IsisParserTest {
 			package org.vaulttec.isis.script.test
 			entity Entity1 {
 				inject Object injection1
-				event Event1
-				property int prop1
-				action action1() {
+				property int prop1 {
+					event Event1
+				}
+				collection java.util.Set<String> collection1 = new java.util.TreeSet<String> {
+					event Event2
+				}
+				action String action1 {
+					body {
+						""
+					}
+					event Event3
 				}
 			}
 		'''.parse => [
@@ -52,31 +60,12 @@ class IsisParserTest {
 			val entity = declaration as IsisEntity
 			assertEquals("Entity1", entity.name)
 			assertEquals("injection1", entity.injections.get(0).name)
-			assertEquals("Event1", entity.events.get(0).name)
 			assertEquals("prop1", entity.properties.get(0).name)
+			assertEquals("Event1", entity.properties.get(0).events.get(0).name)
+			assertEquals("collection1", entity.collections.get(0).name)
+			assertEquals("Event2", entity.collections.get(0).events.get(0).name)
 			assertEquals("action1", entity.actions.get(0).name)
-		]
-	}
-
-	@Test
-	def void parseRepository() {
-		'''
-			package org.vaulttec.isis.script.test
-			entity Entity1 {
-				repository {
-					inject Object injectedObj
-					action listAll() {
-						container.allInstances(Entity1)
-					}
-				}
-			}
-		'''.parse => [
-			assertNoErrors
-			val repo = (declaration as IsisEntity).repositories.get(0)
-			assertNotNull(repo)
-			assertEquals("injectedObj", repo.injections.get(0).name)
-			val action = repo.actions.get(0)
-			assertEquals("listAll", action.name)
+			assertEquals("Event3", entity.actions.get(0).events.get(0).name)
 		]
 	}
 
@@ -86,7 +75,11 @@ class IsisParserTest {
 			package org.vaulttec.isis.script.test
 			service Service1 {
 				inject Object injection1
-				action action1() {
+				action int action1 {
+					body {
+						42
+					}
+					event Event1
 				}
 			}
 		'''.parse => [
@@ -96,6 +89,7 @@ class IsisParserTest {
 			assertEquals("Service1", entity.name)
 			assertEquals("injection1", entity.injections.get(0).name)
 			assertEquals("action1", entity.actions.get(0).name)
+			assertEquals("Event1", entity.actions.get(0).events.get(0).name)
 		]
 	}
 

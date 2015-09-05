@@ -31,14 +31,14 @@ IsisTypeDeclaration:
 IsisEntity:
 	=> (annotations+=XAnnotation*
 	'entity') name=ID ('extends' superType=JvmTypeReference)? '{'
-	(injections+=IsisInjection | events+=IsisEvent | properties+=IsisProperty | actions+=IsisAction |
-	repositories+=IsisRepository | uiHints+=IsisUiHint)*
+	(injections+=IsisInjection | properties+=IsisProperty | collections+=IsisCollection |
+	actions+=IsisAction | uiHints+=IsisUiHint)*
 	'}';
 
 IsisService:
 	annotations+=XAnnotation*
 	'service' name=ID ('extends' superType=JvmTypeReference)? '{'
-	(injections+=IsisInjection | actions+=IsisAction)*
+	(injections+=IsisInjection | collections+=IsisCollection | actions+=IsisAction)*
 	'}';
 
 IsisInjection:
@@ -50,33 +50,55 @@ IsisEvent:
 IsisProperty:
 	=> (annotations+=XAnnotation*
 	'property') type=JvmTypeReference name=ID ('{'
-	features+=IsisPropertyFeature*
+	(features+=IsisPropertyFeature | events+=IsisEvent)*
 	'}')?;
 
 IsisPropertyFeature:
+	annotations+=XAnnotation*
 	type=IsisPropertyFeatureType expression=XBlockExpression;
 
 enum IsisPropertyFeatureType:
-	Derived='derived' | Modify='modify' | Clear='clear' | Default='default' | Choices='choices' | Hide='hide' |
-	Disable='disable' | Validate='validate';
+	Hide='hide' | Disable='disable' | Validate='validate' | Derived='derived' |
+	Modify='modify' | Clear='clear' | Choices='choices' | Complete='complete' | Default='default';
+
+IsisCollection:
+	=> (annotations+=XAnnotation*
+	'collection') (type=JvmTypeReference)? name=ID '=' init=XExpression ('{'
+	(features+=IsisCollectionFeature | events+=IsisEvent)*
+	'}')?;
+
+IsisCollectionFeature:
+	annotations+=XAnnotation*
+	type=IsisCollectionFeatureType expression=XBlockExpression;
+
+enum IsisCollectionFeatureType:
+	Hide='hide' | Disable='disable' | Validate='validate' | Derived='derived' |
+	Add='add' | Remove='remove';
 
 IsisAction:
 	=> (annotations+=XAnnotation*
-	'action') (returnType=JvmTypeReference)? name=ID '('
-	(parameters+=IsisActionParameter (',' parameters+=IsisActionParameter)*)?
-	')'
-	expression=XBlockExpression;
+	'action') type=JvmTypeReference name=ID '{'
+	(features+=IsisActionFeature | parameters+=IsisActionParameter | events+=IsisEvent)*
+	'}';
+
+IsisActionFeature:
+	type=IsisActionFeatureType expression=XBlockExpression;
+
+enum IsisActionFeatureType:
+	Body='body' | Hide='hide' | Disable='disable' | Validate='validate';
 
 IsisActionParameter:
-	annotations+=XAnnotation*
-	type=FullJvmFormalParameter;
+	=> (annotations+=XAnnotation*
+	'parameter') type=FullJvmFormalParameter ('{'
+	(features+=IsisActionParameterFeature)*
+	'}')?;
 
-IsisRepository:
-	{IsisRepository}
+IsisActionParameterFeature:
 	annotations+=XAnnotation*
-	'repository' name=ID? ('extends' superType=JvmTypeReference)? '{'
-	(injections+=IsisInjection | actions+=IsisAction)*
-	'}';
+	type=IsisActionParameterFeatureType expression=XBlockExpression;
+
+enum IsisActionParameterFeatureType:
+	Default='default' | Choices='choices' | Complete='complete' | Validate='validate';
 
 IsisUiHint:
 	type=IsisUiHintType expression=XBlockExpression;

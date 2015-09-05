@@ -1,0 +1,50 @@
+package domainapp.dom.modules.simple
+
+import org.apache.isis.applib.annotation.DomainServiceLayout
+import org.apache.isis.applib.annotation.DomainService
+import org.apache.isis.applib.annotation.Action
+import org.apache.isis.applib.annotation.SemanticsOf
+import org.apache.isis.applib.annotation.BookmarkPolicy
+import org.apache.isis.applib.annotation.ActionLayout
+import org.apache.isis.applib.annotation.MemberOrder
+import org.apache.isis.applib.annotation.ParameterLayout
+import org.apache.isis.applib.query.QueryDefault
+import java.util.List
+
+@DomainService(repositoryFor = SimpleObject)
+@DomainServiceLayout(menuOrder = "10")
+service SimpleObjects {
+
+	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
+	@MemberOrder(sequence = "1")
+	action List<SimpleObject> listAll {
+		body {
+			container.allInstances(SimpleObject)
+		}
+	}
+
+	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
+	@MemberOrder(sequence = "2")
+	action List<SimpleObject> findByName {
+		@ParameterLayout(named="Name") 
+		parameter String name
+		body {
+			container.allMatches(new QueryDefault(SimpleObject, "findByName", "name", name))
+		}
+	}
+
+	@MemberOrder(sequence = "3")
+	action SimpleObject create {
+		@ParameterLayout(named="Name")
+		parameter String name
+		body {
+			val obj = container.newTransientInstance(SimpleObject)
+			obj.name = name
+			container.persistIfNotAlready(obj)
+			obj
+		}
+	}
+	
+}

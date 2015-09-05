@@ -25,7 +25,6 @@ import org.vaulttec.isis.script.dsl.IsisEvent
 import org.vaulttec.isis.script.dsl.IsisInjection
 import org.vaulttec.isis.script.dsl.IsisPackageDeclaration
 import org.vaulttec.isis.script.dsl.IsisProperty
-import org.vaulttec.isis.script.dsl.IsisRepository
 import org.vaulttec.isis.script.dsl.IsisService
 import org.vaulttec.isis.script.dsl.IsisUiHint
 
@@ -46,8 +45,6 @@ class IsisOutlineNodeComparator extends DefaultComparator {
 					return -50
 				case IsisProperty:
 					return -40
-				case IsisRepository:
-					return -30
 				case IsisAction:
 					return -20
 				case IsisUiHint:

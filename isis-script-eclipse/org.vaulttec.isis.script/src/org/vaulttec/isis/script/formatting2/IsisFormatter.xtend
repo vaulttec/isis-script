@@ -8,14 +8,17 @@ import org.eclipse.xtext.formatting2.IFormattableDocument;
 import org.eclipse.xtext.xbase.annotations.formatting2.XbaseWithAnnotationsFormatter;
 import org.eclipse.xtext.xbase.annotations.xAnnotations.XAnnotation;
 import org.vaulttec.isis.script.dsl.IsisAction;
+import org.vaulttec.isis.script.dsl.IsisActionFeature;
 import org.vaulttec.isis.script.dsl.IsisActionParameter;
+import org.vaulttec.isis.script.dsl.IsisActionParameterFeature;
+import org.vaulttec.isis.script.dsl.IsisCollection;
+import org.vaulttec.isis.script.dsl.IsisCollectionFeature;
 import org.vaulttec.isis.script.dsl.IsisEntity;
 import org.vaulttec.isis.script.dsl.IsisEvent;
 import org.vaulttec.isis.script.dsl.IsisFile;
 import org.vaulttec.isis.script.dsl.IsisInjection;
 import org.vaulttec.isis.script.dsl.IsisProperty;
 import org.vaulttec.isis.script.dsl.IsisPropertyFeature;
-import org.vaulttec.isis.script.dsl.IsisRepository;
 import org.vaulttec.isis.script.dsl.IsisService;
 import org.vaulttec.isis.script.dsl.IsisUiHint;
 import org.vaulttec.isis.script.services.IsisGrammarAccess;
@@ -40,17 +43,14 @@ class IsisFormatter extends XbaseWithAnnotationsFormatter {
 		for (IsisInjection injections : isisentity.getInjections()) {
 			format(injections, document);
 		}
-		for (IsisEvent events : isisentity.getEvents()) {
-			format(events, document);
-		}
 		for (IsisProperty properties : isisentity.getProperties()) {
 			format(properties, document);
 		}
+		for (IsisCollection collections : isisentity.getCollections()) {
+			format(collections, document);
+		}
 		for (IsisAction actions : isisentity.getActions()) {
 			format(actions, document);
-		}
-		for (IsisRepository repositories : isisentity.getRepositories()) {
-			format(repositories, document);
 		}
 		for (IsisUiHint uiHints : isisentity.getUiHints()) {
 			format(uiHints, document);
@@ -65,6 +65,9 @@ class IsisFormatter extends XbaseWithAnnotationsFormatter {
 		format(isisservice.getSuperType(), document);
 		for (IsisInjection injections : isisservice.getInjections()) {
 			format(injections, document);
+		}
+		for (IsisCollection collections : isisservice.getCollections()) {
+			format(collections, document);
 		}
 		for (IsisAction actions : isisservice.getActions()) {
 			format(actions, document);
@@ -85,11 +88,39 @@ class IsisFormatter extends XbaseWithAnnotationsFormatter {
 		for (IsisPropertyFeature features : isisproperty.getFeatures()) {
 			format(features, document);
 		}
+		for (IsisEvent events : isisproperty.getEvents()) {
+			format(events, document);
+		}
 	}
 
 	def dispatch void format(IsisPropertyFeature isispropertyfeature, extension IFormattableDocument document) {
 		// TODO: format HiddenRegions around keywords, attributes, cross references, etc. 
+		for (XAnnotation annotations : isispropertyfeature.getAnnotations()) {
+			format(annotations, document);
+		}
 		format(isispropertyfeature.getExpression(), document);
+	}
+
+	def dispatch void format(IsisCollection isiscollection, extension IFormattableDocument document) {
+		// TODO: format HiddenRegions around keywords, attributes, cross references, etc. 
+		for (XAnnotation annotations : isiscollection.getAnnotations()) {
+			format(annotations, document);
+		}
+		format(isiscollection.getType(), document);
+		for (IsisCollectionFeature features : isiscollection.getFeatures()) {
+			format(features, document);
+		}
+		for (IsisEvent events : isiscollection.getEvents()) {
+			format(events, document);
+		}
+	}
+
+	def dispatch void format(IsisCollectionFeature isiscollectionfeature, extension IFormattableDocument document) {
+		// TODO: format HiddenRegions around keywords, attributes, cross references, etc. 
+		for (XAnnotation annotations : isiscollectionfeature.getAnnotations()) {
+			format(annotations, document);
+		}
+		format(isiscollectionfeature.getExpression(), document);
 	}
 
 	def dispatch void format(IsisAction isisaction, extension IFormattableDocument document) {
@@ -97,11 +128,21 @@ class IsisFormatter extends XbaseWithAnnotationsFormatter {
 		for (XAnnotation annotations : isisaction.getAnnotations()) {
 			format(annotations, document);
 		}
-		format(isisaction.getReturnType(), document);
+		format(isisaction.getType(), document);
+		for (IsisActionFeature features : isisaction.getFeatures()) {
+			format(features, document);
+		}
 		for (IsisActionParameter parameters : isisaction.getParameters()) {
 			format(parameters, document);
 		}
-		format(isisaction.getExpression(), document);
+		for (IsisEvent events : isisaction.getEvents()) {
+			format(events, document);
+		}
+	}
+
+	def dispatch void format(IsisActionFeature isisactionfeature, extension IFormattableDocument document) {
+		// TODO: format HiddenRegions around keywords, attributes, cross references, etc. 
+		format(isisactionfeature.getExpression(), document);
 	}
 
 	def dispatch void format(IsisActionParameter isisactionparameter, extension IFormattableDocument document) {
@@ -110,20 +151,17 @@ class IsisFormatter extends XbaseWithAnnotationsFormatter {
 			format(annotations, document);
 		}
 		format(isisactionparameter.getType(), document);
+		for (IsisActionParameterFeature features : isisactionparameter.getFeatures()) {
+			format(features, document);
+		}
 	}
 
-	def dispatch void format(IsisRepository isisrepository, extension IFormattableDocument document) {
+	def dispatch void format(IsisActionParameterFeature isisactionparameterfeature, extension IFormattableDocument document) {
 		// TODO: format HiddenRegions around keywords, attributes, cross references, etc. 
-		for (XAnnotation annotations : isisrepository.getAnnotations()) {
+		for (XAnnotation annotations : isisactionparameterfeature.getAnnotations()) {
 			format(annotations, document);
 		}
-		format(isisrepository.getSuperType(), document);
-		for (IsisInjection injections : isisrepository.getInjections()) {
-			format(injections, document);
-		}
-		for (IsisAction actions : isisrepository.getActions()) {
-			format(actions, document);
-		}
+		format(isisactionparameterfeature.getExpression(), document);
 	}
 
 	def dispatch void format(IsisUiHint isisuihint, extension IFormattableDocument document) {

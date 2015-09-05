@@ -52,17 +52,6 @@ class IsisValidatorTest {
 	}
 
 	@Test
-	def void validateUpperCaseRepositoryName() {
-		'''
-			package org.vaulttec.isis.script.test
-			entity MyEntity {
-				repository myRepository {
-				}
-			}
-		'''.parse.assertWarning(DslPackage.eINSTANCE.isisRepository, INVALID_NAME, 'Name should start with a capital')
-	}
-
-	@Test
 	def void validateLowerCasePropertyName() {
 		'''
 			package org.vaulttec.isis.script.test
@@ -70,6 +59,72 @@ class IsisValidatorTest {
 				property int MyProperty
 			}
 		'''.parse.assertWarning(DslPackage.eINSTANCE.isisProperty, INVALID_NAME, 'Name should start with a non-capital')
+	}
+
+	@Test
+	def void validateLowerCaseCollectionName() {
+		'''
+			package org.vaulttec.isis.script.test
+			entity MyEntity {
+				collection java.util.Set<String> MyCollection {
+					init {
+						new java.util.TreeSet<String>
+					}
+				}
+			}
+		'''.parse.assertWarning(DslPackage.eINSTANCE.isisCollection, INVALID_NAME, 'Name should start with a non-capital')
+	}
+
+	@Test
+	def void validateLowerCaseActionName() {
+		'''
+			package org.vaulttec.isis.script.test
+			entity MyEntity {
+				action String Test {
+					body {
+						""
+					}
+				}
+			}
+		'''.parse.assertWarning(DslPackage.eINSTANCE.isisAction, INVALID_NAME, 'Name should start with a non-capital')
+	}
+
+	@Test
+	def void validateLowerCaseActionParameterName() {
+		'''
+			package org.vaulttec.isis.script.test
+			entity MyEntity {
+				action String test {
+					body {
+						""
+					}
+					parameter int P1
+				}
+			}
+		'''.parse.assertWarning(DslPackage.eINSTANCE.isisActionParameter, INVALID_NAME, 'Name should start with a non-capital')
+	}
+
+	@Test
+	def void validateUpperCaseEventName() {
+		'''
+			package org.vaulttec.isis.script.test
+			entity MyEntity {
+				property int myProperty {
+					event myPropertyChanged
+				}
+			}
+		'''.parse.assertWarning(DslPackage.eINSTANCE.isisEvent, INVALID_NAME, 'Name should start with a capital')
+	}
+
+	@Test
+	def void validateActionBody() {
+		'''
+			package org.vaulttec.isis.script.test
+			entity MyEntity {
+				action test {
+				}
+			}
+		'''.parse.assertError(DslPackage.eINSTANCE.isisAction, MISSING_BODY, 'Action must have a body')
 	}
 
 }

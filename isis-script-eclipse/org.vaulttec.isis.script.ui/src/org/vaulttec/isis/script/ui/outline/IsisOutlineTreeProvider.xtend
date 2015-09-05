@@ -29,7 +29,6 @@ import org.vaulttec.isis.script.dsl.IsisFile
 import org.vaulttec.isis.script.dsl.IsisInjection
 import org.vaulttec.isis.script.dsl.IsisProperty
 import org.vaulttec.isis.script.dsl.IsisPropertyFeature
-import org.vaulttec.isis.script.dsl.IsisRepository
 import org.vaulttec.isis.script.dsl.IsisTypeDeclaration
 import org.vaulttec.isis.script.dsl.IsisUiHint
 
@@ -63,10 +62,6 @@ class IsisOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		property.features.forEach[parentNode.createNode(it)]
 	}
 
-	def _createChildren(IOutlineNode parentNode, IsisRepository repository) {
-		repository.actions.forEach[parentNode.createNode(it)]
-	}
-
 	/**
 	 * Adds a type declarations model elements by their location in the source code.
 	 */
@@ -86,10 +81,6 @@ class IsisOutlineTreeProvider extends DefaultOutlineTreeProvider {
 
 	def _isLeaf(IsisPropertyFeature feature) {
 		true
-	}
-
-	def _isLeaf(IsisRepository repository) {
-		repository.actions.isNullOrEmpty
 	}
 
 	def _isLeaf(IsisUiHint uiHint) {

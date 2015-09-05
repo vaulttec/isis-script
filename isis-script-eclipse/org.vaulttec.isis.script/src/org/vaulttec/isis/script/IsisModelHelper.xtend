@@ -15,11 +15,15 @@
  *******************************************************************************/
 package org.vaulttec.isis.script
 
-import org.atteo.evo.inflector.English
+import org.vaulttec.isis.script.dsl.IsisAction
+import org.vaulttec.isis.script.dsl.IsisActionFeatureType
+import org.vaulttec.isis.script.dsl.IsisActionParameter
+import org.vaulttec.isis.script.dsl.IsisActionParameterFeatureType
+import org.vaulttec.isis.script.dsl.IsisCollection
+import org.vaulttec.isis.script.dsl.IsisCollectionFeatureType
 import org.vaulttec.isis.script.dsl.IsisEntity
 import org.vaulttec.isis.script.dsl.IsisProperty
 import org.vaulttec.isis.script.dsl.IsisPropertyFeatureType
-import org.vaulttec.isis.script.dsl.IsisRepository
 import org.vaulttec.isis.script.dsl.IsisUiHintType
 
 class IsisModelHelper {
@@ -29,6 +33,45 @@ class IsisModelHelper {
 	}
 
 	def getFeatureExpression(IsisProperty it, IsisPropertyFeatureType featureType) {
+		val feature = features.findFirst[type == featureType]
+		if (feature != null) {
+			feature.expression
+		} else {
+			null
+		}
+	}
+
+	def hasFeature(IsisCollection it, IsisCollectionFeatureType featureType) {
+		features != null && features.exists[type == featureType]
+	}
+
+	def getFeatureExpression(IsisCollection it, IsisCollectionFeatureType featureType) {
+		val feature = features.findFirst[type == featureType]
+		if (feature != null) {
+			feature.expression
+		} else {
+			null
+		}
+	}
+
+	def hasFeature(IsisAction it, IsisActionFeatureType featureType) {
+		features != null && features.exists[type == featureType]
+	}
+
+	def getFeatureExpression(IsisAction it, IsisActionFeatureType featureType) {
+		val feature = features.findFirst[type == featureType]
+		if (feature != null) {
+			feature.expression
+		} else {
+			null
+		}
+	}
+
+	def hasFeature(IsisActionParameter it, IsisActionParameterFeatureType featureType) {
+		features != null && features.exists[type == featureType]
+	}
+
+	def getFeatureExpression(IsisActionParameter it, IsisActionParameterFeatureType featureType) {
 		val feature = features.findFirst[type == featureType]
 		if (feature != null) {
 			feature.expression
@@ -48,17 +91,6 @@ class IsisModelHelper {
 		} else {
 			null
 		}
-	}
-
-	def getRepository(IsisEntity it) {
-		if(repositories.nullOrEmpty) null else repositories.get(0)
-	}
-
-	def getNormalizedName(IsisRepository repository) {
-		if (repository.name.nullOrEmpty)
-			English.plural((repository.eContainer as IsisEntity).name)
-		else
-			repository.name
 	}
 
 }

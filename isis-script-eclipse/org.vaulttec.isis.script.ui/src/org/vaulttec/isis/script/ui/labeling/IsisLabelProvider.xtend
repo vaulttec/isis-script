@@ -27,7 +27,6 @@ import org.vaulttec.isis.script.dsl.IsisInjection
 import org.vaulttec.isis.script.dsl.IsisPackageDeclaration
 import org.vaulttec.isis.script.dsl.IsisProperty
 import org.vaulttec.isis.script.dsl.IsisPropertyFeature
-import org.vaulttec.isis.script.dsl.IsisRepository
 import org.vaulttec.isis.script.dsl.IsisService
 import org.vaulttec.isis.script.dsl.IsisUiHint
 
@@ -55,17 +54,13 @@ class IsisLabelProvider extends XbaseLabelProvider {
 		createDecoratedLabel(property.name, property.type.simpleName)
 	}
 
-	def text(IsisRepository repository) {
-		repository.normalizedName
-	}
-
 	def text(IsisPropertyFeature feature) {
 		feature.type.literal
 	}
 
 	def text(IsisAction action) {
 		createDecoratedLabel(action.name + '(' + action.parameters.map[type.simpleName].join(',') + ')',
-			action.returnType.simpleName)
+			action.type.simpleName)
 	}
 
 	def text(IsisUiHint uiHint) {
@@ -85,8 +80,6 @@ class IsisLabelProvider extends XbaseLabelProvider {
 				'obj16/injection.gif'
 			IsisAction:
 				'obj16/action.gif'
-			IsisRepository:
-				'obj16/repository.gif'
 			IsisProperty:
 				if (element.hasFeature(DERIVED)) {
 					'obj16/property_derived.gif'

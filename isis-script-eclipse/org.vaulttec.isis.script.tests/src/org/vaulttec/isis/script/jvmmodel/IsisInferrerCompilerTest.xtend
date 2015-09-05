@@ -19,10 +19,7 @@ import javax.inject.Inject
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.TemporaryFolder
 import org.eclipse.xtext.junit4.XtextRunner
-import org.eclipse.xtext.util.IAcceptor
 import org.eclipse.xtext.xbase.compiler.CompilationTestHelper
-import org.eclipse.xtext.xbase.compiler.CompilationTestHelper.Result
-import static org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -63,63 +60,31 @@ class IsisInferrerCompilerTest {
 	}
 
 	@Test
-	def void testEntityRepository() {
+	def void testEntityWithProperties() {
 		'''
 			package org.vaulttec.isis.script.test
 			entity Child {
-				repository {
-					inject Object injectedObj
-					action listAll() {
-						container.allInstances(Child)
+				property int prop1 {
+					default {
+						42
 					}
+					event Event1
 				}
-			}
-		'''.compile(new IAcceptor<CompilationTestHelper.Result>() {
-			override accept(Result r) {
-				assertEquals(2, r.generatedCode.size)
-				assertEquals('''
-					package org.vaulttec.isis.script.test;
-					
-					import java.util.List;
-					import javax.inject.Inject;
-					import org.apache.isis.applib.DomainObjectContainer;
-					import org.apache.isis.applib.annotation.DomainService;
-					import org.vaulttec.isis.script.test.Child;
-					
-					@DomainService(repositoryFor = Child.class)
-					@SuppressWarnings("all")
-					public class Children {
-					  @Inject
-					  @SuppressWarnings("unused")
-					  private DomainObjectContainer container;
-					  
-					  @Inject
-					  @SuppressWarnings("unused")
-					  private Object injectedObj;
-					  
-					  public List<Child> listAll() {
-					    return this.container.<Child>allInstances(Child.class);
-					  }
+				property String prop2 {
+					default {
+						""
 					}
-				'''.toString, r.getGeneratedCode("org.vaulttec.isis.script.test.Children"))
-			}
-		})
-	}
-
-	@Test
-	def void testEntityEvent() {
-		'''
-			package org.vaulttec.isis.script.test
-			entity Child {
-				event NameChangedEvent
+					event Event2
+				}
 			}
 		'''.assertCompilesTo(
 		'''
 			package org.vaulttec.isis.script.test;
 			
-			import java.util.List;
 			import javax.inject.Inject;
 			import org.apache.isis.applib.DomainObjectContainer;
+			import org.apache.isis.applib.Identifier;
+			import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 			
 			@SuppressWarnings("all")
 			public class Child implements Comparable<Child> {
@@ -127,23 +92,157 @@ class IsisInferrerCompilerTest {
 			  @SuppressWarnings("unused")
 			  private DomainObjectContainer container;
 			  
-			  public static class NameChangedEvent implements org.apache.isis.applib.services.eventbus.ActionDomainEvent {
-			    public NameChangedEvent(final Child source, final org.apache.isis.applib.Identifier identifier) {
+			  private int prop1;
+			  
+			  public int getProp1() {
+			    return this.prop1;
+			  }
+			  
+			  public void setProp1(final int prop1) {
+			    this.prop1 = prop1;
+			  }
+			  
+			  public int defaultProp1() {
+			    return 42;
+			  }
+			  
+			  public static class Event1 extends PropertyDomainEvent<Child> {
+			    public Event1(final Child source, final Identifier identifier) {
 			      super(source, identifier);
 			    }
 			    
-			    public NameChangedEvent(final Child source, final org.apache.isis.applib.Identifier identifier, final Object... arguments) {
-			      super(source, identifier, arguments);
+			    public Event1(final Child source, final Identifier identifier, final int oldValue, final int newValue) {
+			      super(source, identifier, oldValue, newValue);
+			    }
+			  }
+			  
+			  private String prop2;
+			  
+			  public String getProp2() {
+			    return this.prop2;
+			  }
+			  
+			  public void setProp2(final String prop2) {
+			    this.prop2 = prop2;
+			  }
+			  
+			  public String defaultProp2() {
+			    return "";
+			  }
+			  
+			  public static class Event2 extends PropertyDomainEvent<Child> {
+			    public Event2(final Child source, final Identifier identifier) {
+			      super(source, identifier);
 			    }
 			    
-			    public NameChangedEvent(final Child source, final org.apache.isis.applib.Identifier identifier, final List<Object> arguments) {
-			      super(source, identifier, arguments);
+			    public Event2(final Child source, final Identifier identifier, final String oldValue, final String newValue) {
+			      super(source, identifier, oldValue, newValue);
 			    }
 			  }
 			  
 			  @Override
 			  public int compareTo(final Child other) {
+			    return org.apache.isis.applib.util.ObjectContracts.compare(this, other, "prop1,prop2");
+			  }
+			}
+		''')
+	}
+
+	@Test
+	def void testEntityWithCollections() {
+		'''
+			package org.vaulttec.isis.script.test
+			entity Child {
+				@org.apache.isis.applib.annotation.Collection(editing = org.apache.isis.applib.annotation.Editing.ENABLED)
+				collection java.util.Set<Integer> collec1 = new java.util.TreeSet<Integer>
+
+				@org.apache.isis.applib.annotation.Collection(editing = org.apache.isis.applib.annotation.Editing.DISABLED)
+				collection java.util.List<String> collec2 = new java.util.ArrayList<String>
+			}
+		'''.assertCompilesTo(
+		'''
+			package org.vaulttec.isis.script.test;
+			
+			import java.util.ArrayList;
+			import java.util.List;
+			import java.util.Set;
+			import java.util.TreeSet;
+			import javax.inject.Inject;
+			import org.apache.isis.applib.DomainObjectContainer;
+			import org.apache.isis.applib.annotation.Collection;
+			import org.apache.isis.applib.annotation.Editing;
+			
+			@SuppressWarnings("all")
+			public class Child implements Comparable<Child> {
+			  @Inject
+			  @SuppressWarnings("unused")
+			  private DomainObjectContainer container;
+			  
+			  private Set<Integer> collec1 = new TreeSet<Integer>();
+			  
+			  @Collection(editing = Editing.ENABLED)
+			  public Set<Integer> getCollec1() {
+			    return this.collec1;
+			  }
+			  
+			  public void setCollec1(final Set<Integer> collec1) {
+			    this.collec1 = collec1;
+			  }
+			  
+			  private List<String> collec2 = new ArrayList<String>();
+			  
+			  @Collection(editing = Editing.DISABLED)
+			  public List<String> getCollec2() {
+			    return this.collec2;
+			  }
+			  
+			  public void setCollec2(final List<String> collec2) {
+			    this.collec2 = collec2;
+			  }
+			  
+			  @Override
+			  public int compareTo(final Child other) {
 			    return org.apache.isis.applib.util.ObjectContracts.compare(this, other, "");
+			  }
+			}
+		''')
+	}
+
+	@Test
+	def void testService() {
+		'''
+			package org.vaulttec.isis.script.test
+			service Service1 {
+				action String action1 {
+					body {
+						""
+					}
+				}
+				action int action2 {
+					body {
+						42
+					}
+				}
+			}
+		'''.assertCompilesTo(
+        '''
+			package org.vaulttec.isis.script.test;
+			
+			import javax.inject.Inject;
+			import org.apache.isis.applib.DomainObjectContainer;
+			
+			@SuppressWarnings("all")
+			public class Service1 {
+			  @Inject
+			  @SuppressWarnings("unused")
+			  private DomainObjectContainer container;
+			  
+			  public String action1() {
+			    return "";
+			  }
+			  
+			  public int action2() {
+			    return 42;
 			  }
 			}
 		''')

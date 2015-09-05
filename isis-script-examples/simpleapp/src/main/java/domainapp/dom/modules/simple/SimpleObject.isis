@@ -11,19 +11,14 @@ import javax.jdo.annotations.Unique
 import javax.jdo.annotations.Version
 import javax.jdo.annotations.VersionStrategy
 import org.apache.isis.applib.annotation.Action
-import org.apache.isis.applib.annotation.ActionLayout
 import org.apache.isis.applib.annotation.BookmarkPolicy
 import org.apache.isis.applib.annotation.DomainObject
 import org.apache.isis.applib.annotation.DomainObjectLayout
-import org.apache.isis.applib.annotation.DomainServiceLayout
 import org.apache.isis.applib.annotation.Editing
-import org.apache.isis.applib.annotation.MemberOrder
 import org.apache.isis.applib.annotation.Parameter
 import org.apache.isis.applib.annotation.ParameterLayout
 import org.apache.isis.applib.annotation.Property
-import org.apache.isis.applib.annotation.SemanticsOf
 import org.apache.isis.applib.annotation.Title
-import org.apache.isis.applib.query.QueryDefault
 import org.apache.isis.applib.services.i18n.TranslatableString
 
 @PersistenceCapable(identityType=IdentityType.DATASTORE)
@@ -45,50 +40,25 @@ entity SimpleObject {
 	@Property(editing = Editing.DISABLED)
 	property String name
 
-	event UpdateNameDomainEvent
-
 	@Action(domainEvent = UpdateNameDomainEvent)
-	action updateName(@Parameter(maxLength = 40)
-            @ParameterLayout(named = "New name") String newName) {
-		setName(newName)
-		this
-	}
-
-	action default0UpdateName() {
-		getName()
-	}
-
-    action validateUpdateName(String name) {
-        if (name.contains("!"))
-        	TranslatableString.tr("Exclamation mark is not allowed")
-        else null
-    }
-
-	@DomainServiceLayout(menuOrder = "10")
-	repository {
-
-    	@Action(semantics = SemanticsOf.SAFE)
-    	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
-		@MemberOrder(sequence = "1")
-		action listAll() {
-			container.allInstances(SimpleObject)
+	action SimpleObject updateName {
+		@Parameter(maxLength = 40)
+		@ParameterLayout(named = "New name")
+		parameter String newName {
+			default {
+				getName
+			}
 		}
-
-		@Action(semantics = SemanticsOf.SAFE)
-		@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
-		@MemberOrder(sequence = "2")
-		action findByName(@ParameterLayout(named="Name") String name) {
-			container.allMatches(new QueryDefault(SimpleObject,
-				"findByName", "name", name))
+		body {
+			setName(newName)
+			this
 		}
-
-		@MemberOrder(sequence = "3")
-		action create(@ParameterLayout(named="Name") String name) {
-			val obj = container.newTransientInstance(SimpleObject)
-			obj.name = name
-			container.persistIfNotAlready(obj)
-			obj
+		validate {
+	        if (newName.contains("!"))
+	        	TranslatableString.tr("Exclamation mark is not allowed")
+	        else null
 		}
+		event UpdateNameDomainEvent
 	}
 
 	title {

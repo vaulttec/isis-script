@@ -15,12 +15,19 @@
  *******************************************************************************/
 package org.vaulttec.isis.script.validation
 
+import javax.inject.Inject
 import org.eclipse.emf.ecore.EAttribute
+import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.validation.Check
+import org.vaulttec.isis.script.IsisModelHelper
 import org.vaulttec.isis.script.dsl.DslPackage
-import org.vaulttec.isis.script.dsl.IsisRepository
-import org.vaulttec.isis.script.dsl.IsisTypeDeclaration
+import org.vaulttec.isis.script.dsl.IsisAction
+import org.vaulttec.isis.script.dsl.IsisActionParameter
+import org.vaulttec.isis.script.dsl.IsisCollection
+import org.vaulttec.isis.script.dsl.IsisEvent
 import org.vaulttec.isis.script.dsl.IsisProperty
+import org.vaulttec.isis.script.dsl.IsisTypeDeclaration
+import org.vaulttec.isis.script.dsl.IsisActionFeatureType
 
 /**
  * This class contains custom validation rules. 
@@ -30,6 +37,9 @@ import org.vaulttec.isis.script.dsl.IsisProperty
 class IsisValidator extends AbstractIsisValidator {
 
 	public static val INVALID_NAME = 'IsisScript.InvalidName'
+	public static val MISSING_BODY = 'IsisScript.MissingBody'
+
+	@Inject extension IsisModelHelper
 
 	@Check
 	def checkTypeNameStartsWithCapital(IsisTypeDeclaration typeDeclaration) {
@@ -37,13 +47,36 @@ class IsisValidator extends AbstractIsisValidator {
 	}
 
 	@Check
-	def checkRepositoryNameStartsWithCapital(IsisRepository typeDeclaration) {
-		checkNameStartsWithCapital(typeDeclaration.name, DslPackage.Literals.ISIS_REPOSITORY__NAME, INVALID_NAME)
+	def checkPropertyNameStartsWithNonCapital(IsisProperty property) {
+		checkNameStartsWithNonCapital(property.name, DslPackage.Literals.ISIS_PROPERTY__NAME, INVALID_NAME)
 	}
 
 	@Check
-	def checkPropertyNameStartsWithNonCapital(IsisProperty property) {
-		checkNameStartsWithNonCapital(property.name, DslPackage.Literals.ISIS_PROPERTY__NAME, INVALID_NAME)
+	def checkCollectionNameStartsWithNonCapital(IsisCollection collection) {
+		checkNameStartsWithNonCapital(collection.name, DslPackage.Literals.ISIS_COLLECTION__NAME, INVALID_NAME)
+	}
+
+	@Check
+	def checkActionNameStartsWithNonCapital(IsisAction it) {
+		checkNameStartsWithNonCapital(name, DslPackage.Literals.ISIS_ACTION__NAME, INVALID_NAME)
+	}
+
+	@Check
+	def checkActionParameterNameStartsWithNonCapital(IsisActionParameter it) {
+		checkNameStartsWithNonCapital(type.name, DslPackage.Literals.ISIS_ACTION_PARAMETER__TYPE,
+			INVALID_NAME)
+	}
+
+	@Check
+	def checkEventNameStartsWithCapital(IsisEvent it) {
+		checkNameStartsWithCapital(name, DslPackage.Literals.ISIS_EVENT__NAME, INVALID_NAME)
+	}
+
+	@Check
+	def checkActionHasBodyExpression(IsisAction it) {
+		if (!hasFeature(IsisActionFeatureType.BODY)) {
+			error('Action must have a body', DslPackage.Literals.ISIS_ACTION__FEATURES, MISSING_BODY)
+		}
 	}
 
 	private def checkNameStartsWithCapital(String name, EAttribute attribute, String code) {
@@ -52,9 +85,9 @@ class IsisValidator extends AbstractIsisValidator {
 		}
 	}
 
-	private def checkNameStartsWithNonCapital(String name, EAttribute attribute, String code) {
+	private def checkNameStartsWithNonCapital(String name, EStructuralFeature feature, String code) {
 		if (Character.isUpperCase(name.charAt(0))) {
-			warning('Name should start with a non-capital', attribute, code)
+			warning('Name should start with a non-capital', feature, code)
 		}
 	}
 
