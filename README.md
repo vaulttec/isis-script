@@ -23,7 +23,7 @@ Isis Script is an [Xtext](http://xtext.org)-based [DSL](http://en.wikipedia.org/
 The [Isis Script DSL](https://github.com/vaulttec/isis-script/blob/develop/dsl.md) is inspired by concepts from [Domain-Driven Design](http://domaindrivendesign.org/books/). It provides keywords for creating entities (with their annotations, injections, properties, events, actions and UI hints) and services (with their annotations, injections and actions).
 To map the Isis Script DSL to the corresponding Java code the notion of packages and imports are supported as well.
 
-The following example shows an entity with a property and an action using an event:
+The following example shows an entity with a property, an action publishing an event and a title UI hint:
 
 ```java
 package domainapp.dom.modules.simple
@@ -32,21 +32,6 @@ import org.apache.isis.applib.annotation.Action
 import org.apache.isis.applib.annotation.DomainObject
 
 @DomainObject(objectType = "SIMPLE")
-entity SimpleObject {
-	property String name
-
-	event UpdateNameDomainEvent
-
-	@Action(domainEvent = UpdateNameDomainEvent)
-	action updateName(String newName) {
-		setName(newName)
-	}
-}
-```
-
-The following example (package and imports are omitted for brevity) shows an entity with a repository:
-
-```java
 @Queries(#[
 	@Query(name = "findByName", language = "JDOQL",
 		value = "SELECT FROM domainapp.dom.modules.simple.SimpleObject WHERE name.indexOf(:name) >= 0")
@@ -54,27 +39,38 @@ The following example (package and imports are omitted for brevity) shows an ent
 entity SimpleObject {
 	property String name
 
-	repository {
-		action listAll() {
-			container.allInstances(SimpleObject)
+	@Action(domainEvent = UpdateNameDomainEvent)
+	action void updateName {
+		parameter String newName
+		body {
+			setName(newName)
 		}
+		event UpdateNameDomainEvent
+	}
 
-		action findByName(String name) {
-			container.allMatches(new QueryDefault(SimpleObject,
-				"findByName", "name", name))
-		}
+	title {
+		TranslatableString.tr("Object: {name}", "name", name)
 	}
 }
 ```
 
-The following example (package and imports are omitted for brevity) shows an entity with a property and the corresponding title UI hint:
+The following example (package and imports are omitted for brevity) shows a repository service for the aforementioned entity:
 
 ```java
-entity SimpleObject {
-	property String name
+@DomainService(repositoryFor = SimpleObject)
+service SimpleObjects {
+	action List<SimpleObject> listAll {
+		body {
+			container.allInstances(SimpleObject)
+		}
+	}
 
-	title {
-		TranslatableString.tr("Object: {name}", "name", name)
+	action List<SimpleObject> findByName {
+		@ParameterLayout(named="Name") 
+		parameter String name
+		body {
+			container.allMatches(new QueryDefault(SimpleObject, "findByName", "name", name))
+		}
 	}
 }
 ```
@@ -85,13 +81,15 @@ The following example (package and imports are omitted for brevity) shows a serv
 service SimpleObjectProvider {
 	inject SimpleObjects repo
 
-	action allObjects() {
-		repo.listAll
+	action List<SimpleObject> allObjects {
+		body {
+			repo.listAll
+		}
 	}
 }
 ```
 
-The following example shows the complete Isis Script for the entity and repository of the domain object `SimpleObject` from the [Isis Script `simpleapp` example project](https://github.com/vaulttec/isis-script/tree/develop/isis-script-examples/simpleapp) created from the [Apache Isis Maven archetype SimpleApp](http://isis.apache.org/guides/ug.html#_ug_getting-started_simpleapp-archetype):
+The following examples shows the complete Isis Script for the entity and repository service of the domain object `SimpleObject` from the [Isis Script `simpleapp` example project](https://github.com/vaulttec/isis-script/tree/develop/isis-script-examples/simpleapp) created from the [Apache Isis Maven archetype SimpleApp](http://isis.apache.org/guides/ug.html#_ug_getting-started_simpleapp-archetype):
 
 ```java
 package domainapp.dom.modules.simple
@@ -107,19 +105,14 @@ import javax.jdo.annotations.Unique
 import javax.jdo.annotations.Version
 import javax.jdo.annotations.VersionStrategy
 import org.apache.isis.applib.annotation.Action
-import org.apache.isis.applib.annotation.ActionLayout
 import org.apache.isis.applib.annotation.BookmarkPolicy
 import org.apache.isis.applib.annotation.DomainObject
 import org.apache.isis.applib.annotation.DomainObjectLayout
-import org.apache.isis.applib.annotation.DomainServiceLayout
 import org.apache.isis.applib.annotation.Editing
-import org.apache.isis.applib.annotation.MemberOrder
 import org.apache.isis.applib.annotation.Parameter
 import org.apache.isis.applib.annotation.ParameterLayout
 import org.apache.isis.applib.annotation.Property
-import org.apache.isis.applib.annotation.SemanticsOf
 import org.apache.isis.applib.annotation.Title
-import org.apache.isis.applib.query.QueryDefault
 import org.apache.isis.applib.services.i18n.TranslatableString
 
 @PersistenceCapable(identityType=IdentityType.DATASTORE)
@@ -141,54 +134,81 @@ entity SimpleObject {
 	@Property(editing = Editing.DISABLED)
 	property String name
 
-	event UpdateNameDomainEvent
-
 	@Action(domainEvent = UpdateNameDomainEvent)
-	action updateName(@Parameter(maxLength = 40)
-            @ParameterLayout(named = "New name") String newName) {
-		setName(newName)
-		this
+	action SimpleObject updateName {
+		@Parameter(maxLength = 40)
+		@ParameterLayout(named = "New name")
+		parameter String newName {
+			default {
+				getName
+			}
+		}
+		body {
+			setName(newName)
+			this
+		}
+		validate {
+	        if (newName.contains("!"))
+	        	TranslatableString.tr("Exclamation mark is not allowed")
+	        else null
+		}
+		event UpdateNameDomainEvent
 	}
 
-	action default0UpdateName() {
-		getName()
+	title {
+		TranslatableString.tr("Object: {name}", "name", name)
 	}
+}
+```
 
-    action validateUpdateName(String name) {
-        if (name.contains("!"))
-        	TranslatableString.tr("Exclamation mark is not allowed")
-        else null
-    }
+```java
+package domainapp.dom.modules.simple
 
-	@DomainServiceLayout(menuOrder = "10")
-	repository {
+import org.apache.isis.applib.annotation.DomainServiceLayout
+import org.apache.isis.applib.annotation.DomainService
+import org.apache.isis.applib.annotation.Action
+import org.apache.isis.applib.annotation.SemanticsOf
+import org.apache.isis.applib.annotation.BookmarkPolicy
+import org.apache.isis.applib.annotation.ActionLayout
+import org.apache.isis.applib.annotation.MemberOrder
+import org.apache.isis.applib.annotation.ParameterLayout
+import org.apache.isis.applib.query.QueryDefault
+import java.util.List
 
-    	@Action(semantics = SemanticsOf.SAFE)
-    	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
-		@MemberOrder(sequence = "1")
-		action listAll() {
+@DomainService(repositoryFor = SimpleObject)
+@DomainServiceLayout(menuOrder = "10")
+service SimpleObjects {
+
+	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
+	@MemberOrder(sequence = "1")
+	action List<SimpleObject> listAll {
+		body {
 			container.allInstances(SimpleObject)
 		}
+	}
 
-		@Action(semantics = SemanticsOf.SAFE)
-		@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
-		@MemberOrder(sequence = "2")
-		action findByName(@ParameterLayout(named="Name") String name) {
-			container.allMatches(new QueryDefault(SimpleObject,
-				"findByName", "name", name))
+	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
+	@MemberOrder(sequence = "2")
+	action List<SimpleObject> findByName {
+		@ParameterLayout(named="Name") 
+		parameter String name
+		body {
+			container.allMatches(new QueryDefault(SimpleObject, "findByName", "name", name))
 		}
+	}
 
-		@MemberOrder(sequence = "3")
-		action create(@ParameterLayout(named="Name") String name) {
+	@MemberOrder(sequence = "3")
+	action SimpleObject create {
+		@ParameterLayout(named="Name")
+		parameter String name
+		body {
 			val obj = container.newTransientInstance(SimpleObject)
 			obj.name = name
 			container.persistIfNotAlready(obj)
 			obj
 		}
-	}
-
-	title {
-		TranslatableString.tr("Object: {name}", "name", name)
 	}
 }
 ```
@@ -201,25 +221,21 @@ A formal description of the Isis Script DSL can be found [here](https://github.c
 Isis Script uses [Xtexts support for accessing JVM types](https://www.eclipse.org/Xtext/documentation/305_xbase.html#jvmtypes), e.g. for Java annotations, super types, return types or parameters.
 
 ```java
-@Action(domainEvent = SimpleObject.UpdateNameDomainEvent)
-action SimpleObject updateName(
-        @Parameter(maxLength = 40)
-        @ParameterLayout(named = "New name")
-        String newName) {
+@Action(domainEvent = UpdateNameDomainEvent)
+action SimpleObject updateName {
+	@Parameter(maxLength = 40)
+	@ParameterLayout(named = "New name")
+	parameter String newName {
+}
 ```
 
 [Xbase expressions](https://www.eclipse.org/Xtext/documentation/305_xbase.html#xbase-expressions) are used to implement the dynamic parts of the DSL, e.g. property features, actions or UI hints.
 
 ```java
-action TranslatableString validateUpdateName(String name) {
-    if (name.contains("!"))
-        TranslatableString.tr("Exclamation mark is not allowed")
-    else
-        null
-}
-
-title {
-    TranslatableString.tr("Object: {name}", "name", name)
+validate {
+    if (newName.contains("!"))
+    	TranslatableString.tr("Exclamation mark is not allowed")
+    else null
 }
 ```
 
@@ -243,9 +259,9 @@ Isis Script comes with an [Xtext](http://xtext.org)-generated [Eclipse](http://w
 ![DSL Editor](/../images/screenshots/simpleobject-dsl-editor.png?raw=true "DSL Editor")
 	
 The source code in the editor is evaluated while typing. So the outline and the problems markers are updated automatically. 
-If enabled then selecting a node in the outline selects the corresponding code block in the editor view.
+If enabled then selecting a node in the outline then the corresponding code block is selected in the editor view.
 
-![DSL Editor with selected repository](/../images/screenshots/simpleobject-dsl-editor-repository.png?raw=true "DSL Editor with selected repository")
+![DSL Editor with selection in outline](/../images/screenshots/simpleobject-dsl-editor-outline.png?raw=true "DSL Editor with selection in outline")
 
 When a modified Isis Script is saved in the editor then the corresponding Java source file is generated within the folder `target/generated-sources/isis/`.
 
