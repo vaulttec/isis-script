@@ -73,7 +73,7 @@
 		<ecore-xcore-lib-version>1.1.100</ecore-xcore-lib-version>
 		<guava-version>14.0</guava-version>
 		<guice-version>3.0</guice-version>
-		<isis-version>1.8.0</isis-version>
+		<isis-version>1.9.0</isis-version>
 
 		<junit-version>4.12</junit-version>
 

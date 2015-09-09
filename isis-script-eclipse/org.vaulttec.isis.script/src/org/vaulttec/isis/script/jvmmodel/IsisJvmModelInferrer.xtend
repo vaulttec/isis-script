@@ -91,14 +91,14 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 	protected def void addComparable(JvmGenericType it, IsisEntity entity) {
 		val entityType = typeRef()
 		val entityNonDerivedPropertyNames = entity.properties.filter[!hasFeature(IsisPropertyFeatureType.DERIVED)].map [
-			name
+			'"' + name + '"'
 		].join(',')
 		superTypes += typeRef(Comparable, entityType)
 		members += entity.toMethod("compareTo", typeRef("int")) [
 			annotations += annotationRef(Override)
 			parameters +=
 				entity.toParameter("other", entityType)
-			body = '''return org.apache.isis.applib.util.ObjectContracts.compare(this, other, "«entityNonDerivedPropertyNames»");'''
+			body = '''return org.apache.isis.applib.util.ObjectContracts.compare(this, other«if (!entityNonDerivedPropertyNames.empty) ", " + entityNonDerivedPropertyNames»);'''
 		]
 	}
 

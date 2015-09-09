@@ -53,7 +53,7 @@ class IsisInferrerCompilerTest {
 			  
 			  @Override
 			  public int compareTo(final Entity1 other) {
-			    return org.apache.isis.applib.util.ObjectContracts.compare(this, other, "");
+			    return org.apache.isis.applib.util.ObjectContracts.compare(this, other);
 			  }
 			}
 		''')
@@ -142,7 +142,7 @@ class IsisInferrerCompilerTest {
 			  
 			  @Override
 			  public int compareTo(final Child other) {
-			    return org.apache.isis.applib.util.ObjectContracts.compare(this, other, "prop1,prop2");
+			    return org.apache.isis.applib.util.ObjectContracts.compare(this, other, "prop1","prop2");
 			  }
 			}
 		''')
@@ -202,7 +202,7 @@ class IsisInferrerCompilerTest {
 			  
 			  @Override
 			  public int compareTo(final Child other) {
-			    return org.apache.isis.applib.util.ObjectContracts.compare(this, other, "");
+			    return org.apache.isis.applib.util.ObjectContracts.compare(this, other);
 			  }
 			}
 		''')
