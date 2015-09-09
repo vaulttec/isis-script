@@ -49,7 +49,7 @@ class IsisInferrerCompilerTest {
 			public class Entity1 implements Comparable<Entity1> {
 			  @Inject
 			  @SuppressWarnings("unused")
-			  private DomainObjectContainer container;
+			  DomainObjectContainer container;
 			  
 			  @Override
 			  public int compareTo(final Entity1 other) {
@@ -90,7 +90,7 @@ class IsisInferrerCompilerTest {
 			public class Child implements Comparable<Child> {
 			  @Inject
 			  @SuppressWarnings("unused")
-			  private DomainObjectContainer container;
+			  DomainObjectContainer container;
 			  
 			  private int prop1;
 			  
@@ -176,7 +176,7 @@ class IsisInferrerCompilerTest {
 			public class Child implements Comparable<Child> {
 			  @Inject
 			  @SuppressWarnings("unused")
-			  private DomainObjectContainer container;
+			  DomainObjectContainer container;
 			  
 			  private Set<Integer> collec1 = new TreeSet<Integer>();
 			  
@@ -235,7 +235,7 @@ class IsisInferrerCompilerTest {
 			public class Service1 {
 			  @Inject
 			  @SuppressWarnings("unused")
-			  private DomainObjectContainer container;
+			  DomainObjectContainer container;
 			  
 			  public String action1() {
 			    return "";

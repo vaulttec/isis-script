@@ -21,6 +21,8 @@ import javax.inject.Inject
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.common.types.JvmGenericType
+import org.eclipse.xtext.common.types.JvmTypeReference
+import org.eclipse.xtext.common.types.JvmVisibility
 import org.eclipse.xtext.common.types.util.TypeReferences
 import org.eclipse.xtext.naming.QualifiedName
 import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
@@ -101,19 +103,21 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 	}
 
 	protected def void addContainerInjection(JvmGenericType it, EObject object) {
-		members += object.toField("container", typeRef("org.apache.isis.applib.DomainObjectContainer")) [
-			annotations += annotationRef(Inject)
-			annotations += annotationRef(SuppressWarnings, "unused")
-		]
+		members += createInjectionField(object, "container", typeRef("org.apache.isis.applib.DomainObjectContainer"))
 	}
 
 	protected def void addInjections(JvmGenericType it, EList<IsisInjection> injections) {
 		for (i : injections) {
-			members += i.toField(i.name, i.type) [
-				annotations += annotationRef(Inject)
-				annotations += annotationRef(SuppressWarnings, "unused")
-			]
+			members += createInjectionField(i, i.name, i.type)
 		}
+	}
+
+	protected def createInjectionField(EObject object, String fieldName, JvmTypeReference typeRef) {
+		object.toField(fieldName, typeRef) [
+			visibility = JvmVisibility.DEFAULT
+			annotations += annotationRef(Inject)
+			annotations += annotationRef(SuppressWarnings, "unused")
+		]
 	}
 
 	protected def void addProperties(JvmGenericType it, EList<IsisProperty> properties) {
