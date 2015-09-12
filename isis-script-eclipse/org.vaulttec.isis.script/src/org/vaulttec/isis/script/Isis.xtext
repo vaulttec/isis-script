@@ -78,14 +78,8 @@ enum IsisCollectionFeatureType:
 IsisAction:
 	=> (annotations+=XAnnotation*
 	'action') type=JvmTypeReference name=ID '{'
-	(features+=IsisActionFeature | parameters+=IsisActionParameter | events+=IsisEvent)*
+	(parameters+=IsisActionParameter | features+=IsisActionFeature | events+=IsisEvent)*
 	'}';
-
-IsisActionFeature:
-	type=IsisActionFeatureType expression=XBlockExpression;
-
-enum IsisActionFeatureType:
-	Body='body' | Hide='hide' | Disable='disable' | Validate='validate';
 
 IsisActionParameter:
 	=> (annotations+=XAnnotation*
@@ -99,6 +93,12 @@ IsisActionParameterFeature:
 
 enum IsisActionParameterFeatureType:
 	Default='default' | Choices='choices' | Complete='complete' | Validate='validate';
+
+IsisActionFeature:
+	type=IsisActionFeatureType expression=XBlockExpression;
+
+enum IsisActionFeatureType:
+	Body='body' | Hide='hide' | Disable='disable' | Validate='validate';
 
 IsisUiHint:
 	type=IsisUiHintType expression=XBlockExpression;
