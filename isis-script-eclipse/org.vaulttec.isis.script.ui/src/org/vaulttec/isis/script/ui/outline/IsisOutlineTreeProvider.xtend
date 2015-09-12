@@ -25,6 +25,11 @@ import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider
 import org.eclipse.xtext.ui.editor.outline.impl.DocumentRootNode
 import org.eclipse.xtext.xbase.annotations.xAnnotations.XAnnotation
 import org.vaulttec.isis.script.dsl.IsisAction
+import org.vaulttec.isis.script.dsl.IsisActionFeature
+import org.vaulttec.isis.script.dsl.IsisActionParameter
+import org.vaulttec.isis.script.dsl.IsisActionParameterFeature
+import org.vaulttec.isis.script.dsl.IsisCollection
+import org.vaulttec.isis.script.dsl.IsisCollectionFeature
 import org.vaulttec.isis.script.dsl.IsisFile
 import org.vaulttec.isis.script.dsl.IsisInjection
 import org.vaulttec.isis.script.dsl.IsisProperty
@@ -54,14 +59,6 @@ class IsisOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		}
 	}
 
-	def _isLeaf(IsisInjection injection) {
-		true
-	}
-
-	def _createChildren(IOutlineNode parentNode, IsisProperty property) {
-		property.features.forEach[parentNode.createNode(it)]
-	}
-
 	/**
 	 * Adds a type declarations model elements by their location in the source code.
 	 */
@@ -75,19 +72,56 @@ class IsisOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			}).forEach[parentNode.createNode(it)]
 	}
 
+	def _isLeaf(IsisInjection injection) {
+		true
+	}
+
 	def _isLeaf(IsisProperty property) {
 		property.features.isNullOrEmpty
+	}
+
+	def _createChildren(IOutlineNode parentNode, IsisProperty property) {
+		property.features.forEach[parentNode.createNode(it)]
 	}
 
 	def _isLeaf(IsisPropertyFeature feature) {
 		true
 	}
 
-	def _isLeaf(IsisUiHint uiHint) {
+	def _isLeaf(IsisCollection collection) {
+		collection.features.isNullOrEmpty
+	}
+
+	def _createChildren(IOutlineNode parentNode, IsisCollection collection) {
+		collection.features.forEach[parentNode.createNode(it)]
+	}
+
+	def _isLeaf(IsisCollectionFeature feature) {
 		true
 	}
 
 	def _isLeaf(IsisAction action) {
+		action.features.isNullOrEmpty && action.parameters.isNullOrEmpty
+	}
+
+	def _createChildren(IOutlineNode parentNode, IsisAction action) {
+		action.features.forEach[parentNode.createNode(it)]
+		action.parameters.forEach[parentNode.createNode(it)]
+	}
+
+	def _isLeaf(IsisActionFeature feature) {
+		true
+	}
+
+	def _createChildren(IOutlineNode parentNode, IsisActionParameter parameter) {
+		parameter.features.forEach[parentNode.createNode(it)]
+	}
+
+	def _isLeaf(IsisActionParameterFeature feature) {
+		true
+	}
+
+	def _isLeaf(IsisUiHint uiHint) {
 		true
 	}
 
