@@ -106,7 +106,7 @@ class IsisInferrerCompilerTest {
 			    return 42;
 			  }
 			  
-			  public static class Event1 extends PropertyDomainEvent<Child> {
+			  public static class Event1 extends PropertyDomainEvent<Child, Integer> {
 			    public Event1(final Child source, final Identifier identifier) {
 			      super(source, identifier);
 			    }
@@ -130,7 +130,7 @@ class IsisInferrerCompilerTest {
 			    return "";
 			  }
 			  
-			  public static class Event2 extends PropertyDomainEvent<Child> {
+			  public static class Event2 extends PropertyDomainEvent<Child, String> {
 			    public Event2(final Child source, final Identifier identifier) {
 			      super(source, identifier);
 			    }

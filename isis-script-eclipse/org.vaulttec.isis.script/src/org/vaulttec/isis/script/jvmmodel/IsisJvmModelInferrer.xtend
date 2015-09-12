@@ -397,7 +397,8 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 		for (e : property.events) {
 			members += e.toClass(e.name) [
 				static = true
-				superTypes += typeRef("org.apache.isis.applib.services.eventbus.PropertyDomainEvent", sourceType)
+				superTypes +=
+					typeRef("org.apache.isis.applib.services.eventbus.PropertyDomainEvent", sourceType, property.type)
 				members += e.toConstructor [
 					parameters += e.toParameter("source", sourceType)
 					parameters += e.toParameter("identifier", typeRef("org.apache.isis.applib.Identifier"))
@@ -420,7 +421,9 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 		for (e : collection.events) {
 			members += e.toClass(e.name) [
 				static = true
-				superTypes += typeRef("org.apache.isis.applib.services.eventbus.CollectionDomainEvent", sourceType)
+				superTypes +=
+					typeRef("org.apache.isis.applib.services.eventbus.CollectionDomainEvent", sourceType,
+						collection.type)
 				members += e.toConstructor [
 					parameters += e.toParameter("source", sourceType)
 					parameters += e.toParameter("identifier", typeRef("org.apache.isis.applib.Identifier"))
