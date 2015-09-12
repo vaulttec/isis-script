@@ -63,13 +63,7 @@ class IsisOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	 * Adds a type declarations model elements by their location in the source code.
 	 */
 	def _createChildren(IOutlineNode parentNode, IsisTypeDeclaration type) {
-		type.eContents.filter[!(it instanceof JvmTypeReference) && !(it instanceof XAnnotation)].sortWith(
-			new Comparator() {
-				override compare(Object o1, Object o2) {
-					locationInFileProvider.getSignificantTextRegion(o1 as EObject).offset -
-						locationInFileProvider.getSignificantTextRegion(o2 as EObject).offset
-				}
-			}).forEach[parentNode.createNode(it)]
+		createSortedChildren(parentNode, type)
 	}
 
 	def _isLeaf(IsisInjection injection) {
@@ -77,11 +71,11 @@ class IsisOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	}
 
 	def _isLeaf(IsisProperty property) {
-		property.features.isNullOrEmpty
+		property.features.isNullOrEmpty && property.events.isNullOrEmpty
 	}
 
 	def _createChildren(IOutlineNode parentNode, IsisProperty property) {
-		property.features.forEach[parentNode.createNode(it)]
+		createSortedChildren(parentNode, property)
 	}
 
 	def _isLeaf(IsisPropertyFeature feature) {
@@ -89,11 +83,11 @@ class IsisOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	}
 
 	def _isLeaf(IsisCollection collection) {
-		collection.features.isNullOrEmpty
+		collection.features.isNullOrEmpty && collection.events.isNullOrEmpty
 	}
 
 	def _createChildren(IOutlineNode parentNode, IsisCollection collection) {
-		collection.features.forEach[parentNode.createNode(it)]
+		createSortedChildren(parentNode, collection)
 	}
 
 	def _isLeaf(IsisCollectionFeature feature) {
@@ -101,12 +95,11 @@ class IsisOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	}
 
 	def _isLeaf(IsisAction action) {
-		action.features.isNullOrEmpty && action.parameters.isNullOrEmpty
+		action.features.isNullOrEmpty && action.parameters.isNullOrEmpty && action.events.isNullOrEmpty
 	}
 
 	def _createChildren(IOutlineNode parentNode, IsisAction action) {
-		action.features.forEach[parentNode.createNode(it)]
-		action.parameters.forEach[parentNode.createNode(it)]
+		createSortedChildren(parentNode, action)
 	}
 
 	def _isLeaf(IsisActionFeature feature) {
@@ -123,6 +116,19 @@ class IsisOutlineTreeProvider extends DefaultOutlineTreeProvider {
 
 	def _isLeaf(IsisUiHint uiHint) {
 		true
+	}
+
+	/**
+	 * Adds a model elements children by their location in the source code.
+	 */
+	private def createSortedChildren(IOutlineNode parentNode, EObject element) {
+		element.eContents.filter[!(it instanceof JvmTypeReference) && !(it instanceof XAnnotation)].sortWith(
+			new Comparator() {
+				override compare(Object o1, Object o2) {
+					locationInFileProvider.getSignificantTextRegion(o1 as EObject).offset -
+						locationInFileProvider.getSignificantTextRegion(o2 as EObject).offset
+				}
+			}).forEach[parentNode.createNode(it)]
 	}
 
 }
