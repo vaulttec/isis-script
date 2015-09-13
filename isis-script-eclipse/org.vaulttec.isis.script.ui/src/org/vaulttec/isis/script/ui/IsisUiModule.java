@@ -17,7 +17,9 @@ package org.vaulttec.isis.script.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.ui.editor.outline.impl.OutlineFilterAndSorter.IComparator;
+import org.eclipse.xtext.ui.editor.outline.quickoutline.QuickOutlineFilterAndSorter;
 import org.vaulttec.isis.script.ui.outline.IsisOutlineNodeComparator;
+import org.vaulttec.isis.script.ui.outline.IsisQuickOutlineFilterAndSorter;
 
 /**
  * Use this class to register components to be used within the IDE.
@@ -31,6 +33,10 @@ public class IsisUiModule extends AbstractIsisUiModule {
 	@Override
 	public Class<? extends IComparator> bindOutlineFilterAndSorter$IComparator() {
 		return IsisOutlineNodeComparator.class;
+	}
+
+	public Class<? extends QuickOutlineFilterAndSorter> bindQuickOutlineFilterAndSorter() {
+		return IsisQuickOutlineFilterAndSorter.class;
 	}
 
 }
