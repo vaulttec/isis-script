@@ -23,6 +23,7 @@ import org.eclipse.xtext.resource.ILocationInFileProvider
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode
 import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider
 import org.eclipse.xtext.ui.editor.outline.impl.DocumentRootNode
+import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreAccess
 import org.eclipse.xtext.xbase.annotations.xAnnotations.XAnnotation
 import org.vaulttec.isis.script.dsl.IsisAction
 import org.vaulttec.isis.script.dsl.IsisActionFeature
@@ -44,8 +45,9 @@ import org.vaulttec.isis.script.dsl.IsisUiHint
  */
 class IsisOutlineTreeProvider extends DefaultOutlineTreeProvider {
 
-	@Inject
-	private ILocationInFileProvider locationInFileProvider;
+	@Inject ILocationInFileProvider locationInFileProvider;
+
+	@Inject IPreferenceStoreAccess preferenceStoreAccess;
 
 	def _createChildren(DocumentRootNode parentNode, IsisFile file) {
 		if (file.package != null) {
@@ -55,13 +57,15 @@ class IsisOutlineTreeProvider extends DefaultOutlineTreeProvider {
 			parentNode.createNode(file.importSection)
 		}
 		if (file.declaration != null) {
-			parentNode.createNode(file.declaration)
+			if (preferenceStoreAccess.preferenceStore.getBoolean(
+				GoIntoTopLevelTypeOutlineContribution.PREFERENCE_KEY)) {
+				createSortedChildren(parentNode, file.declaration)
+			} else {
+				parentNode.createNode(file.declaration)
+			}
 		}
 	}
 
-	/**
-	 * Adds a type declarations model elements by their location in the source code.
-	 */
 	def _createChildren(IOutlineNode parentNode, IsisTypeDeclaration type) {
 		createSortedChildren(parentNode, type)
 	}
