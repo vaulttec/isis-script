@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<templates>
+<template id="org.vaulttec.isis.script.Isis.Action" autoinsert="true" context="org.vaulttec.isis.script.Isis.kw_action" deleted="false" description="Action of Domain Entity or Domain Service" enabled="true" name="action">@org.apache.isis.applib.annotation.Action(${attribute})
+action ${type} ${name} {
+	${param}
+	body {
+		${cursor}
+	}
+}</template>
+<template id="org.vaulttec.isis.script.Isis.Collection" autoinsert="true" context="org.vaulttec.isis.script.Isis.kw_collection" deleted="false" description="Collection of Domain Entity" enabled="true" name="collection">@org.apache.isis.applib.annotation.Collection(${attribute})
+collection ${type} ${name} {
+	${cursor}
+}</template>
+<template id="org.vaulttec.isis.script.Isis.CollectionExtends" autoinsert="true" context="org.vaulttec.isis.script.Isis.kw_collection" deleted="false" description="Collection of Domain Entity with initializer" enabled="true" name="collectionInit">@org.apache.isis.applib.annotation.Collection(${attribute})
+collection ${type} ${name} = ${expression} {
+	${cursor}
+}</template>
+<template id="org.vaulttec.isis.script.Isis.Entity" autoinsert="true" context="org.vaulttec.isis.script.Isis.kw_entity" deleted="false" description="Domain Entity" enabled="true" name="entity">@org.apache.isis.applib.annotation.DomainObject(objectType="${type}")
+entity ${name} {
+	${cursor}
+}</template>
+<template id="org.vaulttec.isis.script.Isis.EntityExtends" autoinsert="true" context="org.vaulttec.isis.script.Isis.kw_entity" deleted="false" description="Domain Entity extending a supertype" enabled="true" name="entityExtends">@org.apache.isis.applib.annotation.DomainObject(objectType="${type}")
+entity ${name} extends ${supertype} {
+	${cursor}
+}</template>
+<template id="org.vaulttec.isis.script.Isis.Package" autoinsert="true" context="org.vaulttec.isis.script.Isis.kw_package" deleted="false" description="Package definition for Domain Object or Domain Service" enabled="true" name="package">package ${name}
+
+${cursor}</template>
+<template id="org.vaulttec.isis.script.Isis.Property" autoinsert="true" context="org.vaulttec.isis.script.Isis.kw_property" deleted="false" description="Property of Domain Entity" enabled="true" name="property">@org.apache.isis.applib.annotation.Property(${attribute})
+property ${type} ${name} {
+	${cursor}
+}</template>
+<template id="org.vaulttec.isis.script.Isis.Repository" autoinsert="true" context="org.vaulttec.isis.script.Isis.kw_service" deleted="false" description="Repository for Domain Object" enabled="true" name="repository">@org.apache.isis.applib.annotation.DomainService(nature=org.apache.isis.applib.annotation.NatureOfService.DOMAIN, repositoryFor=${type})
+service ${name} {
+	${cursor}
+}</template>
+<template id="org.vaulttec.isis.script.Isis.RepositoryExtends" autoinsert="true" context="org.vaulttec.isis.script.Isis.kw_service" deleted="false" description="Repository Domain Object extending a supertype" enabled="true" name="repositoryExtends">@org.apache.isis.applib.annotation.DomainService(nature=org.apache.isis.applib.annotation.NatureOfService.DOMAIN, repositoryFor=${type})
+service ${name} extends ${supertype} {
+	${cursor}
+}</template>
+<template id="org.vaulttec.isis.script.Isis.Service" autoinsert="true" context="org.vaulttec.isis.script.Isis.kw_service" deleted="false" description="Domain Service" enabled="true" name="service">service ${name} {
+	${cursor}
+}</template>
+<template id="org.vaulttec.isis.script.Isis.ServiceExtends" autoinsert="true" context="org.vaulttec.isis.script.Isis.kw_service" deleted="false" description="Domain Service extending a supertype" enabled="true" name="serviceExtends">service ${name} extends ${supertype} {
+	${cursor}
+}</template>
+</templates>
