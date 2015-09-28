@@ -38,7 +38,7 @@ IsisEntity:
 IsisService:
 	annotations+=XAnnotation*
 	'service' name=ID ('extends' superType=JvmTypeReference)? '{'
-	(injections+=IsisInjection | collections+=IsisCollection | actions+=IsisAction)*
+	(injections+=IsisInjection | actions+=IsisAction)*
 	'}';
 
 IsisInjection:
