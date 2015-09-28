@@ -13,7 +13,7 @@
             icon="icons/obj16/isis.png"
             id="org.vaulttec.isis.script.Isis"
             matchingStrategy="org.vaulttec.isis.script.ui.IsisExecutableExtensionFactory:org.eclipse.xtext.xbase.ui.editor.JavaEditorInputMatcher"
-            name="Isis Editor">
+            name="Isis Script Editor">
         </editor>
     </extension>
     <extension
@@ -84,7 +84,7 @@
         <page
             class="org.vaulttec.isis.script.ui.IsisExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="org.vaulttec.isis.script.Isis"
-            name="Isis">
+            name="Isis Script">
             <keywordReference id="org.vaulttec.isis.script.ui.keyword_Isis"/>
         </page>
         <page
@@ -107,7 +107,7 @@
         <page
             class="org.vaulttec.isis.script.ui.IsisExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="org.vaulttec.isis.script.Isis"
-            name="Isis">
+            name="Isis Script">
             <keywordReference id="org.vaulttec.isis.script.ui.keyword_Isis"/>
             <enabledWhen>
 	            <adapt type="org.eclipse.core.resources.IProject"/>
@@ -119,7 +119,7 @@
         point="org.eclipse.ui.keywords">
         <keyword
             id="org.vaulttec.isis.script.ui.keyword_Isis"
-            label="Isis"/>
+            label="Isis Script"/>
     </extension>
     <extension
          point="org.eclipse.ui.commands">
@@ -229,21 +229,21 @@
 	<!-- marker definitions for org.vaulttec.isis.script.Isis -->
 	<extension
 	        id="isis.check.fast"
-	        name="Isis Problem"
+	        name="Isis Script Problem"
 	        point="org.eclipse.core.resources.markers">
 	    <super type="org.eclipse.xtext.ui.check.fast"/>
 	    <persistent value="true"/>
 	</extension>
 	<extension
 	        id="isis.check.normal"
-	        name="Isis Problem"
+	        name="Isis Script Problem"
 	        point="org.eclipse.core.resources.markers">
 	    <super type="org.eclipse.xtext.ui.check.normal"/>
 	    <persistent value="true"/>
 	</extension>
 	<extension
 	        id="isis.check.expensive"
-	        name="Isis Problem"
+	        name="Isis Script Problem"
 	        point="org.eclipse.core.resources.markers">
 	    <super type="org.eclipse.xtext.ui.check.expensive"/>
 	    <persistent value="true"/>
@@ -593,7 +593,7 @@
   <extension point="org.eclipse.compare.contentMergeViewers">
     <viewer id="org.vaulttec.isis.script.Isis.compare.contentMergeViewers"
             class="org.vaulttec.isis.script.ui.IsisExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
-            extensions="isis" label="Isis Compare">
+            extensions="isis" label="Isis Script Compare">
      </viewer>
   </extension>
   <extension point="org.eclipse.ui.editors.documentProviders">
