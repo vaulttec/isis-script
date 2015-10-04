@@ -32,6 +32,14 @@ class IsisModelHelper {
 		features != null && features.exists[type == featureType]
 	}
 
+	def getFeatureCount(IsisProperty it, IsisPropertyFeatureType featureType) {
+		if (features != null) {
+			features.filter[type == featureType].size
+		} else {
+			0
+		}
+	}
+
 	def getFeatureExpression(IsisProperty it, IsisPropertyFeatureType featureType) {
 		val feature = features.findFirst[type == featureType]
 		if (feature != null) {
@@ -43,6 +51,14 @@ class IsisModelHelper {
 
 	def hasFeature(IsisCollection it, IsisCollectionFeatureType featureType) {
 		features != null && features.exists[type == featureType]
+	}
+
+	def getFeatureCount(IsisCollection it, IsisCollectionFeatureType featureType) {
+		if (features != null) {
+			features.filter[type == featureType].size
+		} else {
+			0
+		}
 	}
 
 	def getFeatureExpression(IsisCollection it, IsisCollectionFeatureType featureType) {
@@ -58,6 +74,14 @@ class IsisModelHelper {
 		features != null && features.exists[type == featureType]
 	}
 
+	def getFeatureCount(IsisAction it, IsisActionFeatureType featureType) {
+		if (features != null) {
+			features.filter[type == featureType].size
+		} else {
+			0
+		}
+	}
+
 	def getFeatureExpression(IsisAction it, IsisActionFeatureType featureType) {
 		val feature = features.findFirst[type == featureType]
 		if (feature != null) {
@@ -71,6 +95,14 @@ class IsisModelHelper {
 		features != null && features.exists[type == featureType]
 	}
 
+	def getFeatureCount(IsisActionParameter it, IsisActionParameterFeatureType featureType) {
+		if (features != null) {
+			features.filter[type == featureType].size
+		} else {
+			0
+		}
+	}
+
 	def getFeatureExpression(IsisActionParameter it, IsisActionParameterFeatureType featureType) {
 		val feature = features.findFirst[type == featureType]
 		if (feature != null) {
@@ -82,6 +114,14 @@ class IsisModelHelper {
 
 	def hasUiHint(IsisEntity it, IsisUiHintType hintType) {
 		uiHints != null && uiHints.exists[type == hintType]
+	}
+
+	def getUiHintCount(IsisEntity it, IsisUiHintType hintType) {
+		if (uiHints != null) {
+			uiHints.filter[type == hintType].size
+		} else {
+			0
+		}
 	}
 
 	def getUiHintExpression(IsisEntity it, IsisUiHintType hintType) {

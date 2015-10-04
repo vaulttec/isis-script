@@ -13,17 +13,21 @@
  * Contributors:
  *     Torsten Juergeleit - initial API and implementation
  *******************************************************************************/
-package org.vaulttec.isis.script
+package org.vaulttec.isis.script.validation
 
 import javax.inject.Inject
+import org.eclipse.xtext.diagnostics.Severity
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.vaulttec.isis.script.IsisInjectorProvider
 import org.vaulttec.isis.script.dsl.DslPackage
 import org.vaulttec.isis.script.dsl.IsisFile
+
+import static org.junit.Assert.*
 import static org.vaulttec.isis.script.validation.IsisValidator.*
 
 @RunWith(typeof(XtextRunner))
@@ -66,10 +70,7 @@ class IsisValidatorTest {
 		'''
 			package org.vaulttec.isis.script.test
 			entity MyEntity {
-				collection java.util.Set<String> MyCollection {
-					init {
-						new java.util.TreeSet<String>
-					}
+				collection java.util.Set<String> MyCollection = new java.util.TreeSet<String> {
 				}
 			}
 		'''.parse.assertWarning(DslPackage.eINSTANCE.isisCollection, INVALID_NAME, 'Name should start with a non-capital')
@@ -125,6 +126,48 @@ class IsisValidatorTest {
 				}
 			}
 		'''.parse.assertError(DslPackage.eINSTANCE.isisAction, MISSING_BODY, 'Action must have a body')
+	}
+
+	@Test
+	def void validateMultipleFeatures() {
+		val issues = '''
+			package org.vaulttec.isis.script.test
+			entity MyEntity {
+				property int myProperty {
+					hide {
+						true
+					}
+					hide {
+						false
+					}
+				}
+			}
+		'''.parse.validate
+		assertEquals(2, issues.size)
+		val issue = issues.get(0)
+		assertEquals(Severity.ERROR, issue.severity)
+		assertEquals(MULTIPLE_FEATURES, issue.code)
+		assertEquals('Only one occurence of "hide" is allowed', issue.message)
+	}
+
+	@Test
+	def void validateMultipleUiHints() {
+		val issues = '''
+			package org.vaulttec.isis.script.test
+			entity MyEntity {
+				title {
+					"foo"
+				}
+				title {
+					"bar"
+				}
+			}
+		'''.parse.validate
+		assertEquals(2, issues.size)
+		val issue = issues.get(0)
+		assertEquals(Severity.ERROR, issue.severity)
+		assertEquals(MULTIPLE_UI_HINTS, issue.code)
+		assertEquals('Only one occurence of "title" is allowed', issue.message)
 	}
 
 }
