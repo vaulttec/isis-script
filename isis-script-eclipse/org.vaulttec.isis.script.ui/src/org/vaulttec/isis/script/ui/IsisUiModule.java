@@ -16,9 +16,11 @@
 package org.vaulttec.isis.script.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.ui.editor.contentassist.ITemplateProposalProvider;
 import org.eclipse.xtext.ui.editor.outline.actions.IOutlineContribution;
 import org.eclipse.xtext.ui.editor.outline.impl.OutlineFilterAndSorter.IComparator;
 import org.eclipse.xtext.ui.editor.outline.quickoutline.QuickOutlineFilterAndSorter;
+import org.vaulttec.isis.script.ui.contentassist.IsisTemplateProposalProvider;
 import org.vaulttec.isis.script.ui.outline.CollapseAllOutlineContribution;
 import org.vaulttec.isis.script.ui.outline.GoIntoTopLevelTypeOutlineContribution;
 import org.vaulttec.isis.script.ui.outline.IsisOutlineNodeComparator;
@@ -34,6 +36,11 @@ public class IsisUiModule extends AbstractIsisUiModule {
 
 	public IsisUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
+	}
+
+	@Override
+	public Class<? extends ITemplateProposalProvider> bindITemplateProposalProvider() {
+		return IsisTemplateProposalProvider.class;
 	}
 
 	@Override
