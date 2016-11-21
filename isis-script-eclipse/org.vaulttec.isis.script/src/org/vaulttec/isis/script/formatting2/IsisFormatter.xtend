@@ -66,9 +66,10 @@ class IsisFormatter extends XbaseWithAnnotationsFormatter {
 		for (IsisInjection injections : isisservice.getInjections()) {
 			format(injections, document);
 		}
-		for (IsisCollection collections : isisservice.getCollections()) {
-			format(collections, document);
-		}
+		// Collections have been removed from IsisService
+		// for (IsisCollection collections : isisservice.getCollections()) {
+		//	format(collections, document);
+		// }
 		for (IsisAction actions : isisservice.getActions()) {
 			format(actions, document);
 		}
