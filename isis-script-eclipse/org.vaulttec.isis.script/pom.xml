@@ -13,12 +13,41 @@
 	<name>Isis Script :: Eclipse :: Textual DSL</name>
 
 	<build>
+	
+		<sourceDirectory>src</sourceDirectory>
+	
 		<plugins>
+		
+			<plugin>
+	            <groupId>org.codehaus.mojo</groupId>
+	            <artifactId>build-helper-maven-plugin</artifactId>
+	            <executions>
+	                <execution>
+	                    <id>add-source</id>
+	                    <phase>generate-sources</phase>
+	                    <goals>
+	                        <goal>add-source</goal>
+	                    </goals>
+	                    <configuration>
+	                        <sources>
+	                            <source>xtend-gen</source>
+	                        </sources>
+	                    </configuration>
+	                </execution>
+	            </executions>
+	        </plugin>		
+		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
 				<configuration>
 					<filesets>
+						<fileset>
+			                <directory>xtend-gen</directory>
+			                <includes>
+			                    <include>**</include>
+			                </includes>
+            			</fileset>						
 						<fileset>
 							<directory>src-gen</directory>
 							<excludes>
@@ -99,7 +128,10 @@
 						<goals>
 							<goal>compile</goal>
 						</goals>
-					</execution>
+						<configuration>
+                			<outputDirectory>xtend-gen</outputDirectory>
+            			</configuration>
+					</execution>					
 				</executions>
 			</plugin>
 		</plugins>
