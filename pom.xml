@@ -64,7 +64,6 @@
 		<maven.compiler.source>${java-version}</maven.compiler.source>
 		<maven.compiler.target>${java-version}</maven.compiler.target>
 
-		<eclipse-release>luna/201502271000</eclipse-release>
 		<tycho-version>0.23.1</tycho-version>
 
 		<xtext-version>2.8.4</xtext-version>
@@ -76,10 +75,6 @@
 		<isis-version>1.9.0</isis-version>
 
 		<junit-version>4.12</junit-version>
-
-		<p2-repository-eclipse>http://download.eclipse.org/releases/${eclipse-release}/</p2-repository-eclipse>
-		<p2-repository-eclipse-xtext>http://download.eclipse.org/modeling/tmf/xtext/updates/releases/${xtext-version}</p2-repository-eclipse-xtext>
-		<p2-repository-xtext-utils>http://xtext-utils.eclipselabs.org.codespot.com/git.distribution/releases/unittesting-0.9.x/</p2-repository-xtext-utils>
 
 		<!-- GitHub server corresponds to entry in ~/.m2/settings.xml -->
 		<github.global.server>github</github.global.server>
@@ -444,9 +439,30 @@
 					<artifactId>target-platform-configuration</artifactId>
 					<version>${tycho-version}</version>
 					<configuration>
-						<resolver>p2</resolver>
-						<!-- No environments defined because otherwise we will end up with a cross-platform build which is not needed here.
-							 So we've to live with Tychos warnings "No explicit target runtime environment configuration. Build is platform dependent". -->
+						<target>
+							<artifact>
+								<groupId>org.vaulttec.isis.script.eclipse</groupId>
+								<artifactId>org.vaulttec.isis.script.target</artifactId>
+								<version>${project.version}</version>
+							</artifact>
+						</target>
+						<environments>
+							<environment>
+								<os>macosx</os>
+								<ws>cocoa</ws>
+								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>win32</os>
+								<ws>win32</ws>
+								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>linux</os>
+								<ws>gtk</ws>
+								<arch>x86_64</arch>
+							</environment>
+						</environments>
 					</configuration>
 				</plugin>
 				<plugin>

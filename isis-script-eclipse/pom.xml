@@ -11,6 +11,7 @@
 	<name>Isis Script :: Eclipse</name>
 
 	<modules>
+		<module>org.vaulttec.isis.script.target</module>
 		<module>org.vaulttec.isis.script</module>
 		<module>org.vaulttec.isis.script.ui</module>
 		<module>org.vaulttec.isis.script.tests</module>
@@ -63,21 +64,6 @@
 			</build>
 		</profile>
 	</profiles>
-
-	<repositories>
-		<!-- Repository to resolve the Eclipse release train dependencies -->
-		<repository>
-			<id>p2.eclipse</id>
-			<url>${p2-repository-eclipse}</url>
-			<layout>p2</layout>
-		</repository>
-		<!-- Repository to resolve the XText dependencies -->
-		<repository>
-			<id>p2.eclipse.xtext</id>
-			<url>${p2-repository-eclipse-xtext}</url>
-			<layout>p2</layout>
-		</repository>
-	</repositories>
 
 	<build>
 		<pluginManagement>
