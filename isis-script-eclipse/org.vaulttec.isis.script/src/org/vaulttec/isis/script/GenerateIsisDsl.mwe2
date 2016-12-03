@@ -52,7 +52,7 @@ Workflow {
     	directory = "${runtimeProject}.tests/src-gen"
     }
     
-    component = Generator {
+    component = Generator auto-inject {
     	pathRtProject = runtimeProject
     	pathUiProject = "${runtimeProject}.ui"
     	pathTestProject = "${runtimeProject}.tests"
@@ -75,9 +75,6 @@ Workflow {
 				javaModelDirectory = "/${projectName}/src-gen"
 			}
     
-    		// the old serialization component
-    		// fragment = parseTreeConstructor.ParseTreeConstructorFragment auto-inject {}    
-    
     		// serializer 2.0
     		fragment = serializer.SerializerFragment auto-inject {
     			generateStub = false
@@ -87,11 +84,7 @@ Workflow {
     		fragment = resourceFactory.ResourceFactoryFragment auto-inject {}
     
     		// The antlr parser generator fragment.
-    		fragment = parser.antlr.XtextAntlrGeneratorFragment auto-inject {
-//    		  options = {
-//    		      backtrack = true
-//    		  }
-    		}
+    		fragment = parser.antlr.XtextAntlrGeneratorFragment auto-inject {}
     
     		// Xtend-based API for validation
     		fragment = validation.ValidatorFragment auto-inject {
@@ -99,17 +92,15 @@ Workflow {
     		//    composedCheck = "org.eclipse.xtext.validation.ImportUriValidator"
     		//    composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"
     		}
-    
-    		// old scoping and exporting API
-    		// fragment = scoping.ImportURIScopingFragment auto-inject {}
-    		// fragment = exporting.SimpleNamesFragment auto-inject {}
-    
+        
     		// scoping and exporting API
     		fragment = scoping.ImportNamespacesScopingFragment auto-inject {
 				generateStub = false
 			}
 
     		fragment = exporting.QualifiedNamesFragment auto-inject {}
+
+    		// integration in Eclipse incremental builder (needed for automatic update of EMF index and validation of DSL files)
     		fragment = builder.BuilderIntegrationFragment auto-inject {}
     
     		// generator API

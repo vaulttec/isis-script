@@ -43,12 +43,6 @@
 				<configuration>
 					<filesets>
 						<fileset>
-			                <directory>xtend-gen</directory>
-			                <includes>
-			                    <include>**</include>
-			                </includes>
-            			</fileset>						
-						<fileset>
 							<directory>src-gen</directory>
 							<excludes>
 								<exclude>.gitignore</exclude>
@@ -128,9 +122,6 @@
 						<goals>
 							<goal>compile</goal>
 						</goals>
-						<configuration>
-                			<outputDirectory>xtend-gen</outputDirectory>
-            			</configuration>
 					</execution>					
 				</executions>
 			</plugin>

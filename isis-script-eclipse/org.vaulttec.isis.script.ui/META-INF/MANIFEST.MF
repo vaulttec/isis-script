@@ -23,5 +23,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.vaulttec.isis.script.ui.internal,
  org.vaulttec.isis.script.ui.contentassist,
  org.vaulttec.isis.script.ui.quickfix,
- org.vaulttec.isis.script.ui.contentassist.antlr
+ org.vaulttec.isis.script.ui.contentassist.antlr,
+ org.vaulttec.isis.script.ui.contentassist.antlr.internal
 Bundle-Activator: org.vaulttec.isis.script.ui.internal.IsisActivator

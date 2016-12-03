@@ -64,16 +64,9 @@
 		<maven.compiler.source>${java-version}</maven.compiler.source>
 		<maven.compiler.target>${java-version}</maven.compiler.target>
 
-		<tycho-version>0.23.1</tycho-version>
-
-		<xtext-version>2.8.4</xtext-version>
-		<ecore-xtext-version>1.2.0</ecore-xtext-version>
-		<ecore-xcore-version>1.3.1</ecore-xcore-version>
-		<ecore-xcore-lib-version>1.1.100</ecore-xcore-lib-version>
-		<guava-version>14.0</guava-version>
-		<guice-version>3.0</guice-version>
-		<isis-version>1.9.0</isis-version>
-
+		<tycho-version>0.26.0</tycho-version>
+		<xtext-version>2.10.0</xtext-version>
+		<isis-version>1.13.1</isis-version>
 		<junit-version>4.12</junit-version>
 
 		<!-- GitHub server corresponds to entry in ~/.m2/settings.xml -->
@@ -208,17 +201,17 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.7</version>
+					<version>3.0.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
-					<version>2.6.1</version>
+					<version>3.0.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.2</version>
+					<version>3.6.0</version>
 					<configuration>
 						<source>${java-version}</source>
 						<target>${java-version}</target>
@@ -227,12 +220,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-enforcer-plugin</artifactId>
-					<version>1.4</version>
+					<version>1.4.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.18.1</version>
+					<version>2.19.1</version>
 					<configuration>
 						<argLine>-Xms32m -Xmx1024m</argLine>
 					</configuration>
@@ -240,7 +233,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-failsafe-plugin</artifactId>
-					<version>2.18.1</version>
+					<version>2.19.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -255,12 +248,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-assembly-plugin</artifactId>
-					<version>2.5.3</version>
+					<version>3.0.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>2.5</version>
+					<version>3.0.2</version>
 					<configuration>
 						<archive>
 							<manifest>
@@ -273,34 +266,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
-					<version>2.4</version>
-					<executions>
-						<!--
-						 ~ This workaround prevents Maven from executing the 'generate-sources' phase twice.
-						 ~ See http://jira.codehaus.org/browse/MSOURCES-13
-						 ~ and http://blog.peterlynch.ca/2010/05/maven-how-to-prevent-generate-sources.html
- 						-->
- 						<execution>
-							<id>attach-sources</id>
-							<phase>invalid</phase>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-						<execution>
-							<id>attach-sources-no-fork</id>
-							<phase>package</phase>
-							<goals>
-								<goal>jar-no-fork</goal>
-								<goal>test-jar-no-fork</goal>
-							</goals>
-						</execution>
-					</executions>
+					<version>3.0.1</version>
       			</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.10.1</version>
+					<version>2.10.4</version>
 					<configuration>
 						<debug>false</debug>
 						<minmemory>128m</minmemory>
@@ -333,7 +304,7 @@
 				<plugin>
 					<groupId>external.atlassian.jgitflow</groupId>
 					<artifactId>jgitflow-maven-plugin</artifactId>
-					<version>1.0-m4.3</version>
+					<version>1.0-m5.1</version>
 					<configuration>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
 					</configuration>
@@ -341,12 +312,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-shade-plugin</artifactId>
-					<version>2.3</version>
+					<version>2.4.3</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-archetype-plugin</artifactId>
-					<version>2.2</version>
+					<version>2.4</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -360,7 +331,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5.1</version>
+					<version>2.5.3</version>
 					<configuration>
 						<mavenExecutorId>forked-path</mavenExecutorId>
 					</configuration>
@@ -373,41 +344,40 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
-					<version>3.4</version>
+					<version>3.6</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-plugin-plugin</artifactId>
-					<version>3.4</version>
+					<version>3.5</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-invoker-plugin</artifactId>
-					<version>1.9</version>
+					<version>2.0.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>exec-maven-plugin</artifactId>
-					<version>1.3.2</version>
+					<version>1.5.0</version>
 					<configuration>
 						<!--
-							to get rid of the warning: [WARNING] Warning: killAfter is now deprecated. Do you need it ? Please comment on MEXEC-6.
-							see: method execute() in https://github.com/ispringer/exec-maven-plugin/blob/master/src/main/java/org/codehaus/mojo/exec/ExecJavaMojo.java
+							to get rid of the warning: Thread [...Mwe2Launcher] was interrupted but is still alive after waiting at least...
+							see: https://bugs.eclipse.org/bugs/show_bug.cgi?id=475098#c3
 						-->
-						<killAfter>-1</killAfter>
 						<cleanupDaemonThreads>false</cleanupDaemonThreads>
 					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>build-helper-maven-plugin</artifactId>
-					<version>1.9.1</version>
+					<version>1.12</version>
 				</plugin>
 				<plugin>
 					<!-- make sure our code only has 1.7 dependencies -->
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>animal-sniffer-maven-plugin</artifactId>
-					<version>1.13</version>
+					<version>1.15</version>
 					<configuration>
 						<signature>
 							<groupId>org.codehaus.mojo.signature</groupId>
@@ -649,16 +619,6 @@
 				<groupId>org.eclipse.xtend</groupId>
 				<artifactId>org.eclipse.xtend.lib</artifactId>
 				<version>${xtext-version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>${guava-version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.inject</groupId>
-				<artifactId>guice</artifactId>
-				<version>${guice-version}</version>
 			</dependency>
 			<!-- Explicit antlr-runtime dependency to 3.2 to avoid loading of mismatched 
 				transitive dependencies -->
