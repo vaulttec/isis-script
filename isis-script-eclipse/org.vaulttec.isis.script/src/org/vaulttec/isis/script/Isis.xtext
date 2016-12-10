@@ -73,7 +73,7 @@ IsisCollectionFeature:
 
 enum IsisCollectionFeatureType:
 	Hide='hide' | Disable='disable' | Validate='validate' | Derived='derived' |
-	Add='add' | Remove='remove';
+	AddTo='addTo' | RemoveFrom='removeFrom';
 
 IsisAction:
 	=> (annotations+=XAnnotation*

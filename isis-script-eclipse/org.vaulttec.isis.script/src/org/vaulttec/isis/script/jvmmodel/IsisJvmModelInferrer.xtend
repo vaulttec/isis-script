@@ -230,10 +230,10 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 						addCollectionValidate(c)
 					case DERIVED: {
 					}
-					case ADD:
-						addCollectionAdd(c)
-					case REMOVE:
-						addCollectionRemove(c)
+					case ADD_TO:
+						addCollectionAddTo(c)
+					case REMOVE_FROM:
+						addCollectionRemoveFrom(c)
 				}
 			]
 			addEvents(c)
@@ -277,19 +277,19 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 		]
 	}
 
-	protected def void addCollectionAdd(JvmGenericType it, IsisCollection c) {
+	protected def void addCollectionAddTo(JvmGenericType it, IsisCollection c) {
 		val argumentType = c.type.getArgument(0)
 		members += c.toMethod("addTo" + c.name.toFirstUpper, typeRef("void")) [
-			parameters += c.toParameter(argumentType.simpleName.toFirstLower, argumentType)
-			body = c.getFeatureExpression(IsisCollectionFeatureType.ADD)
+			parameters += c.toParameter("element", argumentType)
+			body = c.getFeatureExpression(IsisCollectionFeatureType.ADD_TO)
 		]
 	}
 
-	protected def void addCollectionRemove(JvmGenericType it, IsisCollection c) {
+	protected def void addCollectionRemoveFrom(JvmGenericType it, IsisCollection c) {
 		val argumentType = c.type.getArgument(0)
 		members += c.toMethod("removeFrom" + c.name.toFirstUpper, typeRef("void")) [
-			parameters += c.toParameter(argumentType.simpleName.toFirstLower, argumentType)
-			body = c.getFeatureExpression(IsisCollectionFeatureType.REMOVE)
+			parameters += c.toParameter("element", argumentType)
+			body = c.getFeatureExpression(IsisCollectionFeatureType.REMOVE_FROM)
 		]
 	}
 

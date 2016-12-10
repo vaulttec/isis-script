@@ -28,8 +28,8 @@ The different aspects of the Isis Script DSL are explained in the following sect
       - [Disable](#disable-1)
       - [Validate](#validate-1)
     - [Derived Collection](#derived-collection)
-    - [Add](#add)
-    - [Remove](#remove)
+    - [AddTo](#addto)
+    - [RemoveFrom](#removefrom)
     - [Collection Events](#collection-events)
   - [Actions](#actions)
     - [Action Rules](#action-rules)
@@ -343,12 +343,12 @@ The keyword `derived` defines an expression which is used as getter of a non-per
 For these collections only the business rule `hide` is allowed.
 
 
-#### Add
+#### AddTo
 
-The keyword `add` defines an expression to add a given element (parameter name `element`) to the collection:
+The keyword `addTo` defines an expression to add a given element (parameter name `element`) to the collection:
 
 	collection Set<OtherType> someCollection = new TreeSet<>() {
-		add {
+		addTo {
 			doSomeStuff()
 			getSomeCollection().add(element)
 			doSomeOtherStuff()
@@ -358,12 +358,12 @@ The keyword `add` defines an expression to add a given element (parameter name `
 Using this method allows business logic to be placed apart from the update of the collection.
 
 
-#### Remove
+#### RemoveFrom
 
-The keyword `remove` defines an expression to remove a given element (parameter name `element`) from the collection:
+The keyword `removeFrom` defines an expression to remove a given element (parameter name `element`) from the collection:
 
 	collection Set<OtherType> someCollection = new TreeSet<>() {
-		remove {
+		removeFrom {
 			doSomeStuff()
 			getSomeCollection().remove(element)
 			doSomeOtherStuff()
