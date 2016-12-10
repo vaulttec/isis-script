@@ -156,20 +156,16 @@ class IsisInferrerCompilerTest {
 				@org.apache.isis.applib.annotation.Collection(editing = org.apache.isis.applib.annotation.Editing.ENABLED)
 				collection java.util.Set<Integer> collec1 = new java.util.TreeSet<Integer> {
 					addTo {
-						getCollec1().add(element)
 					}
 					removeFrom {
-						getCollec1().remove(element)
 					}
 				}
 
 				@org.apache.isis.applib.annotation.Collection(editing = org.apache.isis.applib.annotation.Editing.DISABLED)
 				collection java.util.List<String> collec2 = new java.util.ArrayList<String> {
 					addTo {
-						getCollec2().add(element)
 					}
 					removeFrom {
-						getCollec2().remove(element)
 					}
 				}
 			}
@@ -204,13 +200,9 @@ class IsisInferrerCompilerTest {
 			  }
 			  
 			  public void addToCollec1(final Integer element) {
-			    Set<Integer> _collec1 = this.getCollec1();
-			    _collec1.add(element);
 			  }
 			  
 			  public void removeFromCollec1(final Integer element) {
-			    Set<Integer> _collec1 = this.getCollec1();
-			    _collec1.remove(element);
 			  }
 			  
 			  private List<String> collec2 = new ArrayList<String>();
@@ -225,13 +217,9 @@ class IsisInferrerCompilerTest {
 			  }
 			  
 			  public void addToCollec2(final String element) {
-			    List<String> _collec2 = this.getCollec2();
-			    _collec2.add(element);
 			  }
 			  
 			  public void removeFromCollec2(final String element) {
-			    List<String> _collec2 = this.getCollec2();
-			    _collec2.remove(element);
 			  }
 			  
 			  @Override
