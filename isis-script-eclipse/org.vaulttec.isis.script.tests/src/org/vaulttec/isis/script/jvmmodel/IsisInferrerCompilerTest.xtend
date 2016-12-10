@@ -157,7 +157,11 @@ class IsisInferrerCompilerTest {
 				collection java.util.Set<Integer> collec1 = new java.util.TreeSet<Integer> {
 					addTo {
 					}
+					validateAddTo {
+					}
 					removeFrom {
+					}
+					validateRemoveFrom {
 					}
 				}
 
@@ -165,7 +169,11 @@ class IsisInferrerCompilerTest {
 				collection java.util.List<String> collec2 = new java.util.ArrayList<String> {
 					addTo {
 					}
+					validateAddTo {
+					}
 					removeFrom {
+					}
+					validateRemoveFrom {
 					}
 				}
 			}
@@ -202,7 +210,15 @@ class IsisInferrerCompilerTest {
 			  public void addToCollec1(final Integer element) {
 			  }
 			  
+			  public Object validateAddToCollec1(final Set<Integer> element) {
+			    return null;
+			  }
+			  
 			  public void removeFromCollec1(final Integer element) {
+			  }
+			  
+			  public Object validateRemoveFromCollec1(final Set<Integer> element) {
+			    return null;
 			  }
 			  
 			  private List<String> collec2 = new ArrayList<String>();
@@ -219,7 +235,15 @@ class IsisInferrerCompilerTest {
 			  public void addToCollec2(final String element) {
 			  }
 			  
+			  public Object validateAddToCollec2(final List<String> element) {
+			    return null;
+			  }
+			  
 			  public void removeFromCollec2(final String element) {
+			  }
+			  
+			  public Object validateRemoveFromCollec2(final List<String> element) {
+			    return null;
 			  }
 			  
 			  @Override

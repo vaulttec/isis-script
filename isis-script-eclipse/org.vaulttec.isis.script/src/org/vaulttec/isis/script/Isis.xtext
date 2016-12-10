@@ -72,8 +72,8 @@ IsisCollectionFeature:
 	type=IsisCollectionFeatureType expression=XBlockExpression;
 
 enum IsisCollectionFeatureType:
-	Hide='hide' | Disable='disable' | Validate='validate' | Derived='derived' |
-	AddTo='addTo' | RemoveFrom='removeFrom';
+	Hide='hide' | Disable='disable' | ValidateAddTo='validateAddTo' | ValidateRemoveFrom='validateRemoveFrom' |
+	Derived='derived' | AddTo='addTo' | RemoveFrom='removeFrom';
 
 IsisAction:
 	=> (annotations+=XAnnotation*

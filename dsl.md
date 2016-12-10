@@ -26,7 +26,7 @@ The different aspects of the Isis Script DSL are explained in the following sect
     - [Collection Rules](#collection-rules)
       - [Hide](#hide-1)
       - [Disable](#disable-1)
-      - [Validate](#validate-1)
+      - [Validate[AddTo|RemoveFrom]](#validateaddtoremovefrom)
     - [Derived Collection](#derived-collection)
     - [AddTo](#addto)
     - [RemoveFrom](#removefrom)
@@ -35,12 +35,12 @@ The different aspects of the Isis Script DSL are explained in the following sect
     - [Action Rules](#action-rules)
       - [Hide](#hide-2)
       - [Disable](#disable-2)
-      - [Validate](#validate-2)
+      - [Validate](#validate-1)
     - [Action Parameters](#action-parameters)
       - [Default](#default-1)
       - [Drop-Downs](#drop-downs-1)
       - [Auto-Complete](#auto-complete-1)
-      - [Validate](#validate-3)
+      - [Validate](#validate-2)
     - [Action Events](#action-events)
 - [Services](#services)
   - [Inheritance](#inheritance-1)
@@ -310,18 +310,18 @@ It returns a string with the reason for disabling or `null` if not disabled:
 	}
 
 
-##### Validate
+##### Validate[AddTo|RemoveFrom]
 
-The keyword `validate [add|remove]` defines an expression which validates a proposed argument (parameter name `element`). It returns a string which is the reason the modification is vetoed or `null` if not vetoed:
+The keyword `validate[AddTo|RemoveFrom]` defines an expression which validates a proposed argument (parameter name `element`). It returns a string which is the reason the modification is vetoed or `null` if not vetoed:
 
 	collection Set<OtherType> someCollection = new TreeSet<>() {
-		validate add {
+		validateAddTo {
 			if (someCollection.contains(element))
 				"Element is already added"
 			else
 				null
 		}
-		validate remove {
+		validateRemoveFrom {
 			if (element.isInUse())
 				"Element is still in use"
 			else
