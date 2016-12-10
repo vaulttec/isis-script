@@ -90,35 +90,35 @@ class IsisValidator extends AbstractIsisValidator {
 	@Check
 	def checkPropertyFeatures(IsisPropertyFeature it) {
 		if ((eContainer as IsisProperty).getFeatureCount(type) > 1) {
-			error('Only one occurence of "'+ type + '" is allowed', DslPackage.Literals.ISIS_PROPERTY_FEATURE__TYPE, MULTIPLE_FEATURES)
+			error('Only one occurrence of "'+ type + '" is allowed', DslPackage.Literals.ISIS_PROPERTY_FEATURE__TYPE, MULTIPLE_FEATURES)
 		}
 	}
 
 	@Check
 	def checkCollectionFeatures(IsisCollectionFeature it) {
 		if ((eContainer as IsisCollection).getFeatureCount(type) > 1) {
-			error('Only one occurence of "'+ type + '" is allowed', DslPackage.Literals.ISIS_COLLECTION_FEATURE__TYPE, MULTIPLE_FEATURES)
+			error('Only one occurrence of "'+ type + '" is allowed', DslPackage.Literals.ISIS_COLLECTION_FEATURE__TYPE, MULTIPLE_FEATURES)
 		}
 	}
 
 	@Check
 	def checkActionFeatures(IsisActionFeature it) {
 		if ((eContainer as IsisAction).getFeatureCount(type) > 1) {
-			error('Only one occurence of "'+ type + '" is allowed', DslPackage.Literals.ISIS_ACTION_FEATURE__TYPE, MULTIPLE_FEATURES)
+			error('Only one occurrence of "'+ type + '" is allowed', DslPackage.Literals.ISIS_ACTION_FEATURE__TYPE, MULTIPLE_FEATURES)
 		}
 	}
 
 	@Check
 	def checkActionParameterFeatures(IsisActionParameterFeature it) {
 		if ((eContainer as IsisActionParameter).getFeatureCount(type) > 1) {
-			error('Only one occurence of "'+ type + '" is allowed', DslPackage.Literals.ISIS_ACTION_PARAMETER_FEATURE__TYPE, MULTIPLE_FEATURES)
+			error('Only one occurrence of "'+ type + '" is allowed', DslPackage.Literals.ISIS_ACTION_PARAMETER_FEATURE__TYPE, MULTIPLE_FEATURES)
 		}
 	}
 
 	@Check
 	def checkUiHintTypes(IsisUiHint it) {
 		if ((eContainer as IsisEntity).getUiHintCount(type) > 1) {
-			error('Only one occurence of "'+ type + '" is allowed', DslPackage.Literals.ISIS_UI_HINT__TYPE, MULTIPLE_UI_HINTS)
+			error('Only one occurrence of "'+ type + '" is allowed', DslPackage.Literals.ISIS_UI_HINT__TYPE, MULTIPLE_UI_HINTS)
 		}
 	}
 

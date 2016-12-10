@@ -147,7 +147,7 @@ class IsisValidatorTest {
 		val issue = issues.get(0)
 		assertEquals(Severity.ERROR, issue.severity)
 		assertEquals(MULTIPLE_FEATURES, issue.code)
-		assertEquals('Only one occurence of "hide" is allowed', issue.message)
+		assertEquals('Only one occurrence of "hide" is allowed', issue.message)
 	}
 
 	@Test
@@ -167,7 +167,7 @@ class IsisValidatorTest {
 		val issue = issues.get(0)
 		assertEquals(Severity.ERROR, issue.severity)
 		assertEquals(MULTIPLE_UI_HINTS, issue.code)
-		assertEquals('Only one occurence of "title" is allowed', issue.message)
+		assertEquals('Only one occurrence of "title" is allowed', issue.message)
 	}
 
 }
