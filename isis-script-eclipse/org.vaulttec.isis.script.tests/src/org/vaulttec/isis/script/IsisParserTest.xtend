@@ -27,6 +27,8 @@ import org.vaulttec.isis.script.dsl.IsisFile
 import org.vaulttec.isis.script.dsl.IsisService
 
 import static org.junit.Assert.*
+import org.vaulttec.isis.script.dsl.IsisPropertyFeatureType
+import org.eclipse.xtext.xbase.XStringLiteral
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(IsisInjectorProvider))
@@ -44,6 +46,11 @@ class IsisParserTest {
 				property int prop1 {
 					event Event1
 				}
+				property String prop2 {
+					derived {
+						"result"
+					}
+				}
 				collection java.util.Set<String> collection1 = new java.util.TreeSet<String> {
 					event Event2
 				}
@@ -60,10 +67,17 @@ class IsisParserTest {
 			val entity = declaration as IsisEntity
 			assertEquals("Entity1", entity.name)
 			assertEquals("injection1", entity.injections.get(0).name)
+			
 			assertEquals("prop1", entity.properties.get(0).name)
 			assertEquals("Event1", entity.properties.get(0).events.get(0).name)
+
+			assertEquals("prop2", entity.properties.get(1).name)
+			assertEquals(1, entity.properties.get(1).features.size)
+			assertEquals(IsisPropertyFeatureType.DERIVED, entity.properties.get(1).features.get(0).type)
+			
 			assertEquals("collection1", entity.collections.get(0).name)
 			assertEquals("Event2", entity.collections.get(0).events.get(0).name)
+			
 			assertEquals("action1", entity.actions.get(0).name)
 			assertEquals("Event3", entity.actions.get(0).events.get(0).name)
 		]

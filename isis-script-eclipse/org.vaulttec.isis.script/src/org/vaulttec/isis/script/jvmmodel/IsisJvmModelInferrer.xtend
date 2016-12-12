@@ -155,7 +155,7 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 		}
 		members += p.toGetter(p.name, p.type) => [
 			addAnnotations(p.annotations)
-			if (!p.hasFeature(IsisPropertyFeatureType.DERIVED)) {
+			if (p.hasFeature(IsisPropertyFeatureType.DERIVED)) {
 				body = p.getFeatureExpression(IsisPropertyFeatureType.DERIVED)
 			}
 		]
