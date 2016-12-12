@@ -58,6 +58,42 @@ class IsisInferrerCompilerTest {
 			}
 		''')
 	}
+	
+	@Test
+	def void testDerivedProperty() {
+		'''
+			package org.vaulttec.isis.script.test
+			entity Entity1 {
+			  property String prop1 {
+			    derived {
+			      "result"
+			    }
+			  }
+			}
+		'''.assertCompilesTo(
+        '''
+			package org.vaulttec.isis.script.test;
+			
+			import javax.inject.Inject;
+			import org.apache.isis.applib.DomainObjectContainer;
+			
+			@SuppressWarnings("all")
+			public class Entity1 implements Comparable<Entity1> {
+			  @Inject
+			  @SuppressWarnings("unused")
+			  DomainObjectContainer container;
+			  
+			  public String getProp1() {
+			    return "result";
+			  }
+			  
+			  @Override
+			  public int compareTo(final Entity1 other) {
+			    return org.apache.isis.applib.util.ObjectContracts.compare(this, other);
+			  }
+			}
+		''')
+	}
 
 	@Test
 	def void testEntityWithProperties() {
