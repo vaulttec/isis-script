@@ -20,6 +20,8 @@ import org.apache.isis.applib.annotation.ParameterLayout
 import org.apache.isis.applib.annotation.Property
 import org.apache.isis.applib.annotation.Title
 import org.apache.isis.applib.services.i18n.TranslatableString
+import java.util.List
+import java.util.ArrayList
 
 @PersistenceCapable(identityType=IdentityType.DATASTORE)
 @DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY, column="id")
@@ -39,6 +41,18 @@ entity SimpleObject {
 	@Title(sequence="1")
 	@Property(editing = Editing.DISABLED)
 	property String name
+	
+	collection List<String> names = new ArrayList {
+		addTo {
+			getNames.add(element)
+		}
+		validateAddTo {
+			if (getNames.contains(element))
+				"Element already added"
+			else
+				null
+		}
+	}
 
 	@Action(domainEvent = UpdateNameDomainEvent)
 	action SimpleObject updateName {
@@ -63,6 +77,12 @@ entity SimpleObject {
 
 	title {
 		TranslatableString.tr("Object: {name}", "name", name)
+	}
+
+	property Integer count {
+		default {
+			5 * -8
+		}
 	}
 
 }

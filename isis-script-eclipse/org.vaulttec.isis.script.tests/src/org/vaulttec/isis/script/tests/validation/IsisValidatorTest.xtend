@@ -13,7 +13,7 @@
  * Contributors:
  *     Torsten Juergeleit - initial API and implementation
  *******************************************************************************/
-package org.vaulttec.isis.script.validation
+package org.vaulttec.isis.script.tests.validation
 
 import javax.inject.Inject
 import org.eclipse.xtext.diagnostics.Severity
@@ -23,9 +23,9 @@ import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.vaulttec.isis.script.IsisInjectorProvider
 import org.vaulttec.isis.script.dsl.DslPackage
 import org.vaulttec.isis.script.dsl.IsisFile
+import org.vaulttec.isis.script.tests.IsisInjectorProvider
 
 import static org.junit.Assert.*
 import static org.vaulttec.isis.script.validation.IsisValidator.*

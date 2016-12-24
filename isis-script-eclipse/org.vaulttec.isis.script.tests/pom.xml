@@ -10,7 +10,7 @@
 	<groupId>org.vaulttec.isis.script.eclipse</groupId>
 	<artifactId>org.vaulttec.isis.script.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<name>Isis Script :: Eclipse :: Textual DSL Tests</name>
+	<name>Isis Script :: Eclipse :: DSL Tests</name>
 
 	<build>
 		<plugins>

@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.vaulttec.isis.script.ide
+Bundle-SymbolicName: org.vaulttec.isis.script.ide;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.vaulttec.isis.script,
+ org.eclipse.xtext.ide,
+ org.eclipse.xtext.xbase.ide
+Export-Package: org.vaulttec.isis.script.ide.contentassist.antlr,
+ org.vaulttec.isis.script.ide.contentassist.antlr.internal
+Bundle-Vendor: Torsten Juergeleit
+

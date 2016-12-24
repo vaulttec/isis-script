@@ -5,19 +5,18 @@ Bundle-Vendor: Torsten Juergeleit
 Bundle-Version: 1.0.0.qualifier
 Bundle-SymbolicName: org.vaulttec.isis.script; singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.eclipse.xtext;visibility:=reexport,
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
  org.eclipse.equinox.common;bundle-version="3.5.0",
- org.eclipse.xtext.util,
  org.eclipse.emf.ecore,
- org.eclipse.emf.common,
+ org.eclipse.emf.mwe2.launch,
  org.eclipse.xtext.xbase.lib,
  org.antlr.runtime,
+ org.eclipse.xtext.util,
+ org.eclipse.xtend.lib,
+ org.eclipse.emf.common,
  org.eclipse.xtext.common.types,
- org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional,
- org.eclipse.xtext.xbase,
- org.eclipse.emf.mwe2.launch
-Import-Package: org.apache.log4j,
- org.eclipse.xtext.xbase.lib
+ org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.vaulttec.isis.script,
  org.vaulttec.isis.script.dsl,
@@ -28,5 +27,7 @@ Export-Package: org.vaulttec.isis.script,
  org.vaulttec.isis.script.parser.antlr,
  org.vaulttec.isis.script.parser.antlr.internal,
  org.vaulttec.isis.script.validation,
- org.vaulttec.isis.script.jvmmodel
-
+ org.vaulttec.isis.script.jvmmodel,
+ org.vaulttec.isis.script.scoping,
+ org.vaulttec.isis.script.formatting2
+Import-Package: org.apache.log4j

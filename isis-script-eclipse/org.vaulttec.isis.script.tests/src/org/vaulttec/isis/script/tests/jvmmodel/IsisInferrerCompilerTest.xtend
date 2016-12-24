@@ -13,7 +13,7 @@
  * Contributors:
  *     Torsten Juergeleit - initial API and implementation
  *******************************************************************************/
-package org.vaulttec.isis.script.jvmmodel
+package org.vaulttec.isis.script.tests.jvmmodel
 
 import javax.inject.Inject
 import org.eclipse.xtext.junit4.InjectWith
@@ -23,7 +23,7 @@ import org.eclipse.xtext.xbase.compiler.CompilationTestHelper
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.vaulttec.isis.script.IsisInjectorProvider
+import org.vaulttec.isis.script.tests.IsisInjectorProvider
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(IsisInjectorProvider))

@@ -13,7 +13,7 @@
  * Contributors:
  *     Torsten Juergeleit - initial API and implementation
  *******************************************************************************/
-package org.vaulttec.isis.script
+package org.vaulttec.isis.script.tests
 
 import javax.inject.Inject
 import org.eclipse.xtext.junit4.InjectWith
@@ -25,6 +25,7 @@ import org.junit.runner.RunWith
 import org.vaulttec.isis.script.dsl.IsisEntity
 import org.vaulttec.isis.script.dsl.IsisFile
 import org.vaulttec.isis.script.dsl.IsisService
+import org.vaulttec.isis.script.tests.IsisInjectorProvider
 
 import static org.junit.Assert.*
 import org.vaulttec.isis.script.dsl.IsisPropertyFeatureType
@@ -32,7 +33,7 @@ import org.eclipse.xtext.xbase.XStringLiteral
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(IsisInjectorProvider))
-class IsisParserTest {
+class IsisParsingTest {
 
 	@Inject extension ParseHelper<IsisFile>
 	@Inject extension ValidationTestHelper
@@ -44,6 +45,9 @@ class IsisParserTest {
 			entity Entity1 {
 				inject Object injection1
 				property int prop1 {
+					default {
+						-1
+					}
 					event Event1
 				}
 				property String prop2 {

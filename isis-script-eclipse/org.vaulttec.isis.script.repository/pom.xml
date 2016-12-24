@@ -8,7 +8,7 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<groupId>org.vaulttec.isis.script.eclipse</groupId>
-	<artifactId>eclipse-repository</artifactId>
+	<artifactId>org.vaulttec.isis.script.repository</artifactId>
 	<packaging>eclipse-repository</packaging>
 	<name>Isis Script :: Eclipse :: p2 Repository</name>
 

@@ -10,7 +10,7 @@
 	<groupId>org.vaulttec.isis.script.eclipse</groupId>
 	<artifactId>org.vaulttec.isis.script</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<name>Isis Script :: Eclipse :: Textual DSL</name>
+	<name>Isis Script :: Eclipse :: DSL</name>
 
 	<build>
 	
@@ -87,13 +87,14 @@
 					</execution>
 				</executions>
 				<configuration>
+					<classpathScope>compile</classpathScope>
 					<includeProjectDependencies>false</includeProjectDependencies>
 					<includePluginDependencies>true</includePluginDependencies>
 					<mainClass>org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher</mainClass>
 					<arguments>
-						<argument>file://${project.basedir}/src/org/vaulttec/isis/script/GenerateIsisDsl.mwe2</argument>
+						<argument>/${project.basedir}/src/org/vaulttec/isis/script/GenerateIsisDsl.mwe2</argument>
 						<argument>-p</argument>
-						<argument>runtimeProject=/${project.basedir}</argument>
+						<argument>rootPath=/${project.basedir}/..</argument>
 					</arguments>
 				</configuration>
 				<dependencies>
@@ -106,11 +107,6 @@
 						<groupId>org.eclipse.xtext</groupId>
 						<artifactId>org.eclipse.xtext.xbase</artifactId>
 						<version>${xtext-version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.eclipse.equinox</groupId>
-						<artifactId>org.eclipse.equinox.common</artifactId>
-						<version>[3.6.0,)</version>
 					</dependency>
 				</dependencies>
 			</plugin>

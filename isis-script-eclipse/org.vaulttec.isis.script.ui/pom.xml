@@ -10,7 +10,7 @@
 	<groupId>org.vaulttec.isis.script.eclipse</groupId>
 	<artifactId>org.vaulttec.isis.script.ui</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<name>Isis Script :: Eclipse :: Textual DSL Editor</name>
+	<name>Isis Script :: Eclipse :: UI</name>
 
 	<build>
 		<plugins>

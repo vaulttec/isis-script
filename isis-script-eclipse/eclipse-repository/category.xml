@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <feature url="features/org.vaulttec.isis.script.ide_1.0.0.qualifier.jar" id="org.vaulttec.isis.script.ide" version="1.0.0.qualifier">
-      <category name="isis"/>
-   </feature>
-   <category-def name="isis" label="Isis Script"/>
-</site>

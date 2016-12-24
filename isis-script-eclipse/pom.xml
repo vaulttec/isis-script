@@ -13,9 +13,12 @@
 	<modules>
 		<module>org.vaulttec.isis.script.target</module>
 		<module>org.vaulttec.isis.script</module>
-		<module>org.vaulttec.isis.script.ui</module>
-		<module>org.vaulttec.isis.script.tests</module>
 		<module>org.vaulttec.isis.script.ide</module>
+		<module>org.vaulttec.isis.script.ui</module>
+		<module>org.vaulttec.isis.script.feature</module>
+		<module>org.vaulttec.isis.script.repository</module>
+		<module>org.vaulttec.isis.script.tests</module>
+		<module>org.vaulttec.isis.script.ui.tests</module>
 	</modules>
 
 	<profiles>
@@ -73,6 +76,25 @@
 					<artifactId>xtend-maven-plugin</artifactId>
 					<configuration>
 						<outputDirectory>${basedir}/xtend-gen</outputDirectory>
+						<testOutputDirectory>${basedir}/xtend-gen</testOutputDirectory>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<configuration>
+						<filesets>
+							<fileset>
+								<directory>${basedir}/xtend-gen</directory>
+								<includes>
+									<include>**/*</include>
+								</includes>
+								<directory>${basedir}/xtend-gen</directory>
+								<includes>
+									<include>**/*</include>
+								</includes>
+							</fileset>
+						</filesets>
 					</configuration>
 				</plugin>
 			</plugins>
@@ -88,8 +110,15 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
-				<!-- Isis Script p2 repository must contain only Isis Script Eclipse plugins -->
 				<configuration>
+					<target>
+						<artifact>
+							<groupId>org.vaulttec.isis.script.eclipse</groupId>
+							<artifactId>org.vaulttec.isis.script.target</artifactId>
+							<version>${project.version}</version>
+						</artifact>
+					</target>
+					<!-- Isis Script p2 repository must contain only Isis Script Eclipse plugins -->
 					<filters>
 						<filter>
 							<type>java-package</type>
@@ -104,5 +133,32 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<id>codehaus-snapshots</id>
+			<name>disable dead 'Codehaus Snapshots' repository, see https://bugs.eclipse.org/bugs/show_bug.cgi?id=481478</name>
+			<url>http://nexus.codehaus.org/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>codehaus-snapshots</id>
+			<name>disable dead 'Codehaus Snapshots' repository, see https://bugs.eclipse.org/bugs/show_bug.cgi?id=481478</name>
+			<url>http://nexus.codehaus.org/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 
 </project>

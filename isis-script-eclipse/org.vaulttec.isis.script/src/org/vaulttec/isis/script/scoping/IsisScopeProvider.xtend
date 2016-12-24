@@ -13,25 +13,13 @@
  * Contributors:
  *     Torsten Juergeleit - initial API and implementation
  *******************************************************************************/
-package org.vaulttec.isis.script;
-
-import org.eclipse.xtext.generator.IOutputConfigurationProvider;
-import org.vaulttec.isis.script.configuration.IsisOutputConfigurationProvider;
-
-import com.google.inject.Binder;
-import com.google.inject.Singleton;
+package org.vaulttec.isis.script.scoping
 
 /**
- * Use this class to register components to be used at runtime / without the
- * Equinox extension registry.
+ * This class contains custom scoping description.
+ * 
+ * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#scoping
+ * on how and when to use it.
  */
-public class IsisRuntimeModule extends AbstractIsisRuntimeModule {
-
-	@Override
-	public void configure(Binder binder) {
-		super.configure(binder);
-		binder.bind(IOutputConfigurationProvider.class)
-				.to(IsisOutputConfigurationProvider.class).in(Singleton.class);
-	}
-
+class IsisScopeProvider extends AbstractIsisScopeProvider {
 }
