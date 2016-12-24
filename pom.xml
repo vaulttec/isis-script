@@ -66,7 +66,7 @@
 
 		<tycho-version>0.26.0</tycho-version>
 		<xtext-version>2.10.0</xtext-version>
-		<isis-version>1.13.1</isis-version>
+		<isis-version>1.13.2</isis-version>
 		<junit-version>4.12</junit-version>
 
 		<!-- GitHub server corresponds to entry in ~/.m2/settings.xml -->
