@@ -10,6 +10,7 @@ Require-Bundle: org.vaulttec.isis.script,
  org.eclipse.xtext.junit4,
  org.eclipse.xtext.xbase.junit,
  org.eclipse.xtext.xbase.lib,
+ org.eclipse.jdt.core;bundle-version="3.10.2",
  org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.vaulttec.isis.script.tests
