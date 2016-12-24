@@ -2,18 +2,17 @@ package domainapp.dom.app.homepage
 
 import org.apache.isis.applib.annotation.Action
 import org.apache.isis.applib.annotation.DomainService
-import org.apache.isis.applib.annotation.NatureOfService
 import org.apache.isis.applib.annotation.SemanticsOf
 import org.apache.isis.applib.annotation.HomePage
 
-@DomainService(nature=NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
+@DomainService(nature=VIEW_CONTRIBUTIONS_ONLY)
 service HomePageService {
 
     @Action(semantics=SemanticsOf.SAFE)
     @HomePage
     action HomePageViewModel homePage {
     	body {
-			container.injectServicesInto(new HomePageViewModel)
+			factoryService.instantiate(HomePageViewModel)
 		}
     }
 

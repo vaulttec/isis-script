@@ -71,7 +71,7 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 	protected def dispatch void initializeDeclaration(JvmGenericType it, IsisEntity entity) {
 		superTypes += entity.superType.cloneWithProxies
 		addAnnotations(entity.annotations)
-		addContainerInjection(entity)
+		addCoreServiceInjections(entity)
 		addInjections(entity.injections)
 		addProperties(entity.properties)
 		addCollections(entity.collections)
@@ -83,7 +83,7 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 	protected def dispatch void initializeDeclaration(JvmGenericType it, IsisService service) {
 		superTypes += service.superType.cloneWithProxies
 		addAnnotations(service.annotations)
-		addContainerInjection(service)
+		addCoreServiceInjections(service)
 		addInjections(service.injections)
 		addActions(service.actions)
 	}
@@ -102,8 +102,15 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 		]
 	}
 
-	protected def void addContainerInjection(JvmGenericType it, EObject object) {
-		members += createInjectionField(object, "container", typeRef("org.apache.isis.applib.DomainObjectContainer"))
+	protected def void addCoreServiceInjections(JvmGenericType it, EObject object) {
+        members += createInjectionField(object, "container", typeRef("org.apache.isis.applib.DomainObjectContainer"))
+        members += createInjectionField(object, "factoryService", typeRef("org.apache.isis.applib.services.factory.FactoryService"))
+		members += createInjectionField(object, "serviceRegistry", typeRef("org.apache.isis.applib.services.registry.ServiceRegistry2"))
+		members += createInjectionField(object, "repositoryService", typeRef("org.apache.isis.applib.services.repository.RepositoryService"))
+		members += createInjectionField(object, "titleService", typeRef("org.apache.isis.applib.services.title.TitleService"))
+		members += createInjectionField(object, "messageService", typeRef("org.apache.isis.applib.services.message.MessageService"))
+		members += createInjectionField(object, "configService", typeRef("org.apache.isis.applib.services.config.ConfigurationService"))
+		members += createInjectionField(object, "userService", typeRef("org.apache.isis.applib.services.user.UserService"))
 	}
 
 	protected def void addInjections(JvmGenericType it, EList<IsisInjection> injections) {
@@ -116,7 +123,6 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 		object.toField(fieldName, typeRef) [
 			visibility = JvmVisibility.DEFAULT
 			annotations += annotationRef(Inject)
-			annotations += annotationRef(SuppressWarnings, "unused")
 		]
 	}
 

@@ -44,12 +44,39 @@ class IsisInferrerCompilerTest {
 			
 			import javax.inject.Inject;
 			import org.apache.isis.applib.DomainObjectContainer;
+			import org.apache.isis.applib.services.config.ConfigurationService;
+			import org.apache.isis.applib.services.factory.FactoryService;
+			import org.apache.isis.applib.services.message.MessageService;
+			import org.apache.isis.applib.services.registry.ServiceRegistry2;
+			import org.apache.isis.applib.services.repository.RepositoryService;
+			import org.apache.isis.applib.services.title.TitleService;
+			import org.apache.isis.applib.services.user.UserService;
 			
 			@SuppressWarnings("all")
 			public class Entity1 implements Comparable<Entity1> {
 			  @Inject
-			  @SuppressWarnings("unused")
 			  DomainObjectContainer container;
+			  
+			  @Inject
+			  FactoryService factoryService;
+			  
+			  @Inject
+			  ServiceRegistry2 serviceRegistry;
+			  
+			  @Inject
+			  RepositoryService repositoryService;
+			  
+			  @Inject
+			  TitleService titleService;
+			  
+			  @Inject
+			  MessageService messageService;
+			  
+			  @Inject
+			  ConfigurationService configService;
+			  
+			  @Inject
+			  UserService userService;
 			  
 			  @Override
 			  public int compareTo(final Entity1 other) {
@@ -76,12 +103,39 @@ class IsisInferrerCompilerTest {
 			
 			import javax.inject.Inject;
 			import org.apache.isis.applib.DomainObjectContainer;
+			import org.apache.isis.applib.services.config.ConfigurationService;
+			import org.apache.isis.applib.services.factory.FactoryService;
+			import org.apache.isis.applib.services.message.MessageService;
+			import org.apache.isis.applib.services.registry.ServiceRegistry2;
+			import org.apache.isis.applib.services.repository.RepositoryService;
+			import org.apache.isis.applib.services.title.TitleService;
+			import org.apache.isis.applib.services.user.UserService;
 			
 			@SuppressWarnings("all")
 			public class Entity1 implements Comparable<Entity1> {
 			  @Inject
-			  @SuppressWarnings("unused")
 			  DomainObjectContainer container;
+			  
+			  @Inject
+			  FactoryService factoryService;
+			  
+			  @Inject
+			  ServiceRegistry2 serviceRegistry;
+			  
+			  @Inject
+			  RepositoryService repositoryService;
+			  
+			  @Inject
+			  TitleService titleService;
+			  
+			  @Inject
+			  MessageService messageService;
+			  
+			  @Inject
+			  ConfigurationService configService;
+			  
+			  @Inject
+			  UserService userService;
 			  
 			  public String getProp1() {
 			    return "result";
@@ -120,13 +174,40 @@ class IsisInferrerCompilerTest {
 			import javax.inject.Inject;
 			import org.apache.isis.applib.DomainObjectContainer;
 			import org.apache.isis.applib.Identifier;
+			import org.apache.isis.applib.services.config.ConfigurationService;
 			import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
+			import org.apache.isis.applib.services.factory.FactoryService;
+			import org.apache.isis.applib.services.message.MessageService;
+			import org.apache.isis.applib.services.registry.ServiceRegistry2;
+			import org.apache.isis.applib.services.repository.RepositoryService;
+			import org.apache.isis.applib.services.title.TitleService;
+			import org.apache.isis.applib.services.user.UserService;
 			
 			@SuppressWarnings("all")
 			public class Child implements Comparable<Child> {
 			  @Inject
-			  @SuppressWarnings("unused")
 			  DomainObjectContainer container;
+			  
+			  @Inject
+			  FactoryService factoryService;
+			  
+			  @Inject
+			  ServiceRegistry2 serviceRegistry;
+			  
+			  @Inject
+			  RepositoryService repositoryService;
+			  
+			  @Inject
+			  TitleService titleService;
+			  
+			  @Inject
+			  MessageService messageService;
+			  
+			  @Inject
+			  ConfigurationService configService;
+			  
+			  @Inject
+			  UserService userService;
 			  
 			  private int prop1;
 			  
@@ -225,12 +306,39 @@ class IsisInferrerCompilerTest {
 			import org.apache.isis.applib.DomainObjectContainer;
 			import org.apache.isis.applib.annotation.Collection;
 			import org.apache.isis.applib.annotation.Editing;
+			import org.apache.isis.applib.services.config.ConfigurationService;
+			import org.apache.isis.applib.services.factory.FactoryService;
+			import org.apache.isis.applib.services.message.MessageService;
+			import org.apache.isis.applib.services.registry.ServiceRegistry2;
+			import org.apache.isis.applib.services.repository.RepositoryService;
+			import org.apache.isis.applib.services.title.TitleService;
+			import org.apache.isis.applib.services.user.UserService;
 			
 			@SuppressWarnings("all")
 			public class Child implements Comparable<Child> {
 			  @Inject
-			  @SuppressWarnings("unused")
 			  DomainObjectContainer container;
+			  
+			  @Inject
+			  FactoryService factoryService;
+			  
+			  @Inject
+			  ServiceRegistry2 serviceRegistry;
+			  
+			  @Inject
+			  RepositoryService repositoryService;
+			  
+			  @Inject
+			  TitleService titleService;
+			  
+			  @Inject
+			  MessageService messageService;
+			  
+			  @Inject
+			  ConfigurationService configService;
+			  
+			  @Inject
+			  UserService userService;
 			  
 			  private Set<Integer> collec1 = new TreeSet<Integer>();
 			  
@@ -312,12 +420,39 @@ class IsisInferrerCompilerTest {
 			
 			import javax.inject.Inject;
 			import org.apache.isis.applib.DomainObjectContainer;
+			import org.apache.isis.applib.services.config.ConfigurationService;
+			import org.apache.isis.applib.services.factory.FactoryService;
+			import org.apache.isis.applib.services.message.MessageService;
+			import org.apache.isis.applib.services.registry.ServiceRegistry2;
+			import org.apache.isis.applib.services.repository.RepositoryService;
+			import org.apache.isis.applib.services.title.TitleService;
+			import org.apache.isis.applib.services.user.UserService;
 			
 			@SuppressWarnings("all")
 			public class Service1 {
 			  @Inject
-			  @SuppressWarnings("unused")
 			  DomainObjectContainer container;
+			  
+			  @Inject
+			  FactoryService factoryService;
+			  
+			  @Inject
+			  ServiceRegistry2 serviceRegistry;
+			  
+			  @Inject
+			  RepositoryService repositoryService;
+			  
+			  @Inject
+			  TitleService titleService;
+			  
+			  @Inject
+			  MessageService messageService;
+			  
+			  @Inject
+			  ConfigurationService configService;
+			  
+			  @Inject
+			  UserService userService;
 			  
 			  public String action1() {
 			    return "";
