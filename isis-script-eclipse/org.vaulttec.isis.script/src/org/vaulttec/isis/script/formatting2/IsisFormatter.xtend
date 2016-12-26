@@ -15,10 +15,9 @@
  *******************************************************************************/
 package org.vaulttec.isis.script.formatting2;
 
-import com.google.inject.Inject
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.formatting2.IFormattableDocument
 import org.eclipse.xtext.xbase.annotations.formatting2.XbaseWithAnnotationsFormatter
-import org.eclipse.xtext.xbase.annotations.xAnnotations.XAnnotation
 import org.vaulttec.isis.script.dsl.IsisAction
 import org.vaulttec.isis.script.dsl.IsisActionFeature
 import org.vaulttec.isis.script.dsl.IsisActionParameter
@@ -26,143 +25,116 @@ import org.vaulttec.isis.script.dsl.IsisActionParameterFeature
 import org.vaulttec.isis.script.dsl.IsisCollection
 import org.vaulttec.isis.script.dsl.IsisCollectionFeature
 import org.vaulttec.isis.script.dsl.IsisEntity
-import org.vaulttec.isis.script.dsl.IsisEvent
 import org.vaulttec.isis.script.dsl.IsisFile
-import org.vaulttec.isis.script.dsl.IsisInjection
+import org.vaulttec.isis.script.dsl.IsisPackageDeclaration
 import org.vaulttec.isis.script.dsl.IsisProperty
 import org.vaulttec.isis.script.dsl.IsisPropertyFeature
 import org.vaulttec.isis.script.dsl.IsisService
+import org.vaulttec.isis.script.dsl.IsisTypeDeclaration
 import org.vaulttec.isis.script.dsl.IsisUiHint
-import org.vaulttec.isis.script.services.IsisGrammarAccess
+
+import static org.vaulttec.isis.script.dsl.DslPackage.Literals.*
 
 class IsisFormatter extends XbaseWithAnnotationsFormatter {
-
-	@Inject extension IsisGrammarAccess
-
+	
 	def dispatch void format(IsisFile isisFile, extension IFormattableDocument document) {
+		isisFile.prepend[noSpace].append[newLine]
 		isisFile.package.format
 		isisFile.importSection.format
 		isisFile.declaration.format
 	}
 
+	def dispatch void format(IsisPackageDeclaration isisPackage, extension IFormattableDocument document) {
+		isisPackage.regionFor.feature(ISIS_PACKAGE_DECLARATION__NAME).prepend[oneSpace]
+		isisPackage.append[newLines = 2]
+	}
+
 	def dispatch void format(IsisEntity isisEntity, extension IFormattableDocument document) {
-		for (XAnnotation annotations : isisEntity.annotations) {
-			annotations.format
-		}
-		isisEntity.superType.format
-		for (IsisInjection injections : isisEntity.injections) {
-			injections.format
-		}
-		for (IsisProperty properties : isisEntity.properties) {
-			properties.format
-		}
-		for (IsisCollection collections : isisEntity.collections) {
-			collections.format
-		}
-		for (IsisAction actions : isisEntity.actions) {
-			actions.format
-		}
-		for (IsisUiHint uiHints : isisEntity.uiHints) {
-			uiHints.format
-		}
+		isisEntity.formatType(document)
+		isisEntity.properties.forEach[format.append[newLines = 2]]
+		isisEntity.collections.forEach[format.append[newLines = 2]]
+		isisEntity.uiHints.forEach[format.append[newLines = 2]]
 	}
 
-	def dispatch void format(IsisService isisservice, extension IFormattableDocument document) {
-		for (XAnnotation annotations : isisservice.annotations) {
-			annotations.format
-		}
-		isisservice.superType.format
-		for (IsisInjection injections : isisservice.injections) {
-			injections.format
-		}
-		for (IsisAction actions : isisservice.actions) {
-			actions.format
-		}
+	def dispatch void format(IsisService isisService, extension IFormattableDocument document) {
+		isisService.formatType(document)
 	}
 
-	def dispatch void format(IsisInjection isisinjection, extension IFormattableDocument document) {
-		isisinjection.type.format
+	def void formatType(IsisTypeDeclaration isisType, extension IFormattableDocument document) {
+		isisType.annotations.forEach[format.append[newLine]]
+		isisType.regionFor.feature(ISIS_TYPE_DECLARATION__NAME).surround[oneSpace]
+		isisType.superType.format.surround[oneSpace]
+		isisType.formatBlock(document)
+		isisType.injections.forEach [ injection |
+			injection.type.format.surround[oneSpace];
+			injection.append[newLines = if(injection == isisType.injections.last) 2 else 1]
+		]
+		isisType.actions.forEach[format.append[newLines = 2]]
 	}
 
-	def dispatch void format(IsisProperty isisproperty, extension IFormattableDocument document) {
-		for (XAnnotation annotations : isisproperty.annotations) {
-			annotations.format
-		}
-		isisproperty.type.format
-		for (IsisPropertyFeature features : isisproperty.features) {
-			features.format
-		}
-		for (IsisEvent events : isisproperty.events) {
-			events.format
-		}
+	def void formatBlock(EObject block, extension IFormattableDocument document) {
+		interior(
+			block.regionFor.keyword("{").prepend[oneSpace].append[newLines = 2],
+			block.regionFor.keyword("}").append[newLines = if (block instanceof IsisTypeDeclaration) 1 else 2],
+			[indent]
+		)
 	}
 
-	def dispatch void format(IsisPropertyFeature isispropertyfeature, extension IFormattableDocument document) {
-		for (XAnnotation annotations : isispropertyfeature.annotations) {
-			annotations.format
-		}
-		isispropertyfeature.expression.format
+	def dispatch void format(IsisProperty isisProperty, extension IFormattableDocument document) {
+		isisProperty.annotations.forEach[format.append[newLine]]
+		isisProperty.type.format.surround[oneSpace]
+		isisProperty.formatBlock(document)
+		isisProperty.features.forEach[format.append[newLines = 2]]
+		isisProperty.events.forEach[format.append[newLines = 2]]
 	}
 
-	def dispatch void format(IsisCollection isiscollection, extension IFormattableDocument document) {
-		for (XAnnotation annotations : isiscollection.annotations) {
-			annotations.format
-		}
-		isiscollection.type.format
-		for (IsisCollectionFeature features : isiscollection.features) {
-			features.format
-		}
-		for (IsisEvent events : isiscollection.events) {
-			events.format
-		}
+	def dispatch void format(IsisPropertyFeature isisPropertyFeature, extension IFormattableDocument document) {
+		isisPropertyFeature.annotations.forEach[format.append[newLine]]
+		isisPropertyFeature.expression.format.prepend[oneSpace]
 	}
 
-	def dispatch void format(IsisCollectionFeature isiscollectionfeature, extension IFormattableDocument document) {
-		for (XAnnotation annotations : isiscollectionfeature.annotations) {
-			annotations.format
-		}
-		isiscollectionfeature.expression.format
+	def dispatch void format(IsisCollection isisCollection, extension IFormattableDocument document) {
+		isisCollection.annotations.forEach[format.append[newLine]]
+		isisCollection.type.format.surround[oneSpace]
+		isisCollection.regionFor.feature(ISIS_COLLECTION__NAME).surround[oneSpace]
+		isisCollection.init.format.surround[oneSpace]
+		isisCollection.formatBlock(document)
+		isisCollection.features.forEach[format.append[newLines = 2]]
+		isisCollection.events.forEach[format.append[newLines = 2]]
 	}
 
-	def dispatch void format(IsisAction isisaction, extension IFormattableDocument document) {
-		for (XAnnotation annotations : isisaction.annotations) {
-			annotations.format
-		}
-		isisaction.type.format
-		for (IsisActionFeature features : isisaction.features) {
-			features.format
-		}
-		for (IsisActionParameter parameters : isisaction.parameters) {
-			parameters.format
-		}
-		for (IsisEvent events : isisaction.events) {
-			events.format
-		}
+	def dispatch void format(IsisCollectionFeature isisCollectionFeature, extension IFormattableDocument document) {
+		isisCollectionFeature.annotations.forEach[format.append[newLine]]
+		isisCollectionFeature.expression.format.prepend[oneSpace]
 	}
 
-	def dispatch void format(IsisActionFeature isisactionfeature, extension IFormattableDocument document) {
-		isisactionfeature.expression.format
+	def dispatch void format(IsisAction isisAction, extension IFormattableDocument document) {
+		isisAction.annotations.forEach[format.append[newLine]]
+		isisAction.type.format.surround[oneSpace]
+		isisAction.formatBlock(document)
+		isisAction.parameters.forEach[format.append[newLines = 2]]
+		isisAction.features.forEach[format.append[newLines = 2]]
+		isisAction.events.forEach[format.append[newLines = 2]]
 	}
 
-	def dispatch void format(IsisActionParameter isisactionparameter, extension IFormattableDocument document) {
-		for (XAnnotation annotations : isisactionparameter.annotations) {
-			annotations.format
-		}
-		isisactionparameter.type.format
-		for (IsisActionParameterFeature features : isisactionparameter.features) {
-			features.format
-		}
+	def dispatch void format(IsisActionParameter isisActionParameter, extension IFormattableDocument document) {
+		isisActionParameter.annotations.forEach[format.append[newLine]]
+		isisActionParameter.type.format.surround[oneSpace]
+		isisActionParameter.formatBlock(document)
+		isisActionParameter.features.forEach[format.append[newLines = 2]]
 	}
 
-	def dispatch void format(IsisActionParameterFeature isisactionparameterfeature, extension IFormattableDocument document) {
-		for (XAnnotation annotations : isisactionparameterfeature.annotations) {
-			annotations.format
-		}
-		isisactionparameterfeature.expression.format
+	def dispatch void format(IsisActionParameterFeature isisActionParameterFeature, extension IFormattableDocument document) {
+		isisActionParameterFeature.annotations.forEach[format.append[newLine]]
+		isisActionParameterFeature.expression.format.prepend[oneSpace]
 	}
 
-	def dispatch void format(IsisUiHint isisuihint, extension IFormattableDocument document) {
-		isisuihint.expression.format
+	def dispatch void format(IsisActionFeature isisActionFeature, extension IFormattableDocument document) {
+		isisActionFeature.expression.format.prepend[oneSpace]
+	}
+
+	def dispatch void format(IsisUiHint isisUiHint, extension IFormattableDocument document) {
+		isisUiHint.expression.format.prepend[oneSpace]
 	}
 
 }
