@@ -16,7 +16,6 @@
 package org.vaulttec.isis.script.jvmmodel
 
 import java.util.Collection
-import java.util.List
 import javax.inject.Inject
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
@@ -413,54 +412,23 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 
 	protected def void addEvents(JvmGenericType it, IsisProperty property) {
 		val sourceType = typeRef()
-		val targetType = property.type
 		for (e : property.events) {
 			members += e.toClass(e.name) [
 				static = true
 				superTypes +=
 					typeRef("org.apache.isis.applib.services.eventbus.PropertyDomainEvent", sourceType, property.type)
-				members += e.toConstructor [
-					parameters += e.toParameter("source", sourceType)
-					parameters += e.toParameter("identifier", typeRef("org.apache.isis.applib.Identifier"))
-					body = '''super(source, identifier);'''
-				]
-				members += e.toConstructor [
-					parameters += e.toParameter("source", sourceType)
-					parameters += e.toParameter("identifier", typeRef("org.apache.isis.applib.Identifier"))
-					parameters += e.toParameter("oldValue", targetType)
-					parameters += e.toParameter("newValue", targetType)
-					body = '''super(source, identifier, oldValue, newValue);'''
-				]
 			]
 		}
 	}
 
 	protected def void addEvents(JvmGenericType it, IsisCollection collection) {
 		val sourceType = typeRef()
-		val targetType = collection.type
 		for (e : collection.events) {
 			members += e.toClass(e.name) [
 				static = true
 				superTypes +=
 					typeRef("org.apache.isis.applib.services.eventbus.CollectionDomainEvent", sourceType,
 						collection.type)
-				members += e.toConstructor [
-					parameters += e.toParameter("source", sourceType)
-					parameters += e.toParameter("identifier", typeRef("org.apache.isis.applib.Identifier"))
-					parameters +=
-						e.toParameter("of",
-							typeRef("org.apache.isis.applib.services.eventbus.CollectionDomainEvent.Of"))
-					body = '''super(source, identifier, of);'''
-				]
-				members += e.toConstructor [
-					parameters += e.toParameter("source", sourceType)
-					parameters += e.toParameter("identifier", typeRef("org.apache.isis.applib.Identifier"))
-					parameters +=
-						e.toParameter("of",
-							typeRef("org.apache.isis.applib.services.eventbus.CollectionDomainEvent.Of"))
-					parameters += e.toParameter("value", targetType)
-					body = '''super(source, identifier, of, value);'''
-				]
 			]
 		}
 	}
@@ -471,23 +439,6 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 			members += e.toClass(e.name) [
 				static = true
 				superTypes += typeRef("org.apache.isis.applib.services.eventbus.ActionDomainEvent", sourceType)
-				members += e.toConstructor [
-					parameters += e.toParameter("source", sourceType)
-					parameters += e.toParameter("identifier", typeRef("org.apache.isis.applib.Identifier"))
-					body = '''super(source, identifier);'''
-				]
-				members += e.toConstructor [
-					parameters += e.toParameter("source", sourceType)
-					parameters += e.toParameter("identifier", typeRef("org.apache.isis.applib.Identifier"))
-					parameters += e.toParameter("arguments", typeRef("Object..."))
-					body = '''super(source, identifier, arguments);'''
-				]
-				members += e.toConstructor [
-					parameters += e.toParameter("source", sourceType)
-					parameters += e.toParameter("identifier", typeRef("org.apache.isis.applib.Identifier"))
-					parameters += e.toParameter("arguments", typeRef(List, typeRef(Object)))
-					body = '''super(source, identifier, arguments);'''
-				]
 			]
 		}
 	}
