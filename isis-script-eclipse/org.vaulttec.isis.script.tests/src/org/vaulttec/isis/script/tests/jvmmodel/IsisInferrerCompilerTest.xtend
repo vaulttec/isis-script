@@ -173,7 +173,6 @@ class IsisInferrerCompilerTest {
 			
 			import javax.inject.Inject;
 			import org.apache.isis.applib.DomainObjectContainer;
-			import org.apache.isis.applib.Identifier;
 			import org.apache.isis.applib.services.config.ConfigurationService;
 			import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 			import org.apache.isis.applib.services.factory.FactoryService;
@@ -224,13 +223,6 @@ class IsisInferrerCompilerTest {
 			  }
 			  
 			  public static class Event1 extends PropertyDomainEvent<Child, Integer> {
-			    public Event1(final Child source, final Identifier identifier) {
-			      super(source, identifier);
-			    }
-			    
-			    public Event1(final Child source, final Identifier identifier, final int oldValue, final int newValue) {
-			      super(source, identifier, oldValue, newValue);
-			    }
 			  }
 			  
 			  private String prop2;
@@ -248,13 +240,6 @@ class IsisInferrerCompilerTest {
 			  }
 			  
 			  public static class Event2 extends PropertyDomainEvent<Child, String> {
-			    public Event2(final Child source, final Identifier identifier) {
-			      super(source, identifier);
-			    }
-			    
-			    public Event2(final Child source, final Identifier identifier, final String oldValue, final String newValue) {
-			      super(source, identifier, oldValue, newValue);
-			    }
 			  }
 			  
 			  @Override
