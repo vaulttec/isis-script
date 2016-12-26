@@ -294,19 +294,23 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 	}
 
 	protected def void addCollectionAddTo(JvmGenericType it, IsisCollection c) {
-		val argumentType = c.type.getArgument(0)
-		members += c.toMethod("addTo" + c.name.toFirstUpper, typeRef("void")) [
-			parameters += c.toParameter("element", argumentType)
-			body = c.getFeatureExpression(IsisCollectionFeatureType.ADD_TO)
-		]
+		if (!c.type.nullOrProxy) {
+			val argumentType = c.type.getArgument(0)
+			members += c.toMethod("addTo" + c.name.toFirstUpper, typeRef("void")) [
+				parameters += c.toParameter("element", argumentType)
+				body = c.getFeatureExpression(IsisCollectionFeatureType.ADD_TO)
+			]
+		}
 	}
 
 	protected def void addCollectionRemoveFrom(JvmGenericType it, IsisCollection c) {
-		val argumentType = c.type.getArgument(0)
-		members += c.toMethod("removeFrom" + c.name.toFirstUpper, typeRef("void")) [
-			parameters += c.toParameter("element", argumentType)
-			body = c.getFeatureExpression(IsisCollectionFeatureType.REMOVE_FROM)
-		]
+		if (!c.type.nullOrProxy) {
+			val argumentType = c.type.getArgument(0)
+			members += c.toMethod("removeFrom" + c.name.toFirstUpper, typeRef("void")) [
+				parameters += c.toParameter("element", argumentType)
+				body = c.getFeatureExpression(IsisCollectionFeatureType.REMOVE_FROM)
+			]
+		}
 	}
 
 	protected def void addActions(JvmGenericType it, EList<IsisAction> actions) {
