@@ -19,6 +19,7 @@ import com.google.inject.Binder
 import com.google.inject.Singleton
 import org.eclipse.xtext.generator.IOutputConfigurationProvider
 import org.vaulttec.isis.script.configuration.IsisOutputConfigurationProvider
+import org.vaulttec.isis.script.validation.IsisConfigurableIssueCodes
 
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
@@ -28,6 +29,10 @@ class IsisRuntimeModule extends AbstractIsisRuntimeModule {
 	override configure(Binder binder) {
 		super.configure(binder)
 		binder.bind(IOutputConfigurationProvider).to(IsisOutputConfigurationProvider).in(Singleton)
+	}
+
+	override bindConfigurableIssueCodesProvider() {
+		IsisConfigurableIssueCodes
 	}
 
 }
