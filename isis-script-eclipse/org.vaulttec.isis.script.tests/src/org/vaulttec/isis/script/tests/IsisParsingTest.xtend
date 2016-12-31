@@ -22,14 +22,13 @@ import org.eclipse.xtext.junit4.util.ParseHelper
 import org.eclipse.xtext.junit4.validation.ValidationTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.vaulttec.isis.script.dsl.IsisBehaviour
 import org.vaulttec.isis.script.dsl.IsisEntity
 import org.vaulttec.isis.script.dsl.IsisFile
+import org.vaulttec.isis.script.dsl.IsisPropertyFeatureType
 import org.vaulttec.isis.script.dsl.IsisService
-import org.vaulttec.isis.script.tests.IsisInjectorProvider
 
 import static org.junit.Assert.*
-import org.vaulttec.isis.script.dsl.IsisPropertyFeatureType
-import org.eclipse.xtext.xbase.XStringLiteral
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(IsisInjectorProvider))
@@ -108,6 +107,26 @@ class IsisParsingTest {
 			assertEquals("injection1", entity.injections.get(0).name)
 			assertEquals("action1", entity.actions.get(0).name)
 			assertEquals("Event1", entity.actions.get(0).events.get(0).name)
+		]
+	}
+
+	@Test
+	def void parseBehaviour() {
+		'''
+			package org.vaulttec.isis.script.test
+			behaviour Foo_text for String text {
+				action String $$ {
+					body {
+						text
+					}
+				}
+			}
+		'''.parse => [
+			assertNoErrors
+			assertEquals("org.vaulttec.isis.script.test", package.name)
+			val behaviour = declaration as IsisBehaviour
+			assertEquals("Foo_text", behaviour.name)
+			assertEquals("$$", behaviour.actions.get(0).name)
 		]
 	}
 
