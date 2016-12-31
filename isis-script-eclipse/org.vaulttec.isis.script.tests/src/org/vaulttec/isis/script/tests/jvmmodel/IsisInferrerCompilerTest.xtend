@@ -154,6 +154,9 @@ class IsisInferrerCompilerTest {
 		'''
 			package org.vaulttec.isis.script.test
 			entity Child {
+				@org.apache.isis.applib.annotation.Property(
+					domainEvent = org.apache.isis.applib.services.eventbus.PropertyDomainEvent.Default,
+					editing = org.apache.isis.applib.annotation.Editing.DISABLED)
 				property int prop1 {
 					default {
 						42
@@ -173,6 +176,8 @@ class IsisInferrerCompilerTest {
 			
 			import javax.inject.Inject;
 			import org.apache.isis.applib.DomainObjectContainer;
+			import org.apache.isis.applib.annotation.Editing;
+			import org.apache.isis.applib.annotation.Property;
 			import org.apache.isis.applib.services.config.ConfigurationService;
 			import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 			import org.apache.isis.applib.services.factory.FactoryService;
@@ -210,6 +215,7 @@ class IsisInferrerCompilerTest {
 			  
 			  private int prop1;
 			  
+			  @Property(domainEvent = PropertyDomainEvent.Default.class, editing = Editing.DISABLED)
 			  public int getProp1() {
 			    return this.prop1;
 			  }
