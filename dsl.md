@@ -21,7 +21,7 @@ The different aspects of the Isis Script DSL are explained in the following sect
     - [Drop-Downs](#drop-downs)
     - [Auto-Complete](#auto-complete)
     - [Default](#default)
-    - [Property Events](#property-events)
+    - [Property Event](#property-event)
   - [Collections](#collections)
     - [Collection Rules](#collection-rules)
       - [Hide](#hide-1)
@@ -30,7 +30,7 @@ The different aspects of the Isis Script DSL are explained in the following sect
     - [Derived Collection](#derived-collection)
     - [AddTo](#addto)
     - [RemoveFrom](#removefrom)
-    - [Collection Events](#collection-events)
+    - [Collection Event](#collection-event)
   - [Actions](#actions)
     - [Action Rules](#action-rules)
       - [Hide](#hide-2)
@@ -41,11 +41,15 @@ The different aspects of the Isis Script DSL are explained in the following sect
       - [Drop-Downs](#drop-downs-1)
       - [Auto-Complete](#auto-complete-1)
       - [Validate](#validate-2)
-    - [Action Events](#action-events)
+    - [Action Event](#action-event)
 - [Services](#services)
   - [Inheritance](#inheritance-1)
   - [Injections](#injections-1)
   - [Actions](#actions-1)
+- [Behaviours](#behaviours)
+  - [Inheritance](#inheritance-2)
+  - [Injections](#injections-2)
+  - [Actions](#actions-2)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -244,9 +248,9 @@ The keyword `default` defines an expression which returns the initial argument v
 	}
 
 
-#### Property Events
+#### Property Event
 
-With the keyword `event` a domain event (subtype of `PropertyDomainEvent`) can be defined: 
+With the keyword `event` a custom domain event (subtype of `PropertyDomainEvent`) can be defined: 
 
 	@Property(domainEvent = SomeEvent)
 	property int someProperty {
@@ -373,9 +377,9 @@ The keyword `removeFrom` defines an expression to remove a given element (parame
 Using this method allows business logic to be placed apart from the update of the collection.
 
 
-#### Collection Events
+#### Collection Event
 
-With the keyword `event` a domain event (subtype of `CollectionDomainEvent`) can be defined: 
+With the keyword `event` a custom domain event (subtype of `CollectionDomainEvent`) can be defined: 
 
 	@Collection(domainEvent = SomeEvent)
 	collection Set<OtherType> someCollection = new TreeSet<>() {
@@ -543,9 +547,9 @@ The keyword `validate` defines an expression which validates a proposed value (p
 	}
 
 
-#### Action Events
+#### Action Event
 
-With the keyword `event` a domain event (subtype of `ActionDomainEvent`) can be defined: 
+With the keyword `event` a custom domain event (subtype of `ActionDomainEvent`) can be defined: 
 
 	@Action(domainEvent = SomeEvent)
 	action someAction {
@@ -602,4 +606,58 @@ Service actions have the same features as [entity actions](#actions):
 
  * [Rules](#action-rules)
  * [Parameters](#action-parameters)
- * [Events](#action-events)
+ * [Event](#action-event)
+
+
+## Behaviours
+
+Behaviours ([Mixins](http://isis.apache.org/guides/rgant.html#_rgant-Mixin)) are defined with the keyword `behaviour`. They have a unique name and are preceeded by Isis or selected JDO annotations.
+The parameter of the behaviour's single-argument constructor is defined after the keyword `for`. 
+
+	@... // Isis and JDO annotations 
+	behaviour SomeBehaviour for SomeObject obj {
+	}
+
+
+### Inheritance
+
+By using the keyword `extends` a behaviour can inherit from another type:
+
+	behaviour SomeBehaviour for SomeObject obj extends SomeSuperType {
+	}
+
+
+### Injections
+
+With the keyword `inject` an Isis service can be autowired (field injection) into a behaviour:
+
+	behaviour SomeBehaviour for SomeObject obj {
+		inject OtherTypeRepository others;
+	}
+
+
+### Actions
+
+Behaviours support the same kind of actions like [service](#services), e.g.
+
+	behaviour SomeBehaviour for SomeObject obj {
+		@... // Isis and JDO annotations
+		action SomeObject $$ {
+			body {
+				obj
+			}
+			disable {
+				if (isBlacklisted())
+					"Cannot executed for blacklisted behaviour")
+				else
+					null
+			}
+		}
+	}
+
+Behaviour actions have the same features as [service actions](#actions):
+
+ * [Rules](#action-rules)
+ * [Parameters](#action-parameters)
+ * [Event](#action-event)
+ 
