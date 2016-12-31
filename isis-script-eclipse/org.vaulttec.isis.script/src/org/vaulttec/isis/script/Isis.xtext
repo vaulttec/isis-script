@@ -26,7 +26,7 @@ IsisPackageDeclaration:
 	'package' name=QualifiedName;
 
 IsisTypeDeclaration:
-	IsisEntity | IsisService;
+	IsisEntity | IsisService | IsisBehaviour;
 
 IsisEntity:
 	=> (annotations+=XAnnotation*
@@ -36,8 +36,14 @@ IsisEntity:
 	'}';
 
 IsisService:
-	annotations+=XAnnotation*
-	'service' name=ID ('extends' superType=JvmTypeReference)? '{'
+	=> (annotations+=XAnnotation*
+	'service') name=ID ('extends' superType=JvmTypeReference)? '{'
+	(injections+=IsisInjection | actions+=IsisAction)*
+	'}';
+
+IsisBehaviour:
+	=> (annotations+=XAnnotation*
+	'behaviour') name=ID 'for' type=JvmTypeReference typeName=ID ('extends' superType=JvmTypeReference)? '{'
 	(injections+=IsisInjection | actions+=IsisAction)*
 	'}';
 

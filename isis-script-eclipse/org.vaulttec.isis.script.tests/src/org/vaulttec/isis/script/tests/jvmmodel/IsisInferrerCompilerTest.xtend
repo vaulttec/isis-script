@@ -450,4 +450,59 @@ class IsisInferrerCompilerTest {
 		''')
 	}
 
+	@Test
+	def void testBehaviour() {
+		'''
+			package org.vaulttec.isis.script.test
+			behaviour Behaviour1 for String text {
+			}
+		'''.assertCompilesTo(
+        '''
+			package org.vaulttec.isis.script.test;
+			
+			import javax.inject.Inject;
+			import org.apache.isis.applib.DomainObjectContainer;
+			import org.apache.isis.applib.services.config.ConfigurationService;
+			import org.apache.isis.applib.services.factory.FactoryService;
+			import org.apache.isis.applib.services.message.MessageService;
+			import org.apache.isis.applib.services.registry.ServiceRegistry2;
+			import org.apache.isis.applib.services.repository.RepositoryService;
+			import org.apache.isis.applib.services.title.TitleService;
+			import org.apache.isis.applib.services.user.UserService;
+			
+			@SuppressWarnings("all")
+			public class Behaviour1 {
+			  @Inject
+			  DomainObjectContainer container;
+			  
+			  @Inject
+			  FactoryService factoryService;
+			  
+			  @Inject
+			  ServiceRegistry2 serviceRegistry;
+			  
+			  @Inject
+			  RepositoryService repositoryService;
+			  
+			  @Inject
+			  TitleService titleService;
+			  
+			  @Inject
+			  MessageService messageService;
+			  
+			  @Inject
+			  ConfigurationService configService;
+			  
+			  @Inject
+			  UserService userService;
+			  
+			  private String text;
+			  
+			  public Behaviour1(final String text) {
+			    this.text = text;
+			  }
+			}
+		''')
+	}
+
 }

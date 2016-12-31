@@ -44,6 +44,7 @@ import org.vaulttec.isis.script.dsl.IsisPropertyFeatureType
 import org.vaulttec.isis.script.dsl.IsisService
 import org.vaulttec.isis.script.dsl.IsisUiHint
 import org.vaulttec.isis.script.dsl.IsisUiHintType
+import org.vaulttec.isis.script.dsl.IsisBehaviour
 
 /**
  * <p>Infers a JVM model from {@link IsisFile}.</p> 
@@ -86,6 +87,23 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 		addInjections(service.injections)
 		addActions(service.actions)
 	}
+
+	protected def dispatch void initializeDeclaration(JvmGenericType it, IsisBehaviour behaviour) {
+		superTypes += behaviour.superType.cloneWithProxies
+		addAnnotations(behaviour.annotations)
+		addCoreServiceInjections(behaviour)
+		addInjections(behaviour.injections)
+		addConstructor(behaviour)
+		addActions(behaviour.actions)
+	}
+
+	protected def addConstructor(JvmGenericType it, IsisBehaviour behaviour) {
+		members += behaviour.toField(behaviour.typeName, behaviour.type)
+		members += behaviour.toConstructor[
+			parameters += behaviour.toParameter(behaviour.typeName, behaviour.type)
+			body = '''this.«behaviour.typeName» = «behaviour.typeName»;'''
+		]
+ 	}
 
 	protected def void addComparable(JvmGenericType it, IsisEntity entity) {
 		val entityType = typeRef()
