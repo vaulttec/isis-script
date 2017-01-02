@@ -130,4 +130,20 @@ class IsisParsingTest {
 		]
 	}
 
+	@Test
+	def void parseModule() {
+		'''
+			package org.vaulttec.isis.script.test
+			module String
+			entity Entity1 {
+			}
+		'''.parse => [
+			assertNoErrors
+			assertEquals("org.vaulttec.isis.script.test", package.name)
+			val entity = declaration as IsisEntity
+			assertEquals("Entity1", entity.name)
+			assertEquals("java.lang.String", (entity.eContainer as IsisFile).module.type.qualifiedName)
+		]
+	}
+
 }

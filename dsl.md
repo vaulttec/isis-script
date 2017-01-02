@@ -6,7 +6,8 @@ The different aspects of the Isis Script DSL are explained in the following sect
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Namespaces](#namespaces)
+- [Namespace](#namespace)
+- [Module](#module)
 - [Entities](#entities)
   - [Inheritance](#inheritance)
   - [Injections](#injections)
@@ -54,7 +55,7 @@ The different aspects of the Isis Script DSL are explained in the following sect
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
-## Namespaces
+## Namespace
 
 To define a namespace for an Isis Script object the corresponding Java notion of packages and imports are supported. So the keywords `package` and `import` are used in the same way as in Java classes:
 
@@ -63,6 +64,18 @@ To define a namespace for an Isis Script object the corresponding Java notion of
 	import org.vaulttec.types.other.SomeSuperType
 	
 	entity SomeType extends SomeSuperType {
+	}
+
+
+## Module
+
+To generate code which refers to the application's module type (e.g. the hierarchy of domain event types) a reference to the corresponding type is needed. This reference is defined with the keyword `module`:
+
+	package domainapp.dom.modules.simple
+	
+	module domainapp.dom.SimpleAppModule
+	
+	entity SimpleObject {
 	}
 
 
@@ -257,6 +270,8 @@ With the keyword `event` a custom domain event (subtype of `PropertyDomainEvent`
 		event SomeEvent
 	}
 
+If the [keyword `module`](#module) is present then the generated custom domain event type inherits from a subtype within the domain event type hierarchy instead of the corresponding Isis library type.  
+
 
 ### Collections
 
@@ -385,6 +400,8 @@ With the keyword `event` a custom domain event (subtype of `CollectionDomainEven
 	collection Set<OtherType> someCollection = new TreeSet<>() {
 		event SomeEvent
 	}
+
+If the [keyword `module`](#module) is present then the generated custom domain event type inherits from a subtype within the domain event type hierarchy instead of the corresponding Isis library type.  
 
 
 ### Actions
@@ -555,6 +572,8 @@ With the keyword `event` a custom domain event (subtype of `ActionDomainEvent`) 
 	action someAction {
 		event SomeEvent
 	}
+
+If the [keyword `module`](#module) is present then the generated custom domain event type inherits from a subtype within the domain event type hierarchy instead of the corresponding Isis library type.  
 
 
 ## Services

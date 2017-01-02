@@ -20,7 +20,11 @@ generate dsl "http://vaulttec.org/dsl/Isis"
 IsisFile:
 	package=IsisPackageDeclaration
 	importSection=XImportSection?
+	module=IsisModule?
 	declaration=IsisTypeDeclaration;
+
+IsisModule:
+	'module' type=JvmTypeReference;
 
 IsisPackageDeclaration:
 	'package' name=QualifiedName;

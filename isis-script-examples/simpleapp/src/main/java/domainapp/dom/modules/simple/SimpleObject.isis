@@ -1,5 +1,6 @@
 package domainapp.dom.modules.simple
 
+import domainapp.dom.app.SimpleAppModule
 import java.util.ArrayList
 import java.util.List
 import javax.jdo.annotations.Column
@@ -19,6 +20,8 @@ import org.apache.isis.applib.annotation.ParameterLayout
 import org.apache.isis.applib.annotation.Property
 import org.apache.isis.applib.annotation.Title
 import org.apache.isis.applib.services.i18n.TranslatableString
+
+module SimpleAppModule
 
 @PersistenceCapable(identityType=DATASTORE)
 @DatastoreIdentity(strategy=IDENTITY, column="id")
@@ -50,7 +53,6 @@ entity SimpleObject {
 				null
 		}
 	}
-
 	@Action(domainEvent = UpdateNameDomainEvent)
 	action SimpleObject updateName {
 		@Parameter(maxLength = 40)

@@ -45,6 +45,8 @@ import org.vaulttec.isis.script.dsl.IsisService
 import org.vaulttec.isis.script.dsl.IsisUiHint
 import org.vaulttec.isis.script.dsl.IsisUiHintType
 import org.vaulttec.isis.script.dsl.IsisBehaviour
+import org.vaulttec.isis.script.dsl.IsisTypeDeclaration
+import org.eclipse.xtext.common.types.TypesFactory
 
 /**
  * <p>Infers a JVM model from {@link IsisFile}.</p> 
@@ -54,6 +56,7 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 	@Inject extension IsisModelHelper
 	@Inject extension JvmTypesBuilder
 	@Inject extension TypeReferences
+	@Inject extension TypesFactory
 
 	def dispatch void infer(IsisFile file, IJvmDeclaredTypeAcceptor acceptor, boolean isPreIndexingPhase) {
 		val declaration = file.declaration
@@ -73,6 +76,7 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 		addAnnotations(entity.annotations)
 		addCoreServiceInjections(entity)
 		addInjections(entity.injections)
+		addClassEvents(entity)
 		addProperties(entity.properties)
 		addCollections(entity.collections)
 		addActions(entity.actions)
@@ -85,6 +89,7 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 		addAnnotations(service.annotations)
 		addCoreServiceInjections(service)
 		addInjections(service.injections)
+		addClassEvents(service)
 		addActions(service.actions)
 	}
 
@@ -93,6 +98,7 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 		addAnnotations(behaviour.annotations)
 		addCoreServiceInjections(behaviour)
 		addInjections(behaviour.injections)
+		addClassEvents(behaviour)
 		addConstructor(behaviour)
 		addActions(behaviour.actions)
 	}
@@ -104,6 +110,43 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 			body = '''this.«behaviour.typeName» = «behaviour.typeName»;'''
 		]
  	}
+
+	protected def void addClassEvents(JvmGenericType it, IsisTypeDeclaration type) {
+		val module = (type.eContainer as IsisFile).module
+		if (module != null) {
+			val sourceType = typeRef
+			if (type instanceof IsisEntity) {
+				val entity = type as IsisEntity
+				if (!entity.properties.map[events].flatten.empty) {
+					val tp = createJvmTypeParameter => [name = "T"]
+					members += module.toClass("PropertyDomainEvent") [
+						static = true
+						abstract = true
+						typeParameters += tp
+						superTypes +=
+							typeRef(module.type.qualifiedName + "$PropertyDomainEvent", sourceType, tp.typeRef)
+					]
+				}
+				if (!entity.collections.map[events].flatten.empty) {
+					val tp = createJvmTypeParameter => [name = "T"]
+					members += module.toClass("CollectionDomainEvent") [
+						static = true
+						abstract = true
+						typeParameters += tp
+						superTypes +=
+							typeRef(module.type.qualifiedName + "$CollectionDomainEvent", sourceType, tp.typeRef)
+					]
+				}
+			}
+			if (!type.actions.map[events].flatten.empty) {
+				members += module.toClass("ActionDomainEvent") [
+					static = true
+					abstract = true
+					superTypes += typeRef(module.type.qualifiedName + "$ActionDomainEvent", sourceType)
+				]
+			}
+		}
+	}
 
 	protected def void addComparable(JvmGenericType it, IsisEntity entity) {
 		val entityType = typeRef()
@@ -429,35 +472,49 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 	}
 
 	protected def void addEvents(JvmGenericType it, IsisProperty property) {
-		val sourceType = typeRef()
-		for (e : property.events) {
-			members += e.toClass(e.name) [
-				static = true
-				superTypes +=
-					typeRef("org.apache.isis.applib.services.eventbus.PropertyDomainEvent", sourceType, property.type)
-			]
+		if (!property.events.empty) {
+			val superType = if ((property.eContainer.eContainer as IsisFile).module == null)
+					typeRef("org.apache.isis.applib.services.eventbus.PropertyDomainEvent", typeRef, property.type)
+				else
+					typeRef(qualifiedName + "$PropertyDomainEvent", property.type)
+
+			for (e : property.events) {
+				members += e.toClass(e.name) [
+					static = true
+					superTypes += superType
+				]
+			}
 		}
 	}
 
 	protected def void addEvents(JvmGenericType it, IsisCollection collection) {
-		val sourceType = typeRef()
-		for (e : collection.events) {
-			members += e.toClass(e.name) [
-				static = true
-				superTypes +=
-					typeRef("org.apache.isis.applib.services.eventbus.CollectionDomainEvent", sourceType,
-						collection.type)
-			]
+		if (!collection.events.empty) {
+			val superType = if ((collection.eContainer.eContainer as IsisFile).module == null)
+					typeRef("org.apache.isis.applib.services.eventbus.PropertyDomainEvent", typeRef, collection.type)
+				else
+					typeRef(qualifiedName + "$CollectionDomainEvent", collection.type)
+
+			for (e : collection.events) {
+				members += e.toClass(e.name) [
+					static = true
+					superTypes += superType
+				]
+			}
 		}
 	}
 
 	protected def void addEvents(JvmGenericType it, IsisAction action) {
-		val sourceType = typeRef()
-		for (e : action.events) {
-			members += e.toClass(e.name) [
-				static = true
-				superTypes += typeRef("org.apache.isis.applib.services.eventbus.ActionDomainEvent", sourceType)
-			]
+		if (!action.events.empty) {
+			val superType = if ((action.eContainer.eContainer as IsisFile).module == null)
+					typeRef("org.apache.isis.applib.services.eventbus.ActionDomainEvent", typeRef)
+				else
+					typeRef(qualifiedName + "$ActionDomainEvent")
+			for (e : action.events) {
+				members += e.toClass(e.name) [
+					static = true
+					superTypes += superType
+				]
+			}
 		}
 	}
 

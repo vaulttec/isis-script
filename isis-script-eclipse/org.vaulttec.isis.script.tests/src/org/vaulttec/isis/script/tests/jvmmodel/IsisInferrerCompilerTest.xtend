@@ -35,12 +35,12 @@ class IsisInferrerCompilerTest {
 	@Test
 	def void testEmptyEntity() {
 		'''
-			package org.vaulttec.isis.script.test
+			package org.vaulttec.isis.script.tests
 			entity Entity1 {
 			}
 		'''.assertCompilesTo(
         '''
-			package org.vaulttec.isis.script.test;
+			package org.vaulttec.isis.script.tests;
 			
 			import javax.inject.Inject;
 			import org.apache.isis.applib.DomainObjectContainer;
@@ -89,7 +89,7 @@ class IsisInferrerCompilerTest {
 	@Test
 	def void testDerivedProperty() {
 		'''
-			package org.vaulttec.isis.script.test
+			package org.vaulttec.isis.script.tests
 			entity Entity1 {
 			  property String prop1 {
 			    derived {
@@ -99,7 +99,7 @@ class IsisInferrerCompilerTest {
 			}
 		'''.assertCompilesTo(
         '''
-			package org.vaulttec.isis.script.test;
+			package org.vaulttec.isis.script.tests;
 			
 			import javax.inject.Inject;
 			import org.apache.isis.applib.DomainObjectContainer;
@@ -152,7 +152,7 @@ class IsisInferrerCompilerTest {
 	@Test
 	def void testEntityWithProperties() {
 		'''
-			package org.vaulttec.isis.script.test
+			package org.vaulttec.isis.script.tests
 			entity Child {
 				@org.apache.isis.applib.annotation.Property(
 					domainEvent = org.apache.isis.applib.services.eventbus.PropertyDomainEvent.Default,
@@ -172,7 +172,7 @@ class IsisInferrerCompilerTest {
 			}
 		'''.assertCompilesTo(
 		'''
-			package org.vaulttec.isis.script.test;
+			package org.vaulttec.isis.script.tests;
 			
 			import javax.inject.Inject;
 			import org.apache.isis.applib.DomainObjectContainer;
@@ -259,7 +259,7 @@ class IsisInferrerCompilerTest {
 	@Test
 	def void testEntityWithCollections() {
 		'''
-			package org.vaulttec.isis.script.test
+			package org.vaulttec.isis.script.tests
 			entity Child {
 				@org.apache.isis.applib.annotation.Collection(editing = org.apache.isis.applib.annotation.Editing.ENABLED)
 				collection java.util.Set<Integer> collec1 = new java.util.TreeSet<Integer> {
@@ -287,7 +287,7 @@ class IsisInferrerCompilerTest {
 			}
 		'''.assertCompilesTo(
 		'''
-			package org.vaulttec.isis.script.test;
+			package org.vaulttec.isis.script.tests;
 			
 			import java.util.ArrayList;
 			import java.util.List;
@@ -392,7 +392,7 @@ class IsisInferrerCompilerTest {
 	@Test
 	def void testService() {
 		'''
-			package org.vaulttec.isis.script.test
+			package org.vaulttec.isis.script.tests
 			service Service1 {
 				action String action1 {
 					body {
@@ -407,7 +407,7 @@ class IsisInferrerCompilerTest {
 			}
 		'''.assertCompilesTo(
         '''
-			package org.vaulttec.isis.script.test;
+			package org.vaulttec.isis.script.tests;
 			
 			import javax.inject.Inject;
 			import org.apache.isis.applib.DomainObjectContainer;
@@ -459,12 +459,12 @@ class IsisInferrerCompilerTest {
 	@Test
 	def void testBehaviour() {
 		'''
-			package org.vaulttec.isis.script.test
+			package org.vaulttec.isis.script.tests
 			behaviour Behaviour1 for String text {
 			}
 		'''.assertCompilesTo(
         '''
-			package org.vaulttec.isis.script.test;
+			package org.vaulttec.isis.script.tests;
 			
 			import javax.inject.Inject;
 			import org.apache.isis.applib.DomainObjectContainer;
@@ -506,6 +506,125 @@ class IsisInferrerCompilerTest {
 			  
 			  public Behaviour1(final String text) {
 			    this.text = text;
+			  }
+			}
+		''')
+	}
+
+	@Test
+	def void testEntityWithModule() {
+		'''
+			package org.vaulttec.isis.script.tests
+			module TestAppModule
+			entity Child {
+				property int prop1 {
+					default {
+						42
+					}
+					event Event1
+				}
+				collection java.util.List<String> coll1 = new java.util.ArrayList<String>() {
+					event Event2
+				}
+				action String action1 {
+					body {
+						""
+					}
+					event Event3
+				}
+			}
+		'''.assertCompilesTo(
+		'''
+			package org.vaulttec.isis.script.tests;
+			
+			import java.util.ArrayList;
+			import java.util.List;
+			import javax.inject.Inject;
+			import org.apache.isis.applib.DomainObjectContainer;
+			import org.apache.isis.applib.services.config.ConfigurationService;
+			import org.apache.isis.applib.services.factory.FactoryService;
+			import org.apache.isis.applib.services.message.MessageService;
+			import org.apache.isis.applib.services.registry.ServiceRegistry2;
+			import org.apache.isis.applib.services.repository.RepositoryService;
+			import org.apache.isis.applib.services.title.TitleService;
+			import org.apache.isis.applib.services.user.UserService;
+			import org.vaulttec.isis.script.tests.TestAppModule;
+			
+			@SuppressWarnings("all")
+			public class Child implements Comparable<Child> {
+			  @Inject
+			  DomainObjectContainer container;
+			  
+			  @Inject
+			  FactoryService factoryService;
+			  
+			  @Inject
+			  ServiceRegistry2 serviceRegistry;
+			  
+			  @Inject
+			  RepositoryService repositoryService;
+			  
+			  @Inject
+			  TitleService titleService;
+			  
+			  @Inject
+			  MessageService messageService;
+			  
+			  @Inject
+			  ConfigurationService configService;
+			  
+			  @Inject
+			  UserService userService;
+			  
+			  public static abstract class PropertyDomainEvent<T> extends TestAppModule.PropertyDomainEvent<Child, T> {
+			  }
+			  
+			  public static abstract class CollectionDomainEvent<T> extends TestAppModule.CollectionDomainEvent<Child, T> {
+			  }
+			  
+			  public static abstract class ActionDomainEvent extends TestAppModule.ActionDomainEvent<Child> {
+			  }
+			  
+			  private int prop1;
+			  
+			  public int getProp1() {
+			    return this.prop1;
+			  }
+			  
+			  public void setProp1(final int prop1) {
+			    this.prop1 = prop1;
+			  }
+			  
+			  public int defaultProp1() {
+			    return 42;
+			  }
+			  
+			  public static class Event1 extends Child.PropertyDomainEvent<Integer> {
+			  }
+			  
+			  private List<String> coll1 = new ArrayList<String>();
+			  
+			  public List<String> getColl1() {
+			    return this.coll1;
+			  }
+			  
+			  public void setColl1(final List<String> coll1) {
+			    this.coll1 = coll1;
+			  }
+			  
+			  public static class Event2 extends Child.CollectionDomainEvent<List<String>> {
+			  }
+			  
+			  public String action1() {
+			    return "";
+			  }
+			  
+			  public static class Event3 extends Child.ActionDomainEvent {
+			  }
+			  
+			  @Override
+			  public int compareTo(final Child other) {
+			    return org.apache.isis.applib.util.ObjectContracts.compare(this, other, "prop1");
 			  }
 			}
 		''')
