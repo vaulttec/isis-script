@@ -81,6 +81,7 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 		addCollections(entity.collections)
 		addActions(entity.actions)
 		addUiHints(entity.uiHints)
+		addToString(entity)
 		addComparable(entity)
 	}
 
@@ -146,6 +147,16 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 				]
 			}
 		}
+	}
+
+	protected def void addToString(JvmGenericType it, IsisEntity entity) {
+		val entityNonDerivedPropertyNames = entity.properties.filter[!hasFeature(IsisPropertyFeatureType.DERIVED)].map [
+			'"' + name + '"'
+		].join(',')
+		members += entity.toMethod("toString", typeRef("String")) [
+			annotations += annotationRef(Override)
+			body = '''return org.apache.isis.applib.util.ObjectContracts.toString(this«if (!entityNonDerivedPropertyNames.empty) ", " + entityNonDerivedPropertyNames»);'''
+		]
 	}
 
 	protected def void addComparable(JvmGenericType it, IsisEntity entity) {

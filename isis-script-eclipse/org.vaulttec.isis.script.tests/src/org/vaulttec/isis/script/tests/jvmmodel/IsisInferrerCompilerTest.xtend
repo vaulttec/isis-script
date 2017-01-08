@@ -79,6 +79,11 @@ class IsisInferrerCompilerTest {
 			  UserService userService;
 			  
 			  @Override
+			  public String toString() {
+			    return org.apache.isis.applib.util.ObjectContracts.toString(this);
+			  }
+			  
+			  @Override
 			  public int compareTo(final Entity1 other) {
 			    return org.apache.isis.applib.util.ObjectContracts.compare(this, other);
 			  }
@@ -139,6 +144,11 @@ class IsisInferrerCompilerTest {
 			  
 			  public String getProp1() {
 			    return "result";
+			  }
+			  
+			  @Override
+			  public String toString() {
+			    return org.apache.isis.applib.util.ObjectContracts.toString(this);
 			  }
 			  
 			  @Override
@@ -246,6 +256,11 @@ class IsisInferrerCompilerTest {
 			  }
 			  
 			  public static class Event2 extends PropertyDomainEvent<Child, String> {
+			  }
+			  
+			  @Override
+			  public String toString() {
+			    return org.apache.isis.applib.util.ObjectContracts.toString(this, "prop1","prop2");
 			  }
 			  
 			  @Override
@@ -379,6 +394,11 @@ class IsisInferrerCompilerTest {
 			  
 			  public Object validateRemoveFromCollec2(final List<String> element) {
 			    return null;
+			  }
+			  
+			  @Override
+			  public String toString() {
+			    return org.apache.isis.applib.util.ObjectContracts.toString(this);
 			  }
 			  
 			  @Override
@@ -620,6 +640,11 @@ class IsisInferrerCompilerTest {
 			  }
 			  
 			  public static class Event3 extends Child.ActionDomainEvent {
+			  }
+			  
+			  @Override
+			  public String toString() {
+			    return org.apache.isis.applib.util.ObjectContracts.toString(this, "prop1");
 			  }
 			  
 			  @Override
