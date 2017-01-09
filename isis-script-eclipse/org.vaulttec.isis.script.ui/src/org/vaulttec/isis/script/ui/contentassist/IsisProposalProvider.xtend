@@ -15,18 +15,18 @@
  *******************************************************************************/
 package org.vaulttec.isis.script.ui.contentassist
 
-import javax.inject.Inject
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.jdt.core.search.IJavaSearchConstants
+import org.eclipse.xtext.Assignment
 import org.eclipse.xtext.Keyword
 import org.eclipse.xtext.RuleCall
-import org.eclipse.xtext.common.types.access.IJvmTypeProvider
 import org.eclipse.xtext.common.types.xtext.ui.ITypesProposalProvider
 import org.eclipse.xtext.ui.editor.contentassist.ConfigurableCompletionProposal
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor
+import org.eclipse.xtext.xbase.annotations.xAnnotations.XAnnotationsPackage
 import org.vaulttec.isis.script.dsl.IsisProperty
 import org.vaulttec.isis.script.dsl.IsisPropertyFeatureType
-import org.vaulttec.isis.script.services.IsisGrammarAccess
 
 /**
  * See https://www.eclipse.org/Xtext/documentation/304_ide_concepts.html#content-assist
@@ -34,9 +34,26 @@ import org.vaulttec.isis.script.services.IsisGrammarAccess
  */
 class IsisProposalProvider extends AbstractIsisProposalProvider {
 
-	@Inject IJvmTypeProvider.Factory jvmTypeProviderFactory
-	@Inject ITypesProposalProvider typeProposalProvider
-	@Inject IsisGrammarAccess grammarAccess
+	static val ISIS_ANNOTATION_FILTER = new ITypesProposalProvider.Filter() {
+		override boolean accept(int modifiers, char[] packageName, char[] simpleTypeName, char[][] enclosingTypeNames,
+			String path) {
+			val package = String.valueOf(packageName)
+			if (package.equals("org.apache.isis.applib.annotation") || package.equals("javax.jdo.annotations"))
+				true
+			else
+				false
+		}
+
+		override int getSearchFor() {
+			IJavaSearchConstants.ANNOTATION_TYPE
+		}
+	}
+
+	override completeXAnnotation_AnnotationType(EObject model, Assignment assignment, ContentAssistContext context,
+		ICompletionProposalAcceptor acceptor) {
+		completeJavaTypes(context, XAnnotationsPackage.Literals.XANNOTATION__ANNOTATION_TYPE, ISIS_ANNOTATION_FILTER,
+			acceptor)
+	}
 
 	override void completeKeyword(Keyword keyword, ContentAssistContext contentAssistContext,
 		ICompletionProposalAcceptor acceptor) {
@@ -60,19 +77,4 @@ class IsisProposalProvider extends AbstractIsisProposalProvider {
 		}
 	}
 
-//	override completeXAnnotation_AnnotationType(EObject model, Assignment assignment,
-//		ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//		if (EcoreUtil2.getContainerOfType(model, IsisProperty) != null) {
-//			val jvmTypeProvider = jvmTypeProviderFactory.createTypeProvider(model.eResource().getResourceSet())
-//			val interfaceToImplement = jvmTypeProvider.findTypeByName(IsisEntity.name)
-//			typeProposalProvider.createSubTypeProposals(interfaceToImplement, this, context,
-//				IsisPackage.Literals.ISIS_PROPERTY__TYPE, TypeMatchFilters.canInstantiate(), acceptor)
-//		} else {
-//			super.completeXAnnotation_AnnotationType(model, assignment, context, acceptor)
-//		}
-//	}
-//
-//	static class AnnotationFilter implements ITypesProposalProvider.Filter {
-//		
-//	}
 }
