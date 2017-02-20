@@ -1,9 +1,9 @@
 package org.vaulttec.isis.script.formatting2
 
 import com.google.inject.Inject
-import org.eclipse.xtext.junit4.InjectWith
-import org.eclipse.xtext.junit4.XtextRunner
-import org.eclipse.xtext.junit4.formatter.FormatterTester
+import org.eclipse.xtext.testing.InjectWith
+import org.eclipse.xtext.testing.XtextRunner
+import org.eclipse.xtext.testing.formatter.FormatterTestHelper
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.vaulttec.isis.script.tests.IsisInjectorProvider
@@ -12,7 +12,7 @@ import org.vaulttec.isis.script.tests.IsisInjectorProvider
 @InjectWith(IsisInjectorProvider)
 class IsisFormatterTest {
 
-	@Inject extension FormatterTester
+	@Inject extension FormatterTestHelper
 
 	@Test
 	def void formatEmptyType() {

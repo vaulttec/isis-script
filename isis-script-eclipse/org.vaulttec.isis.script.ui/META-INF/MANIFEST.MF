@@ -22,7 +22,7 @@ Require-Bundle: org.vaulttec.isis.script,
  org.eclipse.jdt.core,
  org.eclipse.jdt.debug.ui
 Import-Package: org.apache.log4j
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.vaulttec.isis.script.ui.quickfix,
  org.vaulttec.isis.script.ui.contentassist,
  org.vaulttec.isis.script.ui.internal

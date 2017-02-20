@@ -11,9 +11,11 @@ Require-Bundle: org.vaulttec.isis.script,
  org.eclipse.xtext.xbase.junit,
  org.eclipse.xtext.xbase.lib,
  org.eclipse.jdt.core;bundle-version="3.10.2",
- org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: org.vaulttec.isis.script.tests
+ org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional,
+ org.eclipse.xtext.testing,
+ org.eclipse.xtext.xbase.testing
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.vaulttec.isis.script.tests;x-internal=true
 Import-Package: org.hamcrest.core,
  org.junit;version="4.5.0",
  org.junit.runners.model;version="4.5.0",

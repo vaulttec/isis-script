@@ -25,7 +25,7 @@ http://www.eclipse.org/org/documents/edl-v10.html.
    </license>
 
    <url>
-      <update label="isis"/>
+      <update label="Isis Script IDE" url="https://raw.githubusercontent.com/vaulttec/isis-script/updatesite/"/>
    </url>
 
    <plugin

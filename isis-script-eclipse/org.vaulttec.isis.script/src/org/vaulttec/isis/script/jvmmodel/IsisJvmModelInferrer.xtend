@@ -60,7 +60,7 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 
 	def dispatch void infer(IsisFile file, IJvmDeclaredTypeAcceptor acceptor, boolean isPreIndexingPhase) {
 		val declaration = file.declaration
-		if (file.package != null && !file.package.name.nullOrEmpty && declaration != null &&
+		if (file.package !== null && !file.package.name.nullOrEmpty && declaration !== null &&
 			!declaration.name.nullOrEmpty) {
 			val type = file.toClass(QualifiedName.create(file.package.name, declaration.name))
 
@@ -114,11 +114,10 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 
 	protected def void addClassEvents(JvmGenericType it, IsisTypeDeclaration type) {
 		val module = (type.eContainer as IsisFile).module
-		if (module != null) {
+		if (module !== null) {
 			val sourceType = typeRef
 			if (type instanceof IsisEntity) {
-				val entity = type as IsisEntity
-				if (!entity.properties.map[events].flatten.empty) {
+				if (!type.properties.map[events].flatten.empty) {
 					val tp = createJvmTypeParameter => [name = "T"]
 					members += module.toClass("PropertyDomainEvent") [
 						static = true
@@ -128,7 +127,7 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 							typeRef(module.type.qualifiedName + "$PropertyDomainEvent", sourceType, tp.typeRef)
 					]
 				}
-				if (!entity.collections.map[events].flatten.empty) {
+				if (!type.collections.map[events].flatten.empty) {
 					val tp = createJvmTypeParameter => [name = "T"]
 					members += module.toClass("CollectionDomainEvent") [
 						static = true
@@ -484,7 +483,7 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 
 	protected def void addEvents(JvmGenericType it, IsisProperty property) {
 		if (!property.events.empty) {
-			val superType = if ((property.eContainer.eContainer as IsisFile).module == null)
+			val superType = if ((property.eContainer.eContainer as IsisFile).module === null)
 					typeRef("org.apache.isis.applib.services.eventbus.PropertyDomainEvent", typeRef, property.type)
 				else
 					typeRef(qualifiedName + "$PropertyDomainEvent", property.type)
@@ -500,7 +499,7 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 
 	protected def void addEvents(JvmGenericType it, IsisCollection collection) {
 		if (!collection.events.empty) {
-			val superType = if ((collection.eContainer.eContainer as IsisFile).module == null)
+			val superType = if ((collection.eContainer.eContainer as IsisFile).module === null)
 					typeRef("org.apache.isis.applib.services.eventbus.PropertyDomainEvent", typeRef, collection.type)
 				else
 					typeRef(qualifiedName + "$CollectionDomainEvent", collection.type)
@@ -516,7 +515,7 @@ class IsisJvmModelInferrer extends AbstractModelInferrer {
 
 	protected def void addEvents(JvmGenericType it, IsisAction action) {
 		if (!action.events.empty) {
-			val superType = if ((action.eContainer.eContainer as IsisFile).module == null)
+			val superType = if ((action.eContainer.eContainer as IsisFile).module === null)
 					typeRef("org.apache.isis.applib.services.eventbus.ActionDomainEvent", typeRef)
 				else
 					typeRef(qualifiedName + "$ActionDomainEvent")

@@ -29,11 +29,11 @@ import org.vaulttec.isis.script.dsl.IsisUiHintType
 class IsisModelHelper {
 
 	def hasFeature(IsisProperty it, IsisPropertyFeatureType featureType) {
-		features != null && features.exists[type == featureType]
+		features !== null && features.exists[type == featureType]
 	}
 
 	def getFeatureCount(IsisProperty it, IsisPropertyFeatureType featureType) {
-		if (features != null) {
+		if (features !== null) {
 			features.filter[type == featureType].size
 		} else {
 			0
@@ -42,7 +42,7 @@ class IsisModelHelper {
 
 	def getFeatureExpression(IsisProperty it, IsisPropertyFeatureType featureType) {
 		val feature = features.findFirst[type == featureType]
-		if (feature != null) {
+		if (feature !== null) {
 			feature.expression
 		} else {
 			null
@@ -50,11 +50,11 @@ class IsisModelHelper {
 	}
 
 	def hasFeature(IsisCollection it, IsisCollectionFeatureType featureType) {
-		features != null && features.exists[type == featureType]
+		features !== null && features.exists[type == featureType]
 	}
 
 	def getFeatureCount(IsisCollection it, IsisCollectionFeatureType featureType) {
-		if (features != null) {
+		if (features !== null) {
 			features.filter[type == featureType].size
 		} else {
 			0
@@ -63,7 +63,7 @@ class IsisModelHelper {
 
 	def getFeatureExpression(IsisCollection it, IsisCollectionFeatureType featureType) {
 		val feature = features.findFirst[type == featureType]
-		if (feature != null) {
+		if (feature !== null) {
 			feature.expression
 		} else {
 			null
@@ -71,11 +71,11 @@ class IsisModelHelper {
 	}
 
 	def hasFeature(IsisAction it, IsisActionFeatureType featureType) {
-		features != null && features.exists[type == featureType]
+		features !== null && features.exists[type == featureType]
 	}
 
 	def getFeatureCount(IsisAction it, IsisActionFeatureType featureType) {
-		if (features != null) {
+		if (features !== null) {
 			features.filter[type == featureType].size
 		} else {
 			0
@@ -84,7 +84,7 @@ class IsisModelHelper {
 
 	def getFeatureExpression(IsisAction it, IsisActionFeatureType featureType) {
 		val feature = features.findFirst[type == featureType]
-		if (feature != null) {
+		if (feature !== null) {
 			feature.expression
 		} else {
 			null
@@ -92,11 +92,11 @@ class IsisModelHelper {
 	}
 
 	def hasFeature(IsisActionParameter it, IsisActionParameterFeatureType featureType) {
-		features != null && features.exists[type == featureType]
+		features !== null && features.exists[type == featureType]
 	}
 
 	def getFeatureCount(IsisActionParameter it, IsisActionParameterFeatureType featureType) {
-		if (features != null) {
+		if (features !== null) {
 			features.filter[type == featureType].size
 		} else {
 			0
@@ -105,7 +105,7 @@ class IsisModelHelper {
 
 	def getFeatureExpression(IsisActionParameter it, IsisActionParameterFeatureType featureType) {
 		val feature = features.findFirst[type == featureType]
-		if (feature != null) {
+		if (feature !== null) {
 			feature.expression
 		} else {
 			null
@@ -113,11 +113,11 @@ class IsisModelHelper {
 	}
 
 	def hasUiHint(IsisEntity it, IsisUiHintType hintType) {
-		uiHints != null && uiHints.exists[type == hintType]
+		uiHints !== null && uiHints.exists[type == hintType]
 	}
 
 	def getUiHintCount(IsisEntity it, IsisUiHintType hintType) {
-		if (uiHints != null) {
+		if (uiHints !== null) {
 			uiHints.filter[type == hintType].size
 		} else {
 			0
@@ -126,7 +126,7 @@ class IsisModelHelper {
 
 	def getUiHintExpression(IsisEntity it, IsisUiHintType hintType) {
 		val uiHint = uiHints.findFirst[type == hintType]
-		if (uiHint != null) {
+		if (uiHint !== null) {
 			uiHint.expression
 		} else {
 			null

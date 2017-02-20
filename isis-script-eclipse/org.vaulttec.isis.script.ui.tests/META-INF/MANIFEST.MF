@@ -4,15 +4,17 @@ Bundle-Name: org.vaulttec.isis.script.ui.tests
 Bundle-Vendor: Torsten Juergeleit
 Bundle-Version: 1.0.0.qualifier
 Bundle-SymbolicName: org.vaulttec.isis.script.ui.tests;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: org.vaulttec.isis.script.ui.tests
+Export-Package: org.vaulttec.isis.script.ui.tests;x-internal=true
 Require-Bundle: org.vaulttec.isis.script.ui,
  org.junit;bundle-version="4.7.0",
  org.eclipse.xtext.junit4,
  org.eclipse.xtext.xbase.junit,
  org.eclipse.core.runtime,
- org.eclipse.ui.workbench;resolution:=optional
+ org.eclipse.ui.workbench;resolution:=optional,
+ org.eclipse.xtext.testing,
+ org.eclipse.xtext.xbase.testing
 Import-Package: org.hamcrest.core,
  org.junit.runner.manipulation;version="4.5.0",
  org.junit.runner.notification;version="4.5.0",
